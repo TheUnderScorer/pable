@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Message } from '@pable/api-interfaces';
+import { Button, Container } from '@chakra-ui/react';
 
 export const App = () => {
   const [m, setMessage] = useState<Message>({ message: '' });
@@ -11,16 +12,12 @@ export const App = () => {
   }, []);
 
   return (
-    <>
-      <div style={{ textAlign: 'center' }}>
-        <h1>Welcome to pable!</h1>
-        <img
-          width="450"
-          src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
-        />
-      </div>
+    <Container>
+      <Button variant="outline" colorScheme="primary">
+        Button!
+      </Button>
       <div>{m.message}</div>
-    </>
+    </Container>
   );
 };
 

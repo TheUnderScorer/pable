@@ -36,7 +36,7 @@
             "polyfills": "apps/pable/src/polyfills.ts",
             "tsConfig": "apps/pable/tsconfig.app.json",
             "assets": ["apps/pable/src/favicon.ico", "apps/pable/src/assets"],
-            "styles": ["apps/pable/src/styles.css"],
+            "styles": [],
             "scripts": [],
             "webpackConfig": "@nrwl/react/plugins/webpack"
           },
@@ -50,7 +50,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,

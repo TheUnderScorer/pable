@@ -16,9 +16,17 @@
   "npmScope": "pable",
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
+      "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e"
+        ],
+        "accessToken": "OTE5NDYwZjktNDg3Yy00Y2I4LTg0YTgtNDY2MGUyN2M5ODFmfHJlYWQtd3JpdGU=",
+        "canTrackAnalytics": false,
+        "showUsageWarnings": true
       }
     }
   },
@@ -28,7 +36,9 @@
     },
     "pable-e2e": {
       "tags": [],
-      "implicitDependencies": ["pable"]
+      "implicitDependencies": [
+        "pable"
+      ]
     },
     "api": {
       "tags": []
