@@ -1,29 +1,19 @@
 {
   "implicitDependencies": {
     "workspace.json": "*",
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
+    "package.json": { "dependencies": "*", "devDependencies": "*" },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
     ".eslintrc.json": "*",
     "nx.json": "*"
   },
-  "affected": {
-    "defaultBase": "master"
-  },
+  "affected": { "defaultBase": "master" },
   "npmScope": "pable",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ],
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
         "accessToken": "OTE5NDYwZjktNDg3Yy00Y2I4LTg0YTgtNDY2MGUyN2M5ODFmfHJlYWQtd3JpdGU=",
         "canTrackAnalytics": false,
         "showUsageWarnings": true
@@ -31,20 +21,12 @@
     }
   },
   "projects": {
-    "pable": {
-      "tags": []
-    },
-    "pable-e2e": {
-      "tags": [],
-      "implicitDependencies": [
-        "pable"
-      ]
-    },
-    "api": {
-      "tags": []
-    },
-    "api-interfaces": {
-      "tags": []
-    }
+    "pable": { "tags": [] },
+    "pable-e2e": { "tags": [], "implicitDependencies": ["pable"] },
+    "api": { "tags": [] },
+    "api-interfaces": { "tags": [] },
+    "domain": { "tags": [] },
+    "domain-types": { "tags": [] },
+    "server-types": { "tags": [] }
   }
 }

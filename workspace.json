@@ -1,23 +1,12 @@
 {
   "version": 2,
-  "cli": {
-    "defaultCollection": "@nrwl/react"
-  },
+  "cli": { "defaultCollection": "@nrwl/react" },
   "defaultProject": "pable",
   "generators": {
     "@nrwl/react": {
-      "application": {
-        "style": "css",
-        "linter": "eslint",
-        "babel": true
-      },
-      "component": {
-        "style": "css"
-      },
-      "library": {
-        "style": "css",
-        "linter": "eslint"
-      }
+      "application": { "style": "css", "linter": "eslint", "babel": true },
+      "component": { "style": "css" },
+      "library": { "style": "css", "linter": "eslint" }
     }
   },
   "projects": {
@@ -72,16 +61,12 @@
             "proxyConfig": "apps/pable/proxy.conf.json"
           },
           "configurations": {
-            "production": {
-              "buildTarget": "pable:build:production"
-            }
+            "production": { "buildTarget": "pable:build:production" }
           }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/pable/**/*.{ts,tsx,js,jsx}"]
-          }
+          "options": { "lintFilePatterns": ["apps/pable/**/*.{ts,tsx,js,jsx}"] }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -106,16 +91,12 @@
             "devServerTarget": "pable:serve"
           },
           "configurations": {
-            "production": {
-              "devServerTarget": "pable:serve:production"
-            }
+            "production": { "devServerTarget": "pable:serve:production" }
           }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/pable-e2e/**/*.{js,ts}"]
-          }
+          "options": { "lintFilePatterns": ["apps/pable-e2e/**/*.{js,ts}"] }
         }
       }
     },
@@ -150,15 +131,11 @@
         },
         "serve": {
           "executor": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "api:build"
-          }
+          "options": { "buildTarget": "api:build" }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/api/**/*.ts"]
-          }
+          "options": { "lintFilePatterns": ["apps/api/**/*.ts"] }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -177,8 +154,63 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
+          "options": { "lintFilePatterns": ["libs/api-interfaces/**/*.ts"] }
+        }
+      }
+    },
+    "domain": {
+      "root": "libs/domain",
+      "sourceRoot": "libs/domain/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": { "lintFilePatterns": ["libs/domain/**/*.ts"] }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/domain"],
           "options": {
-            "lintFilePatterns": ["libs/api-interfaces/**/*.ts"]
+            "jestConfig": "libs/domain/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "domain-types": {
+      "root": "libs/domain-types",
+      "sourceRoot": "libs/domain-types/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": { "lintFilePatterns": ["libs/domain-types/**/*.ts"] }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/domain-types"],
+          "options": {
+            "jestConfig": "libs/domain-types/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "server-types": {
+      "root": "libs/server-types",
+      "sourceRoot": "libs/server-types/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": { "lintFilePatterns": ["libs/server-types/**/*.ts"] }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/server-types"],
+          "options": {
+            "jestConfig": "libs/server-types/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }

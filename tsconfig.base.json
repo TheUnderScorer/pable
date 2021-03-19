@@ -15,7 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@pable/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@pable/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@pable/domain": ["libs/domain/src/index.ts"],
+      "@pable/domain-types": ["libs/domain-types/src/index.ts"],
+      "@pable/server-types": ["libs/server-types/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

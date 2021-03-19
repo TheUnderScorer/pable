@@ -1,16 +1,14 @@
-import * as express from 'express';
-import { Message } from '@pable/api-interfaces';
+import { createContainer } from './container';
+import { FastifyInstance } from 'fastify';
 
-const app = express();
+const main = async () => {
+  const container = await createContainer();
+  const server = container.resolve<FastifyInstance>('server');
+  const port = container.resolve<number>('port');
 
-const greeting: Message = { message: 'Welcome to api!' };
+  const startResult = await server.listen(port, '0.0.0.0');
 
-app.get('/api', (req, res) => {
-  res.send(greeting);
-});
+  console.log(`Server started on ${startResult}`);
+};
 
-const port = process.env.port || 3333;
-const server = app.listen(port, () => {
-  console.log('Listening at http://localhost:' + port + '/api');
-});
-server.on('error', console.error);
+main().catch(console.error);
