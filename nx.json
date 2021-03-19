@@ -27,6 +27,7 @@
     "api-interfaces": { "tags": [] },
     "domain": { "tags": [] },
     "domain-types": { "tags": [] },
-    "server-types": { "tags": [] }
+    "shared-server": { "tags": [] },
+    "shared": { "tags": [] }
   }
 }

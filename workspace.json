@@ -39,7 +39,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": true,
+              "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
@@ -196,20 +196,39 @@
         }
       }
     },
-    "server-types": {
-      "root": "libs/server-types",
-      "sourceRoot": "libs/server-types/src",
+    "shared-server": {
+      "root": "libs/shared-server",
+      "sourceRoot": "libs/shared-server/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["libs/server-types/**/*.ts"] }
+          "options": { "lintFilePatterns": ["libs/shared-server/**/*.ts"] }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/server-types"],
+          "outputs": ["coverage/libs/shared-server"],
           "options": {
-            "jestConfig": "libs/server-types/jest.config.js",
+            "jestConfig": "libs/shared-server/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared": {
+      "root": "libs/shared",
+      "sourceRoot": "libs/shared/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": { "lintFilePatterns": ["libs/shared/**/*.ts"] }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared"],
+          "options": {
+            "jestConfig": "libs/shared/jest.config.js",
             "passWithNoTests": true
           }
         }

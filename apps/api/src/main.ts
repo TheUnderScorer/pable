@@ -1,3 +1,4 @@
+import '../../../typings/fastify';
 import { createContainer } from './container';
 import { FastifyInstance } from 'fastify';
 

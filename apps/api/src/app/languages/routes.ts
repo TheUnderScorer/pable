@@ -1,4 +1,6 @@
 import { FastifyInstance } from 'fastify';
-import { RegisterRouteFn } from '@pable/server-types';
+import { RegisterRouteFn } from '@pable/shared-server';
 
-export const languageRoutes: RegisterRouteFn = (fastify: FastifyInstance) => {};
+export const languageRoutes: RegisterRouteFn = (fastify: FastifyInstance) => {
+  fastify.get('/', (req) => {});
+};

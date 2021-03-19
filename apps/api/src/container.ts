@@ -3,6 +3,7 @@ import fastify from 'fastify';
 import * as puppeteer from 'puppeteer';
 import { makeFetchTranslations } from '@pable/domain';
 import { languageRoutes } from './app/languages/routes';
+import { scopedContainer } from '@pable/shared-server';
 
 export const createContainer = async () => {
   const container = initContainer();
@@ -24,7 +25,9 @@ export const createContainer = async () => {
     fetchTranslations: asFunction(makeFetchTranslations).singleton(),
   });
 
+  server.decorateRequest('container', '');
   server.register(languageRoutes);
+  server.register(scopedContainer(container));
 
   return container;
 };

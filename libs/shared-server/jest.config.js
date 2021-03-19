@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'server-types',
+  displayName: 'shared-server',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -10,5 +10,5 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/libs/server-types',
+  coverageDirectory: '../../coverage/libs/shared-server',
 };

@@ -4,6 +4,7 @@ module.exports = {
     '<rootDir>/apps/api',
     '<rootDir>/libs/domain',
     '<rootDir>/libs/domain-types',
-    '<rootDir>/libs/server-types',
+    '<rootDir>/libs/shared-server',
+    '<rootDir>/libs/shared',
   ],
 };
