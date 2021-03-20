@@ -3,7 +3,7 @@ import fastify from 'fastify';
 import puppeteer from 'puppeteer';
 import { makeFetchTranslations } from '@pable/domain';
 import { languageRoutes } from './app/languages/routes';
-import { scopedContainer } from '@pable/shared-server';
+import { errorHandler, scopedContainer } from '@pable/shared-server';
 import { URL } from 'url';
 
 export const createContainer = async () => {
@@ -26,6 +26,8 @@ export const createContainer = async () => {
     deeplUrl: asValue(new URL('https://www.deepl.com')),
     fetchTranslations: asFunction(makeFetchTranslations).singleton(),
   });
+
+  server.setErrorHandler(errorHandler);
 
   server.decorateRequest('container', '');
 

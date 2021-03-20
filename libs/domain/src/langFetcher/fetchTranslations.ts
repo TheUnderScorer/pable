@@ -1,10 +1,8 @@
 import { Browser } from 'puppeteer';
-import {
-  FetchTranslationsDto,
-  FetchTranslationsResult,
-} from '@pable/domain-types';
+import { FetchTranslationsResult } from '@pable/domain-types';
 import { URL } from 'url';
 import { selectLanguage } from './selectLanguage';
+import { FetchTranslationsDto } from '@pable/shared';
 
 interface FetchTranslationsDependencies {
   browser: Browser;
