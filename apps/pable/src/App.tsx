@@ -1,12 +1,11 @@
 import React from 'react';
 import { Button, Container } from '@chakra-ui/react';
+import { TranslationsTableView } from '@pable/domain-frontend';
 
 export const App = () => {
   return (
-    <Container>
-      <Button variant="outline" colorScheme="primary">
-        API Url: {process.env.NX_API_URL}
-      </Button>
+    <Container p={4} maxW="1100px">
+      <TranslationsTableView />
     </Container>
   );
 };

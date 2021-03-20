@@ -9,6 +9,7 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "importHelpers": true,
+    "jsx": "react",
     "target": "ES2019",
     "module": "esnext",
     "lib": ["ES2019", "ES2020", "dom"],
@@ -25,7 +26,8 @@
       "@pable/domain-types": ["libs/domain-types/src/index.ts"],
       "@pable/shared-server": ["libs/shared-server/src/index.ts"],
       "@pable/shared": ["libs/shared/src/index.ts"],
-      "@pable/shared-frontend": ["libs/shared-frontend/src/index.ts"]
+      "@pable/shared-frontend": ["libs/shared-frontend/src/index.ts"],
+      "@pable/domain-frontend": ["libs/domain-frontend/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -5,6 +5,7 @@ import { makeFetchTranslations } from '@pable/domain';
 import { languageRoutes } from './app/languages/routes';
 import { errorHandler, scopedContainer } from '@pable/shared-server';
 import { URL } from 'url';
+import fastifyCors from 'fastify-cors';
 
 export const createContainer = async () => {
   const container = initContainer();
@@ -17,8 +18,6 @@ export const createContainer = async () => {
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-dev-shm-usage'],
     executablePath: process.env.PUPPETER_EXECUTABLE_PATH,
-    headless: false,
-    slowMo: 500,
   });
 
   container.register({
@@ -33,7 +32,8 @@ export const createContainer = async () => {
 
   server.decorateRequest('container', '');
 
-  await server.register(languageRoutes);
+  server.register(fastifyCors);
+  server.register(languageRoutes);
 
   scopedContainer(container, server);
 

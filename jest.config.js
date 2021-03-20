@@ -7,5 +7,6 @@ module.exports = {
     '<rootDir>/libs/shared-server',
     '<rootDir>/libs/shared',
     '<rootDir>/libs/shared-frontend',
+    '<rootDir>/libs/domain-frontend',
   ],
 };

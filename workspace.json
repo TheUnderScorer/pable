@@ -56,9 +56,7 @@
         },
         "serve": {
           "executor": "@nrwl/web:dev-server",
-          "options": {
-            "buildTarget": "pable:build"
-          },
+          "options": { "buildTarget": "pable:build" },
           "configurations": {
             "production": { "buildTarget": "pable:build:production" }
           }
@@ -242,6 +240,27 @@
           "outputs": ["coverage/libs/shared-frontend"],
           "options": {
             "jestConfig": "libs/shared-frontend/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "domain-frontend": {
+      "root": "libs/domain-frontend",
+      "sourceRoot": "libs/domain-frontend/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/domain-frontend/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/domain-frontend"],
+          "options": {
+            "jestConfig": "libs/domain-frontend/jest.config.js",
             "passWithNoTests": true
           }
         }

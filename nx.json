@@ -28,6 +28,7 @@
     "domain-types": { "tags": [] },
     "shared-server": { "tags": [] },
     "shared": { "tags": [] },
-    "shared-frontend": { "tags": [] }
+    "shared-frontend": { "tags": [] },
+    "domain-frontend": { "tags": [] }
   }
 }

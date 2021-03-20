@@ -1,1 +1,1 @@
-export * from './langFetcher/fetchTranslations';
+export * from './translations/fetchTranslations';
