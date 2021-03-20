@@ -1,22 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Message } from '@pable/api-interfaces';
+import React from 'react';
 import { Button, Container } from '@chakra-ui/react';
 
 export const App = () => {
-  const [m, setMessage] = useState<Message>({ message: '' });
-
-  useEffect(() => {
-    fetch('/api')
-      .then((r) => r.json())
-      .then(setMessage);
-  }, []);
-
   return (
     <Container>
       <Button variant="outline" colorScheme="primary">
-        Button!
+        API Url: {process.env.NX_API_URL}
       </Button>
-      <div>{m.message}</div>
     </Container>
   );
 };

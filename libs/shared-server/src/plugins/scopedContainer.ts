@@ -1,8 +1,8 @@
-import '../../../../typings/fastify';
 import { FastifyInstance } from 'fastify';
 import { AwilixContainer } from 'awilix';
 
-export const scopedContainer = (container: AwilixContainer) => (
+export const scopedContainer = (
+  container: AwilixContainer,
   instance: FastifyInstance
 ) => {
   instance.addHook('preHandler', async (req) => {

@@ -23,7 +23,8 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "ts-node-dev": "TS_NODE_PROJECT=tsconfig.node.json ts-node-dev -r tsconfig-paths/register"
   },
   "private": true,
   "devDependencies": {
@@ -51,6 +52,7 @@
     "@types/react-dom": "16.9.9",
     "@typescript-eslint/eslint-plugin": "4.3.0",
     "@typescript-eslint/parser": "4.3.0",
+    "@zerollup/ts-transform-paths": "^1.7.18",
     "babel-jest": "26.2.2",
     "cypress": "^6.0.1",
     "dotenv": "6.2.0",
@@ -65,6 +67,8 @@
     "prettier": "2.2.1",
     "ts-jest": "26.4.0",
     "ts-node": "~9.1.1",
+    "ts-node-builder": "^2.2.0",
+    "ttypescript": "^1.5.12",
     "typescript": "^4.2.3"
   },
   "dependencies": {

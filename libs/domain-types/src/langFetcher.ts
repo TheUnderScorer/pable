@@ -4,6 +4,11 @@ export enum Language {
 }
 
 export interface FetchTranslationsDto {
-  language: Language;
+  targetLanguage: Language;
+  sourceLanguage: Language;
   word: string;
+}
+
+export interface FetchTranslationsResult {
+  translation: string;
 }

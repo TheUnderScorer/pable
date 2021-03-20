@@ -7,19 +7,25 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "esModuleInterop": true,
     "importHelpers": true,
-    "target": "es2015",
+    "target": "ES2019",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": ["ES2019", "ES2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
+    "plugins": [
+      {
+        "transform": "@zerollup/ts-transform-paths"
+      }
+    ],
     "paths": {
-      "@pable/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@pable/domain": ["libs/domain/src/index.ts"],
       "@pable/domain-types": ["libs/domain-types/src/index.ts"],
       "@pable/shared-server": ["libs/shared-server/src/index.ts"],
-      "@pable/shared": ["libs/shared/src/index.ts"]
+      "@pable/shared": ["libs/shared/src/index.ts"],
+      "@pable/shared-frontend": ["libs/shared-frontend/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

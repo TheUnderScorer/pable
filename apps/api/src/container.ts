@@ -1,9 +1,10 @@
 import { asFunction, asValue, createContainer as initContainer } from 'awilix';
 import fastify from 'fastify';
-import * as puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer';
 import { makeFetchTranslations } from '@pable/domain';
 import { languageRoutes } from './app/languages/routes';
 import { scopedContainer } from '@pable/shared-server';
+import { URL } from 'url';
 
 export const createContainer = async () => {
   const container = initContainer();
@@ -22,12 +23,15 @@ export const createContainer = async () => {
     port: asValue(port),
     server: asValue(server),
     browser: asValue(browser),
+    deeplUrl: asValue(new URL('https://www.deepl.com')),
     fetchTranslations: asFunction(makeFetchTranslations).singleton(),
   });
 
   server.decorateRequest('container', '');
-  server.register(languageRoutes);
-  server.register(scopedContainer(container));
+
+  await server.register(languageRoutes);
+
+  scopedContainer(container, server);
 
   return container;
 };

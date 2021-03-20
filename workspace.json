@@ -57,8 +57,7 @@
         "serve": {
           "executor": "@nrwl/web:dev-server",
           "options": {
-            "buildTarget": "pable:build",
-            "proxyConfig": "apps/pable/proxy.conf.json"
+            "buildTarget": "pable:build"
           },
           "configurations": {
             "production": { "buildTarget": "pable:build:production" }
@@ -113,7 +112,8 @@
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/main.ts",
             "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": ["apps/api/src/assets"]
+            "assets": ["apps/api/src/assets"],
+            "generatePackageJson": true
           },
           "configurations": {
             "production": {
@@ -130,8 +130,11 @@
           }
         },
         "serve": {
-          "executor": "@nrwl/node:execute",
-          "options": { "buildTarget": "api:build" }
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "parallel": false,
+            "command": "npm run ts-node-dev apps/api/src/main.ts"
+          }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
@@ -144,17 +147,6 @@
             "jestConfig": "apps/api/jest.config.js",
             "passWithNoTests": true
           }
-        }
-      }
-    },
-    "api-interfaces": {
-      "root": "libs/api-interfaces",
-      "sourceRoot": "libs/api-interfaces/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["libs/api-interfaces/**/*.ts"] }
         }
       }
     },
@@ -229,6 +221,27 @@
           "outputs": ["coverage/libs/shared"],
           "options": {
             "jestConfig": "libs/shared/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-frontend": {
+      "root": "libs/shared-frontend",
+      "sourceRoot": "libs/shared-frontend/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared-frontend/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared-frontend"],
+          "options": {
+            "jestConfig": "libs/shared-frontend/jest.config.js",
             "passWithNoTests": true
           }
         }

@@ -1,4 +1,3 @@
-import '../../../typings/fastify';
 import { createContainer } from './container';
 import { FastifyInstance } from 'fastify';
 
@@ -7,9 +6,23 @@ const main = async () => {
   const server = container.resolve<FastifyInstance>('server');
   const port = container.resolve<number>('port');
 
-  const startResult = await server.listen(port, '0.0.0.0');
+  server.listen(port, (err, address) => {
+    if (err) {
+      server.log.error(err);
 
-  console.log(`Server started on ${startResult}`);
+      process.exit(1);
+    }
+
+    server.log.info(`Server started on ${address}`);
+  });
 };
 
-main().catch(console.error);
+process.once('SIGUSR2', function () {
+  process.kill(process.pid, 'SIGUSR2');
+});
+
+main().catch((error) => {
+  console.error(error);
+
+  process.exit(1);
+});

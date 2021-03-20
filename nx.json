@@ -24,10 +24,10 @@
     "pable": { "tags": [] },
     "pable-e2e": { "tags": [], "implicitDependencies": ["pable"] },
     "api": { "tags": [] },
-    "api-interfaces": { "tags": [] },
     "domain": { "tags": [] },
     "domain-types": { "tags": [] },
     "shared-server": { "tags": [] },
-    "shared": { "tags": [] }
+    "shared": { "tags": [] },
+    "shared-frontend": { "tags": [] }
   }
 }
