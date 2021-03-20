@@ -2,8 +2,9 @@ import { Page } from 'puppeteer';
 import { Language } from '@pable/domain-types';
 
 const langCodesMap = {
-  [Language.English]: 'en-GB',
-  [Language.German]: 'de-DE',
+  [Language.English]: ['en-GB', 'en'],
+  [Language.German]: ['de-DE', 'de'],
+  [Language.Polish]: ['pl-PL', 'pl'],
 };
 
 export const selectLanguage = async (
@@ -23,10 +24,15 @@ export const selectLanguage = async (
   const listSelector = `[dl-test=${listId}]`;
 
   await page.evaluate(
-    (selector: string, lang: string) => {
+    (selector: string, languages: string[]) => {
       const list = document.querySelector(selector);
 
-      const btnSelector = `.translator-lang-option-${lang},[dl-test="translator-lang-option-${lang}"]`;
+      const btnSelector = languages
+        .map(
+          (lang) =>
+            `.translator-lang-option-${lang},[dl-test="translator-lang-option-${lang}"]`
+        )
+        .join(', ');
       const btn = list.querySelector<HTMLButtonElement>(btnSelector);
 
       btn.click();

@@ -17,6 +17,8 @@ export const createContainer = async () => {
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-dev-shm-usage'],
     executablePath: process.env.PUPPETER_EXECUTABLE_PATH,
+    headless: false,
+    slowMo: 500,
   });
 
   container.register({

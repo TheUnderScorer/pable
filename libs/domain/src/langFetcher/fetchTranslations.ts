@@ -1,8 +1,9 @@
-import { Browser } from 'puppeteer';
+import { Browser, Page } from 'puppeteer';
 import { FetchTranslationsResult } from '@pable/domain-types';
 import { URL } from 'url';
-import { selectLanguage } from './selectLanguage';
 import { FetchTranslationsDto } from '@pable/shared';
+import { buildTranslationUrl } from './buildTranslationUrl';
+import { getElementPropertyAsText } from '@pable/shared-server';
 
 interface FetchTranslationsDependencies {
   browser: Browser;
@@ -14,61 +15,48 @@ const selectors = {
   sourceTextArea: '.lmt__source_textarea',
 };
 
+const waitForTranslationResult = async (page: Page) => {
+  await page.waitForFunction(
+    (deeplSelectors: typeof selectors) => {
+      const textArea = document.querySelector<HTMLTextAreaElement>(
+        deeplSelectors.targetTextArea
+      );
+
+      return Boolean(textArea.value);
+    },
+    {
+      timeout: 60_000,
+      polling: 500,
+    },
+    selectors
+  );
+};
+
 export const makeFetchTranslations = ({
   browser,
   deeplUrl,
-}: FetchTranslationsDependencies) => async ({
-  word,
-  targetLanguage,
-}: FetchTranslationsDto): Promise<FetchTranslationsResult> => {
+}: FetchTranslationsDependencies) => async (
+  dto: FetchTranslationsDto
+): Promise<FetchTranslationsResult> => {
   const context = await browser.createIncognitoBrowserContext();
 
   try {
-    const url = new URL(deeplUrl.toString());
-    url.pathname = '/translator';
-
+    const url = buildTranslationUrl(deeplUrl, dto);
     const page = await context.newPage();
 
     await page.goto(url.toString());
 
-    // Select target language
-    await selectLanguage(
-      '[dl-test="translator-target-lang-btn"]',
-      page,
-      targetLanguage
-    );
-
-    // Type word into source textarea
-    await page.type(selectors.sourceTextArea, word, {
-      delay: 250,
-    });
-
-    // Wait until translation appears in result textarea
-    await page.waitForFunction(
-      (deeplSelectors: typeof selectors) => {
-        const textArea = document.querySelector<HTMLTextAreaElement>(
-          deeplSelectors.targetTextArea
-        );
-
-        return Boolean(textArea.value);
-      },
-      {
-        timeout: 60_000,
-        polling: 500,
-      },
-      selectors
-    );
-
-    await page.waitForTimeout(2500);
+    await waitForTranslationResult(page);
 
     const targetTextArea = await page.$(selectors.targetTextArea);
 
-    const translation = await targetTextArea
-      .getProperty('value')
-      .then((prop) => prop.jsonValue<string>());
+    const translation = await getElementPropertyAsText<string | null>(
+      targetTextArea,
+      'value'
+    );
 
     if (!translation) {
-      throw new Error(`No translation found for word ${word}`);
+      throw new Error(`No translation found for word ${dto.word}`);
     }
 
     return {

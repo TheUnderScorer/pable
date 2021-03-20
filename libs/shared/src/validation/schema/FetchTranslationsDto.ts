@@ -1,4 +1,4 @@
-import jf from 'joiful';
+import * as jf from 'joiful';
 import { Language } from '@pable/domain-types';
 import { requiredEnum } from '../decorators/enum';
 import { BaseSchema } from '../BaseSchema';
