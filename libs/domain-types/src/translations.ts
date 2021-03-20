@@ -12,6 +12,7 @@ export interface FetchTranslationsResult {
 export interface TranslationEntry {
   sourceWord?: string;
   targetWord?: string;
+  alternatives?: string[];
 }
 
 export interface TranslationConfiguration {

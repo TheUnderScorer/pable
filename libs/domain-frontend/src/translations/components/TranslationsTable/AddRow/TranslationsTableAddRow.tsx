@@ -9,6 +9,7 @@ export const TranslationsTableAddRow = () => {
 
   const [sourceWord, setSourceWord] = useState('');
   const [targetWord, setTargetWord] = useState('');
+  const [alternatives, setAlternatives] = useState([]);
 
   const handleAdd = useCallback(
     (): KeyboardEventHandler => (event) => {
@@ -21,12 +22,14 @@ export const TranslationsTableAddRow = () => {
       addEntry({
         sourceWord,
         targetWord,
+        alternatives,
       });
 
       setSourceWord('');
       setTargetWord('');
+      setAlternatives([]);
     },
-    [addEntry, sourceWord, targetWord]
+    [addEntry, alternatives, sourceWord, targetWord]
   );
 
   return (
@@ -40,6 +43,8 @@ export const TranslationsTableAddRow = () => {
       inputVariant="flushed"
       focusOnMount
       index={entries.length}
+      onAlternatives={setAlternatives}
+      alternatives={alternatives}
     />
   );
 };

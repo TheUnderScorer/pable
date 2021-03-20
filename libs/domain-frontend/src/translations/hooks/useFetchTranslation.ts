@@ -1,6 +1,6 @@
 import { useTranslationsConfiguration } from '../stores/useTranslationsConfiguration';
 import { useMutation } from 'react-query';
-import { useApiClient } from '../../../../shared-frontend/src/providers/ApiClientProvider';
+import { useApiClient } from '@pable/shared-frontend';
 import { FetchTranslationsResult } from '@pable/domain-types';
 import { FetchTranslationsDto } from '@pable/shared';
 
@@ -20,7 +20,7 @@ export const useFetchTranslation = (
     Error,
     Pick<FetchTranslationsDto, 'word'>
   >(
-    fetchTranslationsKey,
+    `${fetchTranslationsKey}-${word}`,
     async (data) => {
       if (!data.word) {
         return null;

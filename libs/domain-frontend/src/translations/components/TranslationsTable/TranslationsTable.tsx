@@ -24,7 +24,7 @@ export const TranslationsTable = () => {
         {entries.map((entry, index) => (
           <TranslationsTableEntryRow key={index} index={index} entry={entry} />
         ))}
-        <TranslationsTableAddRow key={entries.length} />
+        <TranslationsTableAddRow />
       </Tbody>
     </Table>
   );

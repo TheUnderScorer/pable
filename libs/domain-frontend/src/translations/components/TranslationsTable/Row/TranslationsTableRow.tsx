@@ -7,7 +7,7 @@ import React, {
   useState,
 } from 'react';
 import { useFetchTranslation } from '../../../hooks/useFetchTranslation';
-import { useDebounce, useMount, usePrevious } from 'react-use';
+import { useDebounce, useMount, usePrevious, useUnmount } from 'react-use';
 import {
   HStack,
   IconButton,
@@ -29,8 +29,10 @@ import { Key } from 'ts-key-enum';
 export interface TranslationsTableRowProps {
   onSourceChange: (word: string) => void;
   onTargetChanged: (word: string) => void;
+  onAlternatives?: (alternatives: string[]) => void;
   sourceWord: string;
   targetWord: string;
+  alternatives?: string[];
   onKeyDown?: (
     type: keyof Pick<TranslationEntry, 'targetWord' | 'sourceWord'>
   ) => KeyboardEventHandler;
@@ -56,6 +58,8 @@ export const TranslationsTableRow = ({
   focusOnMount,
   className,
   index,
+  onAlternatives,
+  alternatives,
 }: TranslationsTableRowProps) => {
   const prevTargetWord = usePrevious(targetWord);
 
@@ -69,6 +73,10 @@ export const TranslationsTableRow = ({
     (data) => {
       if (data.translation) {
         onTargetChanged(data.translation);
+      }
+
+      if (data.alternatives?.length) {
+        onAlternatives?.(data.alternatives);
       }
     }
   );
@@ -148,7 +156,7 @@ export const TranslationsTableRow = ({
             value={targetWord}
             placeholder="Translation will appear here..."
           />
-          {fetchTranslationQuery.data?.alternatives?.length && (
+          {alternatives?.length && (
             <Popover>
               <PopoverTrigger>
                 <IconButton
@@ -158,11 +166,9 @@ export const TranslationsTableRow = ({
               </PopoverTrigger>
               <PopoverContent p={4}>
                 <List>
-                  {fetchTranslationQuery.data?.alternatives?.map(
-                    (alternative, index) => (
-                      <ListItem key={index}>{alternative}</ListItem>
-                    )
-                  )}
+                  {alternatives?.map((alternative, index) => (
+                    <ListItem key={index}>{alternative}</ListItem>
+                  ))}
                 </List>
               </PopoverContent>
             </Popover>

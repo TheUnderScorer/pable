@@ -21,9 +21,11 @@ export const TranslationsTableEntryRow = ({
       onTargetChanged={(target) => editEntry(index, { targetWord: target })}
       sourceWord={entry.sourceWord}
       targetWord={entry.targetWord}
+      onAlternatives={(alternatives) => editEntry(index, { alternatives })}
       onRemove={() => removeEntry(index)}
       inputVariant="filled"
       index={index}
+      alternatives={entry.alternatives}
     />
   );
 };

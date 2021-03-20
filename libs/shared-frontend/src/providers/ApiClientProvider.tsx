@@ -4,7 +4,7 @@ import React, {
   useContext,
   useMemo,
 } from 'react';
-import { ApiClient } from '@pable/shared-frontend';
+import { ApiClient } from '../api/ApiClient';
 
 export interface ApiClientProviderProps {
   url: string;
