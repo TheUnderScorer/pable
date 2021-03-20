@@ -1,25 +1,46 @@
 import React, {
   KeyboardEventHandler,
   MutableRefObject,
+  useCallback,
   useEffect,
   useRef,
   useState,
 } from 'react';
 import { useFetchTranslation } from '../../../hooks/useFetchTranslation';
-import { useDebounce, usePrevious } from 'react-use';
-import { HStack, Input, Spinner, Td, Tr } from '@chakra-ui/react';
+import { useDebounce, useMount, usePrevious } from 'react-use';
+import {
+  HStack,
+  IconButton,
+  List,
+  ListItem,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Spinner,
+  Td,
+  Textarea,
+  Tr,
+} from '@chakra-ui/react';
 import { TranslationEntry } from '@pable/domain-types';
+import { ChevronDownIcon, DeleteIcon } from '@chakra-ui/icons';
+import classNames from 'classnames';
+import { Key } from 'ts-key-enum';
 
 export interface TranslationsTableRowProps {
   onSourceChange: (word: string) => void;
   onTargetChanged: (word: string) => void;
   sourceWord: string;
   targetWord: string;
-  onKeyUp?: (
+  onKeyDown?: (
     type: keyof Pick<TranslationEntry, 'targetWord' | 'sourceWord'>
   ) => KeyboardEventHandler;
-  sourceRef?: (element?: HTMLInputElement) => void;
-  targetRef?: (element?: HTMLInputElement) => void;
+  sourceRef?: (element?: HTMLTextAreaElement) => void;
+  targetRef?: (element?: HTMLTextAreaElement) => void;
+  onRemove?: () => void;
+  inputVariant?: string;
+  focusOnMount?: boolean;
+  className?: string;
+  index?: number;
 }
 
 export const TranslationsTableRow = ({
@@ -27,14 +48,19 @@ export const TranslationsTableRow = ({
   onTargetChanged,
   sourceWord,
   targetWord,
-  onKeyUp,
+  onKeyDown,
   sourceRef: sourceRefProp,
   targetRef: targetRefProp,
+  onRemove,
+  inputVariant,
+  focusOnMount,
+  className,
+  index,
 }: TranslationsTableRowProps) => {
   const prevTargetWord = usePrevious(targetWord);
 
-  const sourceRef = useRef<HTMLInputElement>();
-  const targetRef = useRef<HTMLInputElement>();
+  const sourceRef = useRef<HTMLTextAreaElement>();
+  const targetRef = useRef<HTMLTextAreaElement>();
 
   const [sourceWordForTranslation, setSourceWordForTranslation] = useState('');
 
@@ -47,6 +73,26 @@ export const TranslationsTableRow = ({
     }
   );
 
+  const handleKeyDown: TranslationsTableRowProps['onKeyDown'] = useCallback(
+    (type) => (event) => {
+      onKeyDown?.(type)?.(event);
+
+      if (![Key.ArrowDown, Key.ArrowUp].includes(event.key as Key)) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      const nextIndex = event.key === Key.ArrowUp ? index - 1 : index + 1;
+
+      document
+        .querySelector<HTMLInputElement>(`.${type}-${nextIndex}`)
+        ?.focus();
+    },
+    [index, onKeyDown]
+  );
+
   useDebounce(
     () => {
       if (!sourceWord || (targetWord && prevTargetWord !== targetWord)) {
@@ -57,7 +103,7 @@ export const TranslationsTableRow = ({
         word: sourceWord,
       });
     },
-    1000,
+    500,
     [sourceWord]
   );
 
@@ -69,28 +115,67 @@ export const TranslationsTableRow = ({
     sourceRefProp?.(sourceRef.current);
   }, [sourceRefProp, sourceRef]);
 
+  useMount(() => {
+    if (focusOnMount) {
+      sourceRef.current?.focus();
+    }
+  });
+
   return (
-    <Tr>
+    <Tr className={className}>
       <Td>
-        <Input
+        <Textarea
+          className={classNames('sourceWord', `sourceWord-${index}`)}
+          minHeight={12}
+          variant={inputVariant}
           onChange={(event) => onSourceChange(event.target.value)}
-          onKeyUp={onKeyUp?.('sourceWord')}
-          ref={sourceRef as MutableRefObject<HTMLInputElement>}
+          onKeyDown={handleKeyDown('sourceWord')}
+          ref={sourceRef as MutableRefObject<HTMLTextAreaElement>}
           value={sourceWord}
           placeholder="Enter word here..."
         />
       </Td>
       <Td>
-        <HStack>
-          <Input
+        <HStack width="100%">
+          <Textarea
+            className={classNames('targetWord', `targetWord-${index}`)}
+            minHeight={12}
+            variant={inputVariant}
             disabled={fetchTranslationQuery.isLoading}
             onChange={(event) => onTargetChanged(event.target.value)}
-            onKeyUp={onKeyUp?.('targetWord')}
-            ref={targetRef as MutableRefObject<HTMLInputElement>}
+            onKeyDown={handleKeyDown('targetWord')}
+            ref={targetRef as MutableRefObject<HTMLTextAreaElement>}
             value={targetWord}
             placeholder="Translation will appear here..."
           />
+          {fetchTranslationQuery.data?.alternatives?.length && (
+            <Popover>
+              <PopoverTrigger>
+                <IconButton
+                  aria-label="Show alternatives"
+                  icon={<ChevronDownIcon />}
+                />
+              </PopoverTrigger>
+              <PopoverContent p={4}>
+                <List>
+                  {fetchTranslationQuery.data?.alternatives?.map(
+                    (alternative, index) => (
+                      <ListItem key={index}>{alternative}</ListItem>
+                    )
+                  )}
+                </List>
+              </PopoverContent>
+            </Popover>
+          )}
           {fetchTranslationQuery.isLoading && <Spinner />}
+          {onRemove && (
+            <IconButton
+              aria-label="Delete entry"
+              colorScheme="danger"
+              onClick={onRemove}
+              icon={<DeleteIcon />}
+            />
+          )}
         </HStack>
       </Td>
     </Tr>

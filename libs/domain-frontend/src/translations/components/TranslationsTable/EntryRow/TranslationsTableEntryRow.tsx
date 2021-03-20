@@ -13,6 +13,7 @@ export const TranslationsTableEntryRow = ({
   index,
 }: TranslationsTableEntryRowProps) => {
   const editEntry = useTranslationsStore((store) => store.editEntry);
+  const removeEntry = useTranslationsStore((store) => store.removeEntry);
 
   return (
     <TranslationsTableRow
@@ -20,6 +21,9 @@ export const TranslationsTableEntryRow = ({
       onTargetChanged={(target) => editEntry(index, { targetWord: target })}
       sourceWord={entry.sourceWord}
       targetWord={entry.targetWord}
+      onRemove={() => removeEntry(index)}
+      inputVariant="filled"
+      index={index}
     />
   );
 };

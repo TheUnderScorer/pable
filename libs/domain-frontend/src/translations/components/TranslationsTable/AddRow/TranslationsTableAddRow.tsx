@@ -1,21 +1,18 @@
 import React, { KeyboardEventHandler, useCallback, useState } from 'react';
 import { useTranslationsStore } from '../../../stores/useTranslationsStore';
-import { useDebounce } from 'react-use';
 import { TranslationsTableRow } from '../Row/TranslationsTableRow';
+import { Key } from 'ts-key-enum';
 
 export const TranslationsTableAddRow = () => {
-  const [sourceWordForTranslation, setSourceWordForTranslation] = useState('');
-
+  const entries = useTranslationsStore((store) => store.translations);
   const addEntry = useTranslationsStore((store) => store.addEntry);
-
-  const [source, setSource] = useState<HTMLInputElement | undefined>();
 
   const [sourceWord, setSourceWord] = useState('');
   const [targetWord, setTargetWord] = useState('');
 
   const handleAdd = useCallback(
     (): KeyboardEventHandler => (event) => {
-      if (event.key !== 'Enter' || !sourceWord || !targetWord) {
+      if (event.key !== Key.Enter || !sourceWord) {
         return;
       }
 
@@ -28,32 +25,21 @@ export const TranslationsTableAddRow = () => {
 
       setSourceWord('');
       setTargetWord('');
-
-      source?.focus();
     },
-    [addEntry, source, sourceWord, targetWord]
-  );
-
-  useDebounce(
-    () => {
-      if (!sourceWord) {
-        return;
-      }
-
-      setSourceWordForTranslation(sourceWord);
-    },
-    1000,
-    [sourceWord]
+    [addEntry, sourceWord, targetWord]
   );
 
   return (
     <TranslationsTableRow
+      className="create"
       onSourceChange={setSourceWord}
       onTargetChanged={setTargetWord}
       sourceWord={sourceWord}
       targetWord={targetWord}
-      onKeyUp={handleAdd}
-      sourceRef={setSource}
+      onKeyDown={handleAdd}
+      inputVariant="flushed"
+      focusOnMount
+      index={entries.length}
     />
   );
 };

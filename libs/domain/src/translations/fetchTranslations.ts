@@ -49,6 +49,15 @@ export const makeFetchTranslations = ({
     await waitForTranslationResult(page);
 
     const targetTextArea = await page.$(selectors.targetTextArea);
+    const alternativeElements = await page.$$(
+      '[dl-test="translator-target-result-as-text-entry"]'
+    );
+
+    const alternatives = await Promise.all(
+      alternativeElements.map((element) =>
+        getElementPropertyAsText<string | null>(element, 'textContent')
+      )
+    );
 
     const translation = await getElementPropertyAsText<string | null>(
       targetTextArea,
@@ -61,6 +70,9 @@ export const makeFetchTranslations = ({
 
     return {
       translation,
+      alternatives: alternatives.filter(
+        (value) => value && value !== translation
+      ) as string[],
     };
   } finally {
     await context.close();

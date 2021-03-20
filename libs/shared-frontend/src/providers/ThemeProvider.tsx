@@ -11,6 +11,7 @@ export const ThemeProvider = ({ children }: PropsWithChildren<unknown>) => {
       extendTheme({
         colors: {
           primary: chakraTheme.colors.blue,
+          danger: chakraTheme.colors.red,
         },
       }),
     []

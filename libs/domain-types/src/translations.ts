@@ -6,6 +6,7 @@ export enum Language {
 
 export interface FetchTranslationsResult {
   translation: string;
+  alternatives: string[];
 }
 
 export interface TranslationEntry {

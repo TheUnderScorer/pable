@@ -9,7 +9,11 @@ export const TranslationsTable = () => {
 
   return (
     <Table>
-      <TableCaption>Enter your translations here.</TableCaption>
+      <TableCaption>
+        {entries.length
+          ? `${entries.length} entries.`
+          : 'Enter your translations here.'}
+      </TableCaption>
       <Thead>
         <Tr>
           <Th>Word</Th>
@@ -20,7 +24,7 @@ export const TranslationsTable = () => {
         {entries.map((entry, index) => (
           <TranslationsTableEntryRow key={index} index={index} entry={entry} />
         ))}
-        <TranslationsTableAddRow />
+        <TranslationsTableAddRow key={entries.length} />
       </Tbody>
     </Table>
   );

@@ -21,7 +21,7 @@ export const useTranslationsStore = create<TranslationsStore>(
         });
       },
       removeEntry: (index) => {
-        const newEntries = get().translations;
+        const newEntries = [...get().translations];
 
         newEntries.splice(index, 1);
 
