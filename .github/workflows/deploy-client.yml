@@ -1,0 +1,45 @@
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'client-[v]\d+.\d+.\d+'
+      - 'client-\d+.\d+.\d+'
+name: Publish client on Netlify
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: Production
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Set Node.js 15.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 15.x
+
+      - name: Setup npm
+        run: npm install -g npm@7
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Create .env file
+        run: |
+          cd apps/pable
+          touch .env
+          echo NX_API_URL=https://pable-api.herokuapp.com >> .env
+          cd ../..
+
+      - name: Build client
+        run: nx build pable --prod
+
+      - name: Publish
+        uses: jsmrcaga/action-netlify-deploy@v1.5.0
+        with:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          build_directory: dist/apps/pable
+          NETLIFY_DEPLOY_TO_PROD: true

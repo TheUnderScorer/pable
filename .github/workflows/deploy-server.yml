@@ -1,0 +1,39 @@
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'server-[v]\d+.\d+.\d+'
+      - 'server-\d+.\d+.\d+'
+name: Publish server on Heroku
+
+jobs:
+  deploy-server:
+    runs-on: ubuntu-latest
+    name: Deploy server
+    environment: Production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set Node.js 15.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 15.x
+
+      - name: Setup npm
+        run: npm install -g npm@7
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build
+        run: nx build api --prod
+
+      - uses: akhileshns/heroku-deploy@v3.8.8
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "pable-api"
+          heroku_email: "przemyslawzydek@gmail.com"
+          procfile: "web: node main.js"
+          appdir: "dist/apps/api"
+
