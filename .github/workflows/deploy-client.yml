@@ -33,7 +33,7 @@ jobs:
           cd ../..
 
       - name: Build client
-        run: nx build pable --prod
+        run: npx nx build pable --prod
 
       - name: Publish
         uses: jsmrcaga/action-netlify-deploy@v1.5.0

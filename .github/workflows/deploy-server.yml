@@ -27,7 +27,7 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Build
-        run: nx build api --prod
+        run: npx nx build api --prod
 
       - uses: akhileshns/heroku-deploy@v3.8.8
         with:

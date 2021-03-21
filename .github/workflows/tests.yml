@@ -20,7 +20,7 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Build
-        run: nx build && nx build api
+        run: npx nx build && npx nx build api
 
   lint:
     name: Run linter
