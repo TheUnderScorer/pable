@@ -6,13 +6,7 @@ const main = async () => {
   const server = container.resolve<FastifyInstance>('server');
   const port = container.resolve<number>('port');
 
-  server.listen(port, (err, address) => {
-    if (err) {
-      server.log.error(err);
-
-      process.exit(1);
-    }
-
+  server.listen(port, '0.0.0.0').then((address) => {
     server.log.info(`Server started on ${address}`);
   });
 };
