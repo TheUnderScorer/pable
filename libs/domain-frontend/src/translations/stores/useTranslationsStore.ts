@@ -44,6 +44,27 @@ export const useTranslationsStore = create<TranslationsStore>(
     }),
     {
       name: 'translations',
+      deserialize: (value) => {
+        if (!value) {
+          return {
+            version: 0,
+            state: {
+              translations: [],
+            },
+          };
+        }
+
+        const parsedValue = JSON.parse(value);
+
+        return {
+          version: parsedValue?.version ?? 0,
+          state: {
+            ...parsedValue?.state,
+            translations:
+              parsedValue?.state?.translations?.filter(Boolean) ?? [],
+          },
+        };
+      },
     }
   )
 );

@@ -13,6 +13,11 @@ import {
   IconButton,
   List,
   ListItem,
+  Menu,
+  MenuButton,
+  MenuGroup,
+  MenuItem,
+  MenuList,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -61,6 +66,7 @@ export const TranslationsTableRow = ({
   onAlternatives,
   alternatives,
 }: TranslationsTableRowProps) => {
+  const prevSourceWord = usePrevious(sourceWord);
   const prevTargetWord = usePrevious(targetWord);
 
   const sourceRef = useRef<HTMLTextAreaElement>();
@@ -101,18 +107,37 @@ export const TranslationsTableRow = ({
     [index, onKeyDown]
   );
 
+  const handleAlternativeClick = useCallback(
+    (alternative: string) => () => {
+      const newAlternatives = [
+        ...(alternatives?.filter(
+          (prevAlternative) => prevAlternative !== alternative
+        ) ?? []),
+        targetWord,
+      ];
+
+      onTargetChanged(alternative);
+      onAlternatives?.(newAlternatives);
+    },
+    [alternatives, onAlternatives, onTargetChanged, targetWord]
+  );
+
   useDebounce(
     () => {
-      if (!sourceWord || (targetWord && prevTargetWord !== targetWord)) {
+      if (
+        !sourceWord ||
+        (prevSourceWord && prevSourceWord.trim() === sourceWord.trim()) ||
+        (targetWord && prevTargetWord !== targetWord)
+      ) {
         return;
       }
 
       fetchTranslationQuery.mutate({
-        word: sourceWord,
+        word: sourceWord.trim(),
       });
     },
     500,
-    [sourceWord]
+    [sourceWord, targetWord, prevTargetWord, prevSourceWord]
   );
 
   useEffect(() => {
@@ -128,6 +153,8 @@ export const TranslationsTableRow = ({
       sourceRef.current?.focus();
     }
   });
+
+  console.log({ alternatives });
 
   return (
     <Tr className={className}>
@@ -157,21 +184,25 @@ export const TranslationsTableRow = ({
             placeholder="Translation will appear here..."
           />
           {alternatives?.length && (
-            <Popover>
-              <PopoverTrigger>
-                <IconButton
-                  aria-label="Show alternatives"
-                  icon={<ChevronDownIcon />}
-                />
-              </PopoverTrigger>
-              <PopoverContent p={4}>
-                <List>
+            <Menu>
+              <MenuButton
+                as={IconButton}
+                aria-label="Show alternatives"
+                icon={<ChevronDownIcon />}
+              />
+              <MenuList p={4}>
+                <MenuGroup title="Alternatives">
                   {alternatives?.map((alternative, index) => (
-                    <ListItem key={index}>{alternative}</ListItem>
+                    <MenuItem
+                      onClick={handleAlternativeClick(alternative)}
+                      key={index}
+                    >
+                      {alternative}
+                    </MenuItem>
                   ))}
-                </List>
-              </PopoverContent>
-            </Popover>
+                </MenuGroup>
+              </MenuList>
+            </Menu>
           )}
           {fetchTranslationQuery.isLoading && <Spinner />}
           {onRemove && (
