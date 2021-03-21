@@ -26,11 +26,6 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Create procfile
-        run: |
-          touch Procfile
-          echo "web: npm install && npx nx build api --prod && cd dist/apps/api && npm run install && node main.js" >> Procfile
-
       - uses: akhileshns/heroku-deploy@v3.8.8
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
