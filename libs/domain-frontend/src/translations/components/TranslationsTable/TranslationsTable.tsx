@@ -1,8 +1,17 @@
-import { Table, TableCaption, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
+import {
+  HStack,
+  Table,
+  TableCaption,
+  Tbody,
+  Th,
+  Thead,
+  Tr,
+} from '@chakra-ui/react';
 import React from 'react';
 import { useTranslationsStore } from '../../stores/useTranslationsStore';
 import { TranslationsTableAddRow } from './AddRow/TranslationsTableAddRow';
 import { TranslationsTableEntryRow } from './EntryRow/TranslationsTableEntryRow';
+import { TranslationsTableUpload } from './Upload/TranslationsTableUpload';
 
 export const TranslationsTable = () => {
   const entries = useTranslationsStore((store) => store.translations);
@@ -10,9 +19,9 @@ export const TranslationsTable = () => {
   return (
     <Table>
       <TableCaption>
-        {entries.length
-          ? `${entries.length} entries.`
-          : 'Enter your translations here.'}
+        <HStack>
+          <TranslationsTableUpload />
+        </HStack>
       </TableCaption>
       <Thead>
         <Tr>

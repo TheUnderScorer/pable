@@ -1,12 +1,14 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import { TranslationEntry } from '@pable/domain-types';
+import { castAsArray } from '@pable/shared';
 
 export interface TranslationsStore {
   translations: TranslationEntry[];
-  addEntry: (entry: TranslationEntry) => void;
+  addEntry: (entry: TranslationEntry | TranslationEntry[]) => void;
   removeEntry: (index: number) => void;
   editEntry: (index: number, entry: Partial<TranslationEntry>) => void;
+  setEntries: (entries: TranslationEntry[]) => void;
 
   [key: string]: unknown;
 }
@@ -16,8 +18,10 @@ export const useTranslationsStore = create<TranslationsStore>(
     (set, get) => ({
       translations: [],
       addEntry: (entry) => {
+        const entries = castAsArray(entry);
+
         set({
-          translations: [...get().translations, entry],
+          translations: [...get().translations, ...entries],
         });
       },
       removeEntry: (index) => {
@@ -27,6 +31,11 @@ export const useTranslationsStore = create<TranslationsStore>(
 
         set({
           translations: newEntries,
+        });
+      },
+      setEntries: (entries) => {
+        set({
+          translations: entries,
         });
       },
       editEntry: (index, entry) => {

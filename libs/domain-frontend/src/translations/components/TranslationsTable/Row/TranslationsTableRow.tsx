@@ -208,7 +208,7 @@ export const TranslationsTableRow = ({
           {onRemove && (
             <IconButton
               aria-label="Delete entry"
-              colorScheme="danger"
+              colorScheme="dangerScheme"
               onClick={onRemove}
               icon={<DeleteIcon />}
             />
