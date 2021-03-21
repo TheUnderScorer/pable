@@ -36,4 +36,5 @@ jobs:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "pable-api"
           heroku_email: "przemyslawzydek@gmail.com"
+          procfile: "web: npm install && npx nx build api --prod && cd dist/apps/api && npm run install && node main.js"
 
