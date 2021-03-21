@@ -6,6 +6,7 @@
     "nx": "nx",
     "start": "nx serve",
     "build": "nx build",
+    "heroku-postbuild": "nx build api --prod",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint && nx lint api",
     "e2e": "nx e2e",
