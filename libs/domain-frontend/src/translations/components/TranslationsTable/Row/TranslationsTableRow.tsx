@@ -143,8 +143,6 @@ export const TranslationsTableRow = ({
     }
   });
 
-  console.log({ alternatives });
-
   return (
     <Tr className={className}>
       <Td>

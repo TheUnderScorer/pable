@@ -30,7 +30,6 @@ export const UploadInput = ({
       <input
         multiple={multiple}
         onChange={(event) => {
-          console.log({ event });
           onFile?.(event.target.files);
 
           if (clearAfterOnFile) {
