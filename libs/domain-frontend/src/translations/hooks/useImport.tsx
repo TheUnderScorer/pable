@@ -2,9 +2,7 @@ import { useTranslationsStore } from '../stores/useTranslationsStore';
 import React, { useCallback } from 'react';
 import { TranslationEntry } from '@pable/domain-types';
 import { Button, useToast } from '@chakra-ui/react';
-import { map } from 'remeda';
-
-const separator = '/';
+import { separator } from '../constants';
 
 const toastId = 'importResult';
 

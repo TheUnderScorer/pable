@@ -9,6 +9,7 @@ export interface TranslationsStore {
   removeEntry: (index: number) => void;
   editEntry: (index: number, entry: Partial<TranslationEntry>) => void;
   setEntries: (entries: TranslationEntry[]) => void;
+  clear: () => void;
 
   [key: string]: unknown;
 }
@@ -36,6 +37,11 @@ export const useTranslationsStore = create<TranslationsStore>(
       setEntries: (entries) => {
         set({
           translations: entries,
+        });
+      },
+      clear: () => {
+        set({
+          translations: [],
         });
       },
       editEntry: (index, entry) => {

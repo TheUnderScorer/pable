@@ -4,23 +4,17 @@ import React, {
   useCallback,
   useEffect,
   useRef,
-  useState,
 } from 'react';
 import { useFetchTranslation } from '../../../hooks/useFetchTranslation';
-import { useDebounce, useMount, usePrevious, useUnmount } from 'react-use';
+import { useDebounce, useMount, usePrevious } from 'react-use';
 import {
   HStack,
   IconButton,
-  List,
-  ListItem,
   Menu,
   MenuButton,
   MenuGroup,
   MenuItem,
   MenuList,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
   Spinner,
   Td,
   Textarea,
@@ -72,20 +66,15 @@ export const TranslationsTableRow = ({
   const sourceRef = useRef<HTMLTextAreaElement>();
   const targetRef = useRef<HTMLTextAreaElement>();
 
-  const [sourceWordForTranslation, setSourceWordForTranslation] = useState('');
-
-  const fetchTranslationQuery = useFetchTranslation(
-    sourceWordForTranslation,
-    (data) => {
-      if (data.translation) {
-        onTargetChanged(data.translation);
-      }
-
-      if (data.alternatives?.length) {
-        onAlternatives?.(data.alternatives);
-      }
+  const fetchTranslationQuery = useFetchTranslation(sourceWord, (data) => {
+    if (data.translation) {
+      onTargetChanged(data.translation);
     }
-  );
+
+    if (data.alternatives?.length) {
+      onAlternatives?.(data.alternatives);
+    }
+  });
 
   const handleKeyDown: TranslationsTableRowProps['onKeyDown'] = useCallback(
     (type) => (event) => {
@@ -204,7 +193,7 @@ export const TranslationsTableRow = ({
               </MenuList>
             </Menu>
           )}
-          {fetchTranslationQuery.isLoading && <Spinner />}
+          {fetchTranslationQuery.isLoading && <Spinner color="primary" />}
           {onRemove && (
             <IconButton
               aria-label="Delete entry"

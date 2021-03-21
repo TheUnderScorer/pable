@@ -1,5 +1,6 @@
 import {
-  HStack,
+  Button,
+  ButtonGroup,
   Table,
   TableCaption,
   Tbody,
@@ -12,16 +13,29 @@ import { useTranslationsStore } from '../../stores/useTranslationsStore';
 import { TranslationsTableAddRow } from './AddRow/TranslationsTableAddRow';
 import { TranslationsTableEntryRow } from './EntryRow/TranslationsTableEntryRow';
 import { TranslationsTableUpload } from './Upload/TranslationsTableUpload';
+import { DownloadIcon } from '@chakra-ui/icons';
+import { useExport } from '../../hooks/useExport';
+import { TranslationsTableClearAll } from './ClearAll/TranslationsTableClearAll';
 
 export const TranslationsTable = () => {
   const entries = useTranslationsStore((store) => store.translations);
+  const handleExport = useExport();
 
   return (
     <Table>
-      <TableCaption>
-        <HStack>
+      <TableCaption placement="top">
+        <ButtonGroup>
           <TranslationsTableUpload />
-        </HStack>
+          <Button
+            colorScheme="primaryScheme"
+            disabled={!entries.length}
+            onClick={handleExport}
+            leftIcon={<DownloadIcon />}
+          >
+            Export
+          </Button>
+          <TranslationsTableClearAll />
+        </ButtonGroup>
       </TableCaption>
       <Thead>
         <Tr>
