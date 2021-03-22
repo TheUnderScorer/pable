@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/TheUnderScorer/pable/compare/client-1.0.1...client-1.1.0) (2021-03-22)
+
+
+### Features
+
+* **pable:** Show version ([5f092e8](https://github.com/TheUnderScorer/pable/commit/5f092e81812c8ba2885939aae63b54a0e53b8c0b))
+
 ## [1.0.1](https://github.com/TheUnderScorer/pable/compare/client-1.0.0...client-1.0.1) (2021-03-22)
 
 
