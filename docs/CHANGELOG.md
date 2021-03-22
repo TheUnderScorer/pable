@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/TheUnderScorer/pable/compare/client-1.0.0...client-1.0.1) (2021-03-22)
+
+
+### Bug Fixes
+
+* **pable:** Export with utf-8 encoding ([705334f](https://github.com/TheUnderScorer/pable/commit/705334feca11143d3d7cb1f234c84be98e76f9b1))
+
 # 1.0.0 (2021-03-22)
 
 
