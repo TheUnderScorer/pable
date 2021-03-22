@@ -1,21 +1,19 @@
-import { cleanup, getByText, render, waitFor } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import React from 'react';
 import App from './App';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ApiClientProvider } from '@pable/shared-frontend';
 
 describe('App', () => {
-  afterEach(() => {
-    delete global['fetch'];
-    cleanup();
-  });
-
   it('should render successfully', async () => {
-    global['fetch'] = jest.fn().mockResolvedValueOnce({
-      json: () => ({
-        message: 'my message',
-      }),
-    });
+    const cmp = render(
+      <QueryClientProvider client={new QueryClient()}>
+        <ApiClientProvider url="">
+          <App />
+        </ApiClientProvider>
+      </QueryClientProvider>
+    );
 
-    const { baseElement } = render(<App />);
-    await waitFor(() => getByText(baseElement, 'my message'));
+    expect(cmp).toBeDefined();
   });
 });
