@@ -19,6 +19,10 @@ export const useExport = () => {
       )
       .join('\n');
 
-    download(entriesForExport, 'words.txt', 'text/plain');
+    const blob = new Blob([entriesForExport], {
+      type: 'type: "text/plain;charset=utf-8"',
+    });
+
+    download(blob, 'words.txt');
   }, [getValues]);
 };

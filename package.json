@@ -29,7 +29,7 @@
     "release:pable": "semantic-release --extends ./tools/release/release.pable.js",
     "release:pable:dry": "semantic-release --extends ./tools/release/release.pable.js -d",
     "release:api": "semantic-release --extends ./tools/release/release.api.js",
-    "release:api:dry": "semantic-release --extends ./tools/release/release.ap.js -d",
+    "release:api:dry": "semantic-release --extends ./tools/release/release.api.js -d",
     "release": "npm run release:api && npm run release:pable",
     "release:dry": "npm run release:api:dry && npm run release:pable:dry"
   },
