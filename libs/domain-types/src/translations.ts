@@ -15,7 +15,18 @@ export interface TranslationEntry {
   alternatives?: string[];
 }
 
+export interface TranslationsForm {
+  entries: TranslationEntry[];
+  newEntry: Partial<TranslationEntry>;
+}
+
 export interface TranslationConfiguration {
   targetLang: Language;
   sourceLang: Language;
 }
+
+export const initialTranslationEntry: TranslationEntry = {
+  targetWord: '',
+  alternatives: [],
+  sourceWord: '',
+};

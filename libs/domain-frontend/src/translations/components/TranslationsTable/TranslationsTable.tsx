@@ -8,18 +8,40 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import React from 'react';
-import { useTranslationsStore } from '../../stores/useTranslationsStore';
-import { TranslationsTableAddRow } from './AddRow/TranslationsTableAddRow';
+import React, { useCallback } from 'react';
 import { TranslationsTableEntryRow } from './EntryRow/TranslationsTableEntryRow';
 import { TranslationsTableUpload } from './Upload/TranslationsTableUpload';
 import { DownloadIcon } from '@chakra-ui/icons';
 import { useExport } from '../../hooks/useExport';
 import { TranslationsTableClearAll } from './ClearAll/TranslationsTableClearAll';
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import {
+  initialTranslationEntry,
+  TranslationEntry,
+  TranslationsForm,
+} from '@pable/domain-types';
+import { isLast } from '@pable/shared';
 
 export const TranslationsTable = () => {
-  const entries = useTranslationsStore((store) => store.translations);
+  const form = useFormContext<TranslationsForm>();
+  const { append, fields, remove } = useFieldArray<TranslationEntry>({
+    name: 'entries',
+    control: form.control,
+    keyName: 'id',
+  });
+
   const handleExport = useExport();
+
+  const handleAdd = useCallback(
+    () =>
+      append(
+        {
+          ...initialTranslationEntry,
+        },
+        false
+      ),
+    [append]
+  );
 
   return (
     <Table>
@@ -28,13 +50,16 @@ export const TranslationsTable = () => {
           <TranslationsTableUpload />
           <Button
             colorScheme="primaryScheme"
-            disabled={!entries.length}
+            disabled={!fields.length}
             onClick={handleExport}
             leftIcon={<DownloadIcon />}
           >
             Export
           </Button>
-          <TranslationsTableClearAll />
+          <TranslationsTableClearAll
+            entries={fields}
+            setValue={form.setValue}
+          />
         </ButtonGroup>
       </TableCaption>
       <Thead>
@@ -44,10 +69,18 @@ export const TranslationsTable = () => {
         </Tr>
       </Thead>
       <Tbody>
-        {entries.map((entry, index) => (
-          <TranslationsTableEntryRow key={index} index={index} entry={entry} />
+        {fields.map((entry, index) => (
+          <TranslationsTableEntryRow
+            entry={entry}
+            onRemove={remove}
+            key={entry.id}
+            index={index}
+            onAdd={handleAdd}
+            isLast={isLast(index, fields)}
+            register={form.register}
+            setValue={form.setValue}
+          />
         ))}
-        <TranslationsTableAddRow key={entries.length} />
       </Tbody>
     </Table>
   );

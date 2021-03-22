@@ -1,23 +1,45 @@
-import React, { MutableRefObject, useRef } from 'react';
+import React, { MutableRefObject, useCallback, useRef, useState } from 'react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { Button, ButtonGroup, Text } from '@chakra-ui/react';
-import { useTranslationsStore } from '../../../stores/useTranslationsStore';
 import { Dialog } from '@pable/shared-frontend';
 import { useToggle } from 'react-use';
+import { UseFormMethods } from 'react-hook-form';
+import { initialTranslationEntry, TranslationEntry } from '@pable/domain-types';
 
-export const TranslationsTableClearAll = () => {
+export interface TranslationsTableClearAllProps
+  extends Pick<UseFormMethods, 'setValue'> {
+  entries: TranslationEntry[];
+}
+
+export const TranslationsTableClearAll = ({
+  entries,
+  setValue,
+}: TranslationsTableClearAllProps) => {
   const [open, toggleOpen] = useToggle(false);
+  const [loading, setLoading] = useState(false);
   const cancelRef = useRef<HTMLButtonElement>();
 
-  const clear = useTranslationsStore((store) => store.clear);
-  const entries = useTranslationsStore((store) => store.translations);
+  const handleClear = useCallback(async () => {
+    setLoading(true);
+
+    setValue('entries', [
+      {
+        ...initialTranslationEntry,
+      },
+    ]);
+
+    setLoading(false);
+
+    toggleOpen(false);
+  }, [setValue, toggleOpen]);
 
   return (
     <>
       <Button
+        isLoading={loading}
         onClick={() => toggleOpen()}
         colorScheme="dangerScheme"
-        disabled={!entries.length}
+        disabled={!entries?.length}
         leftIcon={<DeleteIcon />}
       >
         Clear entries
@@ -27,18 +49,16 @@ export const TranslationsTableClearAll = () => {
         footer={
           <ButtonGroup>
             <Button
+              isDisabled={loading}
               onClick={() => toggleOpen()}
               ref={cancelRef as MutableRefObject<HTMLButtonElement>}
             >
               Cancel
             </Button>
             <Button
+              isLoading={loading}
               colorScheme="dangerScheme"
-              onClick={() => {
-                clear();
-
-                toggleOpen();
-              }}
+              onClick={handleClear}
             >
               Delete all entries
             </Button>
@@ -49,7 +69,7 @@ export const TranslationsTableClearAll = () => {
         onClose={toggleOpen}
       >
         <Text>
-          Are you sure you want to remove all {entries.length} entries?
+          Are you sure you want to remove all {entries?.length} entries?
         </Text>
         <Text>It cannot be undone!</Text>
       </Dialog>

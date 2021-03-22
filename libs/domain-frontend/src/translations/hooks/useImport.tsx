@@ -1,21 +1,19 @@
-import { useTranslationsStore } from '../stores/useTranslationsStore';
 import React, { useCallback } from 'react';
-import { TranslationEntry } from '@pable/domain-types';
+import { TranslationEntry, TranslationsForm } from '@pable/domain-types';
 import { Button, useToast } from '@chakra-ui/react';
 import { separator } from '../constants';
+import { useFormContext } from 'react-hook-form';
 
 const toastId = 'importResult';
 
 export const useImport = () => {
-  const toast = useToast();
+  const { setValue, getValues } = useFormContext<TranslationsForm>();
 
-  const addTranslation = useTranslationsStore((store) => store.addEntry);
-  const setEntries = useTranslationsStore((store) => store.setEntries);
-  const translations = useTranslationsStore((store) => store.translations);
+  const toast = useToast();
 
   const fromRawText = useCallback(
     (textEntries: string[]) => {
-      const oldTranslations = [...translations];
+      const oldTranslations = [...getValues().entries];
 
       const mappedTexts: TranslationEntry[] = textEntries.flatMap((entry) =>
         entry
@@ -24,12 +22,12 @@ export const useImport = () => {
           .filter((entry) => entry[0])
           .map((entry) => ({
             sourceWord: entry[0],
-            targetWord: entry[1],
+            targetWord: entry[1] ?? '',
             alternatives: [],
           }))
       );
 
-      addTranslation(mappedTexts);
+      setValue('entries', [...oldTranslations, ...mappedTexts]);
 
       toast({
         id: toastId,
@@ -42,7 +40,7 @@ export const useImport = () => {
             color="white"
             variant="link"
             onClick={() => {
-              setEntries(oldTranslations);
+              setValue('entries', oldTranslations);
               toast.close(toastId);
             }}
           >
@@ -51,10 +49,9 @@ export const useImport = () => {
         ),
         variant: 'solid',
         isClosable: true,
-        duration: 9999999999,
       });
     },
-    [addTranslation, setEntries, toast, translations]
+    [getValues, setValue, toast]
   );
 
   return {

@@ -1,12 +1,11 @@
 import React, {
   KeyboardEventHandler,
-  MutableRefObject,
+  memo,
   useCallback,
-  useEffect,
-  useRef,
+  useState,
 } from 'react';
 import { useFetchTranslation } from '../../../hooks/useFetchTranslation';
-import { useDebounce, useMount, usePrevious } from 'react-use';
+import { useDebounce, useMount } from 'react-use';
 import {
   HStack,
   IconButton,
@@ -20,188 +19,200 @@ import {
   Textarea,
   Tr,
 } from '@chakra-ui/react';
-import { TranslationEntry } from '@pable/domain-types';
+import { FetchTranslationsResult, TranslationEntry } from '@pable/domain-types';
 import { ChevronDownIcon, DeleteIcon } from '@chakra-ui/icons';
 import classNames from 'classnames';
 import { Key } from 'ts-key-enum';
+import { FormField } from '@pable/shared-frontend';
+import { UseFormMethods } from 'react-hook-form';
 
 export interface TranslationsTableRowProps {
-  onSourceChange: (word: string) => void;
-  onTargetChanged: (word: string) => void;
-  onAlternatives?: (alternatives: string[]) => void;
-  sourceWord: string;
-  targetWord: string;
-  alternatives?: string[];
   onKeyDown?: (
     type: keyof Pick<TranslationEntry, 'targetWord' | 'sourceWord'>
   ) => KeyboardEventHandler;
-  sourceRef?: (element?: HTMLTextAreaElement) => void;
-  targetRef?: (element?: HTMLTextAreaElement) => void;
-  onRemove?: () => void;
+  onRemove?: (index: number) => void;
   inputVariant?: string;
-  focusOnMount?: boolean;
   className?: string;
   index?: number;
+  sourceWordName: string;
+  targetWordName: string;
+  alternativesName: string;
+  entry: TranslationEntry;
+  register: UseFormMethods['register'];
+  setValue: UseFormMethods['setValue'];
 }
 
-export const TranslationsTableRow = ({
-  onSourceChange,
-  onTargetChanged,
-  sourceWord,
-  targetWord,
-  onKeyDown,
-  sourceRef: sourceRefProp,
-  targetRef: targetRefProp,
-  onRemove,
-  inputVariant,
-  focusOnMount,
-  className,
-  index,
-  onAlternatives,
-  alternatives,
-}: TranslationsTableRowProps) => {
-  const prevSourceWord = usePrevious(sourceWord);
-  const prevTargetWord = usePrevious(targetWord);
+// TODO Fix alternatives
+export const TranslationsTableRow = memo(
+  ({
+    onKeyDown,
+    onRemove,
+    inputVariant,
+    className,
+    index,
+    alternativesName,
+    sourceWordName,
+    targetWordName,
+    entry,
+    register,
+    setValue,
+  }: TranslationsTableRowProps) => {
+    const [didMountQuery, setDidMountQuery] = useState(false);
 
-  const sourceRef = useRef<HTMLTextAreaElement>();
-  const targetRef = useRef<HTMLTextAreaElement>();
+    const { targetWord } = entry;
 
-  const fetchTranslationQuery = useFetchTranslation(sourceWord, (data) => {
-    if (data.translation) {
-      onTargetChanged(data.translation);
-    }
+    const [sourceWord, setSourceWord] = useState(entry.sourceWord);
+    const [alternatives, setAlternatives] = useState(entry.alternatives);
 
-    if (data.alternatives?.length) {
-      onAlternatives?.(data.alternatives);
-    }
-  });
+    const handleQueryResult = useCallback(
+      (data?: FetchTranslationsResult) => {
+        const { alternatives = [], translation } = data;
+        if (translation) {
+          setValue(targetWordName, translation);
+        }
 
-  const handleKeyDown: TranslationsTableRowProps['onKeyDown'] = useCallback(
-    (type) => (event) => {
-      onKeyDown?.(type)?.(event);
+        setValue(alternativesName, alternatives);
+        setAlternatives(alternatives);
+      },
+      [alternativesName, targetWordName, setValue]
+    );
 
-      if (![Key.ArrowDown, Key.ArrowUp].includes(event.key as Key)) {
-        return;
+    const fetchTranslationQuery = useFetchTranslation(
+      sourceWord,
+      handleQueryResult
+    );
+
+    const handleKeyDown: TranslationsTableRowProps['onKeyDown'] = useCallback(
+      (type) => (event) => {
+        onKeyDown?.(type)?.(event);
+
+        if (![Key.ArrowDown, Key.ArrowUp].includes(event.key as Key)) {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const nextIndex = event.key === Key.ArrowUp ? index - 1 : index + 1;
+
+        document
+          .querySelector<HTMLInputElement>(`.${type}-${nextIndex}`)
+          ?.focus();
+      },
+      [index, onKeyDown]
+    );
+
+    const handleAlternativeClick = useCallback(
+      (alternative: string) => () => {
+        const newAlternatives = [
+          ...(alternatives?.filter(
+            (prevAlternative) => prevAlternative !== alternative
+          ) ?? []),
+          targetWord,
+        ];
+
+        setValue(targetWordName, alternative);
+        setValue(alternativesName, newAlternatives);
+      },
+      [alternatives, alternativesName, targetWord, targetWordName, setValue]
+    );
+
+    useDebounce(
+      () => {
+        if (!sourceWord.trim() || (!didMountQuery && targetWord)) {
+          return;
+        }
+
+        fetchTranslationQuery.mutate({
+          word: sourceWord.trim(),
+        });
+      },
+      500,
+      [sourceWord]
+    );
+
+    useMount(() => {
+      if (sourceWord && !targetWord) {
+        fetchTranslationQuery
+          .mutateAsync({
+            word: sourceWord,
+          })
+          .then(() => {
+            setDidMountQuery(true);
+          });
+      } else {
+        setTimeout(() => setDidMountQuery(true), 550);
       }
+    });
 
-      event.preventDefault();
-      event.stopPropagation();
-
-      const nextIndex = event.key === Key.ArrowUp ? index - 1 : index + 1;
-
-      document
-        .querySelector<HTMLInputElement>(`.${type}-${nextIndex}`)
-        ?.focus();
-    },
-    [index, onKeyDown]
-  );
-
-  const handleAlternativeClick = useCallback(
-    (alternative: string) => () => {
-      const newAlternatives = [
-        ...(alternatives?.filter(
-          (prevAlternative) => prevAlternative !== alternative
-        ) ?? []),
-        targetWord,
-      ];
-
-      onTargetChanged(alternative);
-      onAlternatives?.(newAlternatives);
-    },
-    [alternatives, onAlternatives, onTargetChanged, targetWord]
-  );
-
-  useDebounce(
-    () => {
-      if (
-        !sourceWord ||
-        (prevSourceWord && prevSourceWord.trim() === sourceWord.trim()) ||
-        (targetWord && prevTargetWord !== targetWord)
-      ) {
-        return;
-      }
-
-      fetchTranslationQuery.mutate({
-        word: sourceWord.trim(),
-      });
-    },
-    500,
-    [sourceWord, targetWord, prevTargetWord, prevSourceWord]
-  );
-
-  useEffect(() => {
-    targetRefProp?.(targetRef.current);
-  }, [targetRef, targetRefProp]);
-
-  useEffect(() => {
-    sourceRefProp?.(sourceRef.current);
-  }, [sourceRefProp, sourceRef]);
-
-  useMount(() => {
-    if (focusOnMount) {
-      sourceRef.current?.focus();
-    }
-  });
-
-  return (
-    <Tr className={className}>
-      <Td>
-        <Textarea
-          className={classNames('sourceWord', `sourceWord-${index}`)}
-          minHeight={12}
-          variant={inputVariant}
-          onChange={(event) => onSourceChange(event.target.value)}
-          onKeyDown={handleKeyDown('sourceWord')}
-          ref={sourceRef as MutableRefObject<HTMLTextAreaElement>}
-          value={sourceWord}
-          placeholder="Enter word here..."
-        />
-      </Td>
-      <Td>
-        <HStack width="100%">
-          <Textarea
-            className={classNames('targetWord', `targetWord-${index}`)}
-            minHeight={12}
-            variant={inputVariant}
-            disabled={fetchTranslationQuery.isLoading}
-            onChange={(event) => onTargetChanged(event.target.value)}
-            onKeyDown={handleKeyDown('targetWord')}
-            ref={targetRef as MutableRefObject<HTMLTextAreaElement>}
-            value={targetWord}
-            placeholder="Translation will appear here..."
-          />
-          {alternatives?.length && (
-            <Menu>
-              <MenuButton
-                as={IconButton}
-                aria-label="Show alternatives"
-                icon={<ChevronDownIcon />}
-              />
-              <MenuList p={4}>
-                <MenuGroup title="Alternatives">
-                  {alternatives?.map((alternative, index) => (
-                    <MenuItem
-                      onClick={handleAlternativeClick(alternative)}
-                      key={index}
-                    >
-                      {alternative}
-                    </MenuItem>
-                  ))}
-                </MenuGroup>
-              </MenuList>
-            </Menu>
-          )}
-          {fetchTranslationQuery.isLoading && <Spinner color="primary" />}
-          {onRemove && (
-            <IconButton
-              aria-label="Delete entry"
-              colorScheme="dangerScheme"
-              onClick={onRemove}
-              icon={<DeleteIcon />}
+    return (
+      <Tr className={className}>
+        <Td>
+          <FormField name={sourceWordName}>
+            <Textarea
+              defaultValue={entry.sourceWord}
+              name={sourceWordName}
+              ref={register()}
+              className={classNames('sourceWord', `sourceWord-${index}`)}
+              minHeight={12}
+              variant={inputVariant}
+              onKeyDown={handleKeyDown('sourceWord')}
+              placeholder="Enter word here..."
+              onChange={(event) => {
+                setSourceWord(event.target.value);
+              }}
             />
-          )}
-        </HStack>
-      </Td>
-    </Tr>
-  );
-};
+          </FormField>
+        </Td>
+        <Td>
+          <HStack width="100%">
+            <FormField name={targetWordName}>
+              <Textarea
+                name={targetWordName}
+                className={classNames('targetWord', `targetWord-${index}`)}
+                minHeight={12}
+                variant={inputVariant}
+                disabled={fetchTranslationQuery.isLoading}
+                onKeyDown={handleKeyDown('targetWord')}
+                placeholder="Translation will appear here..."
+                defaultValue={entry.targetWord}
+                ref={register()}
+              />
+            </FormField>
+
+            {alternatives?.length && (
+              <Menu>
+                <MenuButton
+                  as={IconButton}
+                  aria-label="Show alternatives"
+                  icon={<ChevronDownIcon />}
+                />
+                <MenuList p={4}>
+                  <MenuGroup title="Alternatives">
+                    {alternatives?.map((alternative, index) => (
+                      <MenuItem
+                        onClick={handleAlternativeClick(alternative)}
+                        key={index}
+                      >
+                        {alternative}
+                      </MenuItem>
+                    ))}
+                  </MenuGroup>
+                </MenuList>
+              </Menu>
+            )}
+            {fetchTranslationQuery.isLoading && <Spinner color="primary" />}
+            {onRemove && (
+              <IconButton
+                aria-label="Delete entry"
+                colorScheme="dangerScheme"
+                onClick={() => onRemove(index)}
+                icon={<DeleteIcon />}
+              />
+            )}
+          </HStack>
+        </Td>
+      </Tr>
+    );
+  }
+);

@@ -1,16 +1,17 @@
-import { useTranslationsStore } from '../stores/useTranslationsStore';
 import { useCallback } from 'react';
 import { separator } from '../constants';
 import download from 'downloadjs';
+import { useFormContext } from 'react-hook-form';
+import { TranslationsForm } from '@pable/domain-types';
 
-const formatWord = (word: string) => word.replace(/\n/g, ' ');
+const formatWord = (word?: string) => word?.replace(/\n/g, ' ') ?? '';
 
 export const useExport = () => {
-  const entries = useTranslationsStore((store) => store.translations);
+  const { getValues } = useFormContext<TranslationsForm>();
 
   return useCallback(() => {
-    const entriesForExport = entries
-      .map(
+    const entriesForExport = getValues()
+      .entries.map(
         (entry) =>
           `${formatWord(entry.sourceWord)}${separator}${formatWord(
             entry.targetWord
@@ -19,5 +20,5 @@ export const useExport = () => {
       .join('\n');
 
     download(entriesForExport, 'words.txt', 'text/plain');
-  }, [entries]);
+  }, [getValues]);
 };
