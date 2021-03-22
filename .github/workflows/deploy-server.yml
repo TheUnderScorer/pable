@@ -2,8 +2,8 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - 'server-[v]\d+.\d+.\d+'
-      - 'server-\d+.\d+.\d+'
+      - 'api-[v]\d+.\d+.\d+'
+      - 'api-\d+.\d+.\d+'
 name: Publish server on Heroku
 
 jobs:
