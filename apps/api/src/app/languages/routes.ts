@@ -1,9 +1,9 @@
 import { FastifyInstance } from 'fastify';
-import { RegisterRouteFn } from '@pable/shared-server';
-import { apiRoutes } from '@pable/domain-types';
-import { FetchTranslations } from '@pable/domain';
-import { FetchTranslationsDto } from '@pable/shared';
-import { bodySchemaValidator } from '@pable/shared-server';
+import { RegisterRouteFn } from '@skryba/shared-server';
+import { apiRoutes } from '@skryba/domain-types';
+import { FetchTranslations } from '@skryba/domain';
+import { FetchTranslationsDto } from '@skryba/shared';
+import { bodySchemaValidator } from '@skryba/shared-server';
 
 export const languageRoutes: RegisterRouteFn = async (
   fastify: FastifyInstance

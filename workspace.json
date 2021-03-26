@@ -1,102 +1,26 @@
 {
   "version": 2,
-  "cli": { "defaultCollection": "@nrwl/react" },
-  "defaultProject": "pable",
+  "cli": {
+    "defaultCollection": "@nrwl/react"
+  },
+  "defaultProject": "skryba",
   "generators": {
     "@nrwl/react": {
-      "application": { "style": "css", "linter": "eslint", "babel": true },
-      "component": { "style": "css" },
-      "library": { "style": "css", "linter": "eslint" }
+      "application": {
+        "style": "css",
+        "linter": "eslint",
+        "babel": true
+      },
+      "component": {
+        "style": "css"
+      },
+      "library": {
+        "style": "css",
+        "linter": "eslint"
+      }
     }
   },
   "projects": {
-    "pable": {
-      "root": "apps/pable",
-      "sourceRoot": "apps/pable/src",
-      "projectType": "application",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/web:build",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/apps/pable",
-            "index": "apps/pable/src/index.html",
-            "main": "apps/pable/src/main.tsx",
-            "polyfills": "apps/pable/src/polyfills.ts",
-            "tsConfig": "apps/pable/tsconfig.app.json",
-            "assets": ["apps/pable/src/favicon.ico", "apps/pable/src/assets"],
-            "styles": [],
-            "scripts": [],
-            "webpackConfig": "@nrwl/react/plugins/webpack"
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/pable/src/environments/environment.ts",
-                  "with": "apps/pable/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "executor": "@nrwl/web:dev-server",
-          "options": { "buildTarget": "pable:build" },
-          "configurations": {
-            "production": { "buildTarget": "pable:build:production" }
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["apps/pable/**/*.{ts,tsx,js,jsx}"] }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/pable"],
-          "options": {
-            "jestConfig": "apps/pable/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "pable-e2e": {
-      "root": "apps/pable-e2e",
-      "sourceRoot": "apps/pable-e2e/src",
-      "projectType": "application",
-      "targets": {
-        "e2e": {
-          "executor": "@nrwl/cypress:cypress",
-          "options": {
-            "cypressConfig": "apps/pable-e2e/cypress.json",
-            "tsConfig": "apps/pable-e2e/tsconfig.e2e.json",
-            "devServerTarget": "pable:serve"
-          },
-          "configurations": {
-            "production": { "devServerTarget": "pable:serve:production" }
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["apps/pable-e2e/**/*.{js,ts}"] }
-        }
-      }
-    },
     "api": {
       "root": "apps/api",
       "sourceRoot": "apps/api/src",
@@ -136,7 +60,9 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["apps/api/**/*.ts"] }
+          "options": {
+            "lintFilePatterns": ["apps/api/**/*.ts"]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -155,7 +81,9 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["libs/domain/**/*.ts"] }
+          "options": {
+            "lintFilePatterns": ["libs/domain/**/*.ts"]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -174,7 +102,9 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["libs/domain-types/**/*.ts"] }
+          "options": {
+            "lintFilePatterns": ["libs/domain-types/**/*.ts"]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -193,7 +123,9 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["libs/shared-server/**/*.ts"] }
+          "options": {
+            "lintFilePatterns": ["libs/shared-server/**/*.ts"]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -212,7 +144,9 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["libs/shared/**/*.ts"] }
+          "options": {
+            "lintFilePatterns": ["libs/shared/**/*.ts"]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -262,6 +196,103 @@
           "options": {
             "jestConfig": "libs/domain-frontend/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "skryba": {
+      "root": "apps/skryba",
+      "sourceRoot": "apps/skryba/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/skryba",
+            "index": "apps/skryba/src/index.html",
+            "main": "apps/skryba/src/main.tsx",
+            "polyfills": "apps/skryba/src/polyfills.ts",
+            "tsConfig": "apps/skryba/tsconfig.app.json",
+            "assets": ["apps/skryba/src/favicon.ico", "apps/skryba/src/assets"],
+            "styles": [],
+            "scripts": [],
+            "webpackConfig": "@nrwl/react/plugins/webpack"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/skryba/src/environments/environment.ts",
+                  "with": "apps/skryba/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "skryba:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "skryba:build:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/skryba/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/skryba"],
+          "options": {
+            "jestConfig": "apps/skryba/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "skryba-e2e": {
+      "root": "apps/skryba-e2e",
+      "sourceRoot": "apps/skryba-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/skryba-e2e/cypress.json",
+            "tsConfig": "apps/skryba-e2e/tsconfig.e2e.json",
+            "devServerTarget": "skryba:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "skryba:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/skryba-e2e/**/*.{js,ts}"]
           }
         }
       }

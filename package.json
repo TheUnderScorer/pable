@@ -1,5 +1,5 @@
 {
-  "name": "pable",
+  "name": "skryba",
   "version": "1.1.0",
   "license": "MIT",
   "scripts": {
@@ -7,8 +7,8 @@
     "start": "nx serve",
     "build": "NX_APP_VERSION=$(node -p 'require(\"./package.json\").version') nx build",
     "build:api": "nx build api",
-    "build:api-docker": "docker buildx build . -f docker/api/Dockerfile -t pable-api:latest --progress=plain --platform linux/amd64",
-    "build:api-docker:native": "docker buildx build . -f docker/api/Dockerfile -t pable-api:native --progress=plain",
+    "build:api-docker": "docker buildx build . -f docker/api/Dockerfile -t skryba-api:latest --progress=plain --platform linux/amd64",
+    "build:api-docker:native": "docker buildx build . -f docker/api/Dockerfile -t skryba-api:native --progress=plain",
     "heroku-postbuild": "nx build api --prod",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint && nx lint api",
@@ -29,12 +29,12 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "ts-node-dev": "TS_NODE_PROJECT=tsconfig.node.json ts-node-dev -r tsconfig-paths/register",
-    "release:pable": "semantic-release --extends ./tools/release/release.pable.js",
-    "release:pable:dry": "semantic-release --extends ./tools/release/release.pable.js -d",
+    "release:skryba": "semantic-release --extends ./tools/release/release.skryba.js",
+    "release:skryba:dry": "semantic-release --extends ./tools/release/release.skryba.js -d",
     "release:api": "semantic-release --extends ./tools/release/release.api.js",
     "release:api:dry": "semantic-release --extends ./tools/release/release.api.js -d",
-    "release": "npm run release:api && npm run release:pable",
-    "release:dry": "npm run release:api:dry && npm run release:pable:dry"
+    "release": "npm run release:api && npm run release:skryba",
+    "release:dry": "npm run release:api:dry && npm run release:skryba:dry"
   },
   "private": true,
   "devDependencies": {

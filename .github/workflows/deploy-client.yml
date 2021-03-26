@@ -27,13 +27,13 @@ jobs:
 
       - name: Create .env file
         run: |
-          cd apps/pable
+          cd apps/skryba
           touch .env
-          echo NX_API_URL=https://pable-api.herokuapp.com >> .env
+          echo NX_API_URL=https://skryba-api.herokuapp.com >> .env
           cd ../..
 
       - name: Build client
-        run: npx nx build pable --prod
+        run: npx nx build skryba --prod
 
       - name: Publish
         uses: jsmrcaga/action-netlify-deploy@v1.5.0
@@ -41,5 +41,5 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          build_directory: dist/apps/pable
+          build_directory: dist/apps/skryba
           NETLIFY_DEPLOY_TO_PROD: true

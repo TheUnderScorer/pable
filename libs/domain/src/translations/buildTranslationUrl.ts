@@ -1,6 +1,6 @@
 import { URL } from 'url';
-import { FetchTranslationsDto } from '@pable/shared';
-import { Language } from '@pable/domain-types';
+import { FetchTranslationsDto } from '@skryba/shared';
+import { Language } from '@skryba/domain-types';
 
 const langCodesMap = {
   [Language.English]: 'en',

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { TranslationEntry, TranslationsForm } from '@pable/domain-types';
+import { TranslationEntry, TranslationsForm } from '@skryba/domain-types';
 import { Button, useToast } from '@chakra-ui/react';
 import { separator } from '../constants';
 import { useFormContext } from 'react-hook-form';

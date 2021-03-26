@@ -1,10 +1,13 @@
 import React, { MutableRefObject, useCallback, useRef, useState } from 'react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { Button, ButtonGroup, Text } from '@chakra-ui/react';
-import { Dialog } from '@pable/shared-frontend';
+import { Dialog } from '@skryba/shared-frontend';
 import { useToggle } from 'react-use';
 import { UseFormMethods } from 'react-hook-form';
-import { initialTranslationEntry, TranslationEntry } from '@pable/domain-types';
+import {
+  initialTranslationEntry,
+  TranslationEntry,
+} from '@skryba/domain-types';
 
 export interface TranslationsTableClearAllProps
   extends Pick<UseFormMethods, 'setValue'> {

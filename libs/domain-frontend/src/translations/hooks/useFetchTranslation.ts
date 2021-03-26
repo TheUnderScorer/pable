@@ -1,8 +1,8 @@
 import { useTranslationsConfiguration } from '../stores/useTranslationsConfiguration';
 import { useMutation } from 'react-query';
-import { useApiClient } from '@pable/shared-frontend';
-import { FetchTranslationsResult } from '@pable/domain-types';
-import { FetchTranslationsDto } from '@pable/shared';
+import { useApiClient } from '@skryba/shared-frontend';
+import { FetchTranslationsResult } from '@skryba/domain-types';
+import { FetchTranslationsDto } from '@skryba/shared';
 import { useCallback } from 'react';
 
 export const fetchTranslationsKey = 'fetchTranslations';

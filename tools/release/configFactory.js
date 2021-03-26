@@ -1,4 +1,4 @@
-const appNames = ['pable', 'api'];
+const appNames = ['skryba', 'api'];
 
 const releaseFactory = ({ tagFormat, name, assets = [], execConfig }) => {
   const plugins = [
@@ -43,7 +43,7 @@ const releaseFactory = ({ tagFormat, name, assets = [], execConfig }) => {
 
   return {
     tagFormat,
-    repositoryUrl: 'https://github.com/TheUnderScorer/pable.git',
+    repositoryUrl: 'https://github.com/TheUnderScorer/skryba.git',
     branches: [
       '+([0-9])?(.{+([0-9]),x}).x',
       'master',

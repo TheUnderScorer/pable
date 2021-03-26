@@ -1,6 +1,6 @@
 import { Select, SelectProps } from '@chakra-ui/react';
 import React from 'react';
-import { Language } from '@pable/domain-types';
+import { Language } from '@skryba/domain-types';
 
 const languagesArray = Object.values(Language);
 

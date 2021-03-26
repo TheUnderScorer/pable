@@ -23,7 +23,7 @@ jobs:
       - uses: akhileshns/heroku-deploy@v3.8.8
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "pable-api"
+          heroku_app_name: "skryba-api"
           heroku_email: "przemyslawzydek@gmail.com"
           procfile: "web: node dist/apps/api/main.js"
 

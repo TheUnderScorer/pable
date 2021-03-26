@@ -3,8 +3,11 @@ import React from 'react';
 import { TranslationsConfiguration } from '../components/TranslationsConfiguration/TranslationsConfiguration';
 import { TranslationsTable } from '../components/TranslationsTable/TranslationsTable';
 import { FormProvider } from 'react-hook-form';
-import { initialTranslationEntry, TranslationsForm } from '@pable/domain-types';
-import { useLocalStorageForm } from '@pable/shared-frontend';
+import {
+  initialTranslationEntry,
+  TranslationsForm,
+} from '@skryba/domain-types';
+import { useLocalStorageForm } from '@skryba/shared-frontend';
 import { TranslationsErrorBoundary } from '../components/TranslationsErrorBoundary/TranslationsErrorBoundary';
 
 export const TranslationsTableView = () => {

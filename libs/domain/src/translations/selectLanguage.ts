@@ -1,5 +1,5 @@
 import { Page } from 'puppeteer';
-import { Language } from '@pable/domain-types';
+import { Language } from '@skryba/domain-types';
 
 const langCodesMap = {
   [Language.English]: ['en-GB', 'en'],

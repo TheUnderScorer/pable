@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
-import { TranslationEntry } from '@pable/domain-types';
-import { castAsArray } from '@pable/shared';
+import { TranslationEntry } from '@skryba/domain-types';
+import { castAsArray } from '@skryba/shared';
 
 export interface TranslationsStore {
   translations: TranslationEntry[];

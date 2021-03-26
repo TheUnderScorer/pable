@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { separator } from '../constants';
 import download from 'downloadjs';
 import { useFormContext } from 'react-hook-form';
-import { TranslationsForm } from '@pable/domain-types';
+import { TranslationsForm } from '@skryba/domain-types';
 
 const formatWord = (word?: string) => word?.replace(/\n/g, ' ') ?? '';
 

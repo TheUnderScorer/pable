@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import React from 'react';
 import App from './App';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { ApiClientProvider } from '@pable/shared-frontend';
+import { ApiClientProvider } from '@skryba/shared-frontend';
 
 describe('App', () => {
   it('should render successfully', async () => {

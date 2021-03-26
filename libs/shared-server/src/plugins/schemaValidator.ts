@@ -1,5 +1,5 @@
 import { RouteHandler } from 'fastify';
-import { BaseSchemaConstructor } from '@pable/shared';
+import { BaseSchemaConstructor } from '@skryba/shared';
 
 export const bodySchemaValidator = <T extends BaseSchemaConstructor<unknown>>(
   schema: T

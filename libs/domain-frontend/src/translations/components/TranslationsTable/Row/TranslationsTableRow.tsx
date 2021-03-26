@@ -19,11 +19,14 @@ import {
   Textarea,
   Tr,
 } from '@chakra-ui/react';
-import { FetchTranslationsResult, TranslationEntry } from '@pable/domain-types';
+import {
+  FetchTranslationsResult,
+  TranslationEntry,
+} from '@skryba/domain-types';
 import { ChevronDownIcon, DeleteIcon } from '@chakra-ui/icons';
 import classNames from 'classnames';
 import { Key } from 'ts-key-enum';
-import { FormField } from '@pable/shared-frontend';
+import { FormField } from '@skryba/shared-frontend';
 import { UseFormMethods } from 'react-hook-form';
 
 export interface TranslationsTableRowProps {

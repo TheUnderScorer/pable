@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { ValidationError } from '@pable/shared';
+import { ValidationError } from '@skryba/shared';
 
 export const errorHandler: FastifyInstance['errorHandler'] = async (
   error,

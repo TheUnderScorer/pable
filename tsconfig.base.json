@@ -22,12 +22,12 @@
       }
     ],
     "paths": {
-      "@pable/domain": ["libs/domain/src/index.ts"],
-      "@pable/domain-types": ["libs/domain-types/src/index.ts"],
-      "@pable/shared-server": ["libs/shared-server/src/index.ts"],
-      "@pable/shared": ["libs/shared/src/index.ts"],
-      "@pable/shared-frontend": ["libs/shared-frontend/src/index.ts"],
-      "@pable/domain-frontend": ["libs/domain-frontend/src/index.ts"]
+      "@skryba/domain": ["libs/domain/src/index.ts"],
+      "@skryba/domain-types": ["libs/domain-types/src/index.ts"],
+      "@skryba/shared-server": ["libs/shared-server/src/index.ts"],
+      "@skryba/shared": ["libs/shared/src/index.ts"],
+      "@skryba/shared-frontend": ["libs/shared-frontend/src/index.ts"],
+      "@skryba/domain-frontend": ["libs/domain-frontend/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

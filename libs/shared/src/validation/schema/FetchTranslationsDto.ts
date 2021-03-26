@@ -1,5 +1,5 @@
 import * as jf from 'joiful';
-import { Language } from '@pable/domain-types';
+import { Language } from '@skryba/domain-types';
 import { requiredEnum } from '../decorators/enum';
 import { BaseSchema } from '../BaseSchema';
 

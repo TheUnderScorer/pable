@@ -1,5 +1,5 @@
-import { FetchTranslationsDto } from '@pable/shared';
-import { apiRoutes, FetchTranslationsResult } from '@pable/domain-types';
+import { FetchTranslationsDto } from '@skryba/shared';
+import { apiRoutes, FetchTranslationsResult } from '@skryba/domain-types';
 
 export class ApiClient {
   constructor(private readonly url: string) {}

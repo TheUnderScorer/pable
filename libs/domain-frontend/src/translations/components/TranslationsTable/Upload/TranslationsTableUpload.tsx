@@ -5,9 +5,9 @@ import {
   readFile,
   UploadInput,
   UploadInputProps,
-} from '@pable/shared-frontend';
+} from '@skryba/shared-frontend';
 import { Button, List, ListItem } from '@chakra-ui/react';
-import { UploadError } from '@pable/shared';
+import { UploadError } from '@skryba/shared';
 import { useImport } from '../../../hooks/useImport';
 
 export const TranslationsTableUpload = () => {

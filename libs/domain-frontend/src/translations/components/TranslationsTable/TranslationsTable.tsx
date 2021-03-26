@@ -19,8 +19,8 @@ import {
   initialTranslationEntry,
   TranslationEntry,
   TranslationsForm,
-} from '@pable/domain-types';
-import { isLast } from '@pable/shared';
+} from '@skryba/domain-types';
+import { isLast } from '@skryba/shared';
 
 export const TranslationsTable = () => {
   const form = useFormContext<TranslationsForm>();

@@ -1,6 +1,6 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Language, TranslationConfiguration } from '@pable/domain-types';
+import { Language, TranslationConfiguration } from '@skryba/domain-types';
 
 export interface TranslationConfigurationStore
   extends TranslationConfiguration {

@@ -1,9 +1,9 @@
 import { Browser, Page } from 'puppeteer';
-import { FetchTranslationsResult } from '@pable/domain-types';
+import { FetchTranslationsResult } from '@skryba/domain-types';
 import { URL } from 'url';
-import { FetchTranslationsDto } from '@pable/shared';
+import { FetchTranslationsDto } from '@skryba/shared';
 import { buildTranslationUrl } from './buildTranslationUrl';
-import { getElementPropertyAsText } from '@pable/shared-server';
+import { getElementPropertyAsText } from '@skryba/shared-server';
 
 interface FetchTranslationsDependencies {
   browser: Browser;

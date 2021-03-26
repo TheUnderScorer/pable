@@ -1,6 +1,6 @@
 module.exports = {
   projects: [
-    '<rootDir>/apps/pable',
+    '<rootDir>/apps/skryba',
     '<rootDir>/apps/api',
     '<rootDir>/libs/domain',
     '<rootDir>/libs/domain-types',

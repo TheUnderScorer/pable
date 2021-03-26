@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslationsConfiguration } from '../../stores/useTranslationsConfiguration';
 import { FormControl, FormLabel, HStack } from '@chakra-ui/react';
-import { Language } from '@pable/domain-types';
+import { Language } from '@skryba/domain-types';
 import { LangSelect } from '../LangSelect/LangSelect';
 
 export const TranslationsConfiguration = () => {

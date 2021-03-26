@@ -1,14 +1,19 @@
 {
   "implicitDependencies": {
     "workspace.json": "*",
-    "package.json": { "dependencies": "*", "devDependencies": "*" },
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
     ".eslintrc.json": "*",
     "nx.json": "*"
   },
-  "affected": { "defaultBase": "master" },
-  "npmScope": "pable",
+  "affected": {
+    "defaultBase": "master"
+  },
+  "npmScope": "skryba",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/nx-cloud",
@@ -21,14 +26,33 @@
     }
   },
   "projects": {
-    "pable": { "tags": [] },
-    "pable-e2e": { "tags": [], "implicitDependencies": ["pable"] },
-    "api": { "tags": [] },
-    "domain": { "tags": [] },
-    "domain-types": { "tags": [] },
-    "shared-server": { "tags": [] },
-    "shared": { "tags": [] },
-    "shared-frontend": { "tags": [] },
-    "domain-frontend": { "tags": [] }
+    "api": {
+      "tags": []
+    },
+    "domain": {
+      "tags": []
+    },
+    "domain-types": {
+      "tags": []
+    },
+    "shared-server": {
+      "tags": []
+    },
+    "shared": {
+      "tags": []
+    },
+    "shared-frontend": {
+      "tags": []
+    },
+    "domain-frontend": {
+      "tags": []
+    },
+    "skryba": {
+      "tags": []
+    },
+    "skryba-e2e": {
+      "tags": [],
+      "implicitDependencies": ["skryba"]
+    }
   }
 }

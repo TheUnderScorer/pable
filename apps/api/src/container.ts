@@ -1,9 +1,9 @@
 import { asFunction, asValue, createContainer as initContainer } from 'awilix';
 import fastify from 'fastify';
 import puppeteer from 'puppeteer';
-import { makeFetchTranslations } from '@pable/domain';
+import { makeFetchTranslations } from '@skryba/domain';
 import { languageRoutes } from './app/languages/routes';
-import { errorHandler, scopedContainer } from '@pable/shared-server';
+import { errorHandler, scopedContainer } from '@skryba/shared-server';
 import { URL } from 'url';
 import fastifyCors from 'fastify-cors';
 
