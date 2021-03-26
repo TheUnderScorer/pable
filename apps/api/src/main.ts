@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { createContainer } from './container';
 import { FastifyInstance } from 'fastify';
 

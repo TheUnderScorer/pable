@@ -10,7 +10,7 @@ import fastifyCors from 'fastify-cors';
 export const createContainer = async () => {
   const container = initContainer();
 
-  const port = process.env.PORT || 3333;
+  const port = process.env.PORT || 3000;
   const server = fastify({
     logger: true,
   });
@@ -18,6 +18,7 @@ export const createContainer = async () => {
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-dev-shm-usage'],
     executablePath: process.env.PUPPETER_EXECUTABLE_PATH,
+    headless: true,
   });
 
   container.register({
