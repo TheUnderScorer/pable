@@ -1,3 +1,5 @@
+# [1.1.0](https://github.com/TheUnderScorer/skryba/compare/api-1.0.0...api-1.1.0) (2021-03-26)
+
 # [1.1.0](https://github.com/TheUnderScorer/skryba/compare/client-1.0.1...client-1.1.0) (2021-03-22)
 
 
