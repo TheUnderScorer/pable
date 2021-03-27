@@ -28,11 +28,11 @@ resource "aws_route" "internet_access" {
 
 resource "aws_security_group" "api_sg" {
   name = "security_group_app"
-  description = "Allow TLS inbound traffic on port 80 (http)"
+  description = "Allow TLS inbound traffic"
   vpc_id = aws_vpc.app_vpc.id
 
   ingress {
-    from_port = 80
+    from_port = "80"
     to_port = 3000
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]

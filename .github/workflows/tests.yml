@@ -81,5 +81,5 @@ jobs:
         run: docker-compose up -d api
 
       - name: Run e2e tsts
-        run: nx run skryba-e2e:e2e
+        run: npx nx run skryba-e2e:e2e
 
