@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/TheUnderScorer/skryba/compare/client-1.1.0...client-1.1.1) (2021-03-27)
+
+
+### Bug Fixes
+
+* **skryba:** Block removal if only one row if present ([336acc2](https://github.com/TheUnderScorer/skryba/commit/336acc2f7958591900cee5d6ddea42e79c4f4784))
+
 # [1.1.0](https://github.com/TheUnderScorer/skryba/compare/api-1.0.0...api-1.1.0) (2021-03-26)
 
 # [1.1.0](https://github.com/TheUnderScorer/skryba/compare/client-1.0.1...client-1.1.0) (2021-03-22)
