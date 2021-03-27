@@ -72,6 +72,7 @@ export const TranslationsTable = () => {
         {fields.map((entry, index) => (
           <TranslationsTableEntryRow
             entry={entry}
+            itemsCount={fields.length}
             onRemove={remove}
             key={entry.id}
             index={index}

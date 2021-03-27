@@ -19,6 +19,7 @@ export interface TranslationsTableEntryRowProps
   index: number;
   isLast: boolean;
   onAdd: () => void;
+  itemsCount: number;
 }
 
 export const TranslationsTableEntryRow = memo(
@@ -28,6 +29,7 @@ export const TranslationsTableEntryRow = memo(
     entry,
     onAdd,
     isLast,
+    itemsCount,
     ...props
   }: TranslationsTableEntryRowProps) => {
     const [didAdd, setDidAdd] = useState(false);
@@ -65,7 +67,7 @@ export const TranslationsTableEntryRow = memo(
       <TranslationsTableRow
         className={isLast ? 'last-entry' : ''}
         entry={entry}
-        onRemove={onRemove}
+        onRemove={itemsCount <= 1 ? undefined : onRemove}
         inputVariant="filled"
         index={index}
         alternativesName={`entries[${index}].alternatives`}
