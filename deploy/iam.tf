@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ecs_role" {
-  name = "ecs_app"
+  name        = "ecs_app"
   description = "Role for running ECS tasks"
 
   assume_role_policy = <<POLICY

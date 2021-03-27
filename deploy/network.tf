@@ -1,18 +1,18 @@
 resource "aws_vpc" "app_vpc" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
-  enable_dns_support = true
+  enable_dns_support   = true
 }
 
 resource "aws_subnet" "public_a" {
-  vpc_id = aws_vpc.app_vpc.id
-  cidr_block = "10.0.1.0/24"
+  vpc_id            = aws_vpc.app_vpc.id
+  cidr_block        = "10.0.1.0/24"
   availability_zone = "${var.aws_region}a"
 }
 
 resource "aws_subnet" "public_b" {
-  vpc_id = aws_vpc.app_vpc.id
-  cidr_block = "10.0.2.0/24"
+  vpc_id            = aws_vpc.app_vpc.id
+  cidr_block        = "10.0.2.0/24"
   availability_zone = "${var.aws_region}b"
 }
 
@@ -21,28 +21,28 @@ resource "aws_internet_gateway" "internet_gateway" {
 }
 
 resource "aws_route" "internet_access" {
-  route_table_id = aws_vpc.app_vpc.main_route_table_id
+  route_table_id         = aws_vpc.app_vpc.main_route_table_id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id = aws_internet_gateway.internet_gateway.id
+  gateway_id             = aws_internet_gateway.internet_gateway.id
 }
 
 resource "aws_security_group" "api_sg" {
-  name = "security_group_app"
+  name        = "security_group_app"
   description = "Allow TLS inbound traffic"
-  vpc_id = aws_vpc.app_vpc.id
+  vpc_id      = aws_vpc.app_vpc.id
 
   ingress {
-    from_port = "80"
-    to_port = 3000
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port       = "80"
+    to_port         = 3000
+    protocol        = "tcp"
+    cidr_blocks     = ["0.0.0.0/0"]
     security_groups = [aws_security_group.app_lb_sg.id]
   }
 
   egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
