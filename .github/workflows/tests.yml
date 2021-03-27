@@ -55,3 +55,31 @@ jobs:
 
       - name: Lint
         run: npm run test
+
+  test-e2e:
+    name: Run e2e tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Set Node.js 13.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 15.x
+
+      - name: Create .env file
+        run: |
+          cd apps/skryba
+          touch .env
+          echo NX_API_URL=http://localhost:3000 >> .env
+          cd ../..
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Start api
+        run: docker-compose up -d api
+
+      - name: Run e2e tsts
+        run: npx nx run skryba-e2e:e2e
+

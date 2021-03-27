@@ -1,4 +1,4 @@
-POST http://34.254.249.165:3000/languages
+POST https://api.skryba.link/languages
 Content-Type: application/json
 
 {

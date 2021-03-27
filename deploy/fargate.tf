@@ -11,7 +11,6 @@ resource "aws_ecs_task_definition" "api_task" {
 
   // Fargate requires task definitions to have an execution role ARN to support ECR images
   execution_role_arn = aws_iam_role.ecs_role.arn
-
   container_definitions = <<EOT
 [
     {
@@ -66,7 +65,7 @@ resource "aws_ecs_service" "api_service" {
     target_group_arn = aws_lb_target_group.api_tg.arn
   }
 
-  depends_on = [aws_lb_listener.api_http_forward]
+  depends_on = [aws_lb_listener.api_https_forward, aws_lb_listener.http_redirect]
 }
 
 resource "aws_cloudwatch_log_group" "api_logs" {
