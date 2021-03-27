@@ -6,6 +6,7 @@ import { languageRoutes } from './app/languages/routes';
 import { errorHandler, scopedContainer } from '@skryba/shared-server';
 import { URL } from 'url';
 import fastifyCors from 'fastify-cors';
+import { apiRoutes } from '@skryba/domain-types';
 
 export const createContainer = async () => {
   const container = initContainer();
@@ -37,6 +38,14 @@ export const createContainer = async () => {
   server.register(languageRoutes);
 
   scopedContainer(container, server);
+
+  server.get(apiRoutes.health, async (_request, reply) => {
+    reply.status(200);
+
+    return {
+      result: true,
+    };
+  });
 
   return container;
 };

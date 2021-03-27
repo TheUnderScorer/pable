@@ -4,8 +4,6 @@ FROM $IMAGE as builder
 
 WORKDIR /app
 
-RUN npm install -g npm@7
-
 COPY ./package.json ./package.json
 COPY ./package-lock.json ./package-lock.json
 
