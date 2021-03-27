@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useTranslationsConfiguration } from '../../stores/useTranslationsConfiguration';
-import { FormControl, FormLabel, HStack } from '@chakra-ui/react';
+import {
+  FormControl,
+  FormLabel,
+  HStack,
+  IconButton,
+  Tooltip,
+} from '@chakra-ui/react';
 import { Language } from '@skryba/domain-types';
 import { LangSelect } from '../LangSelect/LangSelect';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRandom } from '@fortawesome/free-solid-svg-icons';
 
 export const TranslationsConfiguration = () => {
   const sourceLang = useTranslationsConfiguration((store) => store.sourceLang);
@@ -15,8 +23,13 @@ export const TranslationsConfiguration = () => {
     (store) => store.setTargetLang
   );
 
+  const swap = useCallback(() => {
+    setSourceLang(targetLang);
+    setTargetLang(sourceLang);
+  }, [setSourceLang, setTargetLang, sourceLang, targetLang]);
+
   return (
-    <HStack spacing={4}>
+    <HStack spacing={4} alignItems="flex-end">
       <FormControl id="sourceLanguage">
         <FormLabel>Source language</FormLabel>
         <LangSelect
@@ -33,6 +46,11 @@ export const TranslationsConfiguration = () => {
           onChange={(event) => setTargetLang(event.target.value as Language)}
         />
       </FormControl>
+      <Tooltip label="Swap languages">
+        <IconButton onClick={swap} padding={0} aria-label="Swap">
+          <FontAwesomeIcon icon={faRandom} />
+        </IconButton>
+      </Tooltip>
     </HStack>
   );
 };
