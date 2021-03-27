@@ -52,7 +52,7 @@ resource "aws_ecs_service" "api_service" {
   desired_count = 1
 
   deployment_minimum_healthy_percent = 0
-  deployment_maximum_percent = 200
+  deployment_maximum_percent         = 200
 
   force_new_deployment = true
 
