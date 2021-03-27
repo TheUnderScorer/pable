@@ -51,6 +51,11 @@ resource "aws_ecs_service" "api_service" {
   launch_type   = "FARGATE"
   desired_count = 1
 
+  deployment_minimum_healthy_percent = 0
+  deployment_maximum_percent = 200
+
+  force_new_deployment = true
+
   network_configuration {
     subnets = [
     aws_subnet.public_a.id, aws_subnet.public_b.id]
