@@ -4,7 +4,7 @@ on:
     tags:
       - 'api-[v]\d+.\d+.\d+'
       - 'api-\d+.\d+.\d+'
-name: Publish server on Heroku
+name: Push server image to ECR
 
 jobs:
   deploy-server:
@@ -37,6 +37,7 @@ jobs:
           ECR_REPOSITORY: api_repo
           IMAGE_TAG: latest
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          npm run build:api
+          docker tag skryba-api:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
