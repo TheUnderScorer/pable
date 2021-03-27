@@ -42,7 +42,6 @@ jobs:
         run: cd deploy && terraform init
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: cd deploy && terraform apply -auto-approve
 
       - name: Login to Amazon ECR
