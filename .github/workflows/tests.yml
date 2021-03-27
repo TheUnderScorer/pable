@@ -57,7 +57,7 @@ jobs:
         run: npm run test
 
   test-e2e:
-    name: Run tests
+    name: Run e2e tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
