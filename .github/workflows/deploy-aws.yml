@@ -4,7 +4,7 @@ on:
     tags:
       - 'api-[v]\d+.\d+.\d+'
       - 'api-\d+.\d+.\d+'
-name: Push server image to ECR
+name: Deploy app on AWS
 
 jobs:
   deploy-server:
@@ -27,6 +27,24 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          # terraform_version: 0.13.0
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Format
+        id: fmt
+        run: cd deploy && terraform fmt -check
+
+      - name: Terraform Init
+        id: init
+        run: cd deploy && terraform init
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: cd deploy && terraform apply -auto-approve
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
@@ -38,6 +56,6 @@ jobs:
           IMAGE_TAG: latest
         run: |
           npm run build:api-docker
-          docker tag skryba-api:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker tag skryba-api:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
