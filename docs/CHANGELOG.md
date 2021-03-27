@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/TheUnderScorer/skryba/compare/client-1.1.1...client-1.1.2) (2021-03-27)
+
+
+### Bug Fixes
+
+* **skryba:** Add swap button ([8d78f98](https://github.com/TheUnderScorer/skryba/commit/8d78f987cc652c9a14fc076752a51b143505e530))
+
 ## [1.1.1](https://github.com/TheUnderScorer/skryba/compare/client-1.1.0...client-1.1.1) (2021-03-27)
 
 
