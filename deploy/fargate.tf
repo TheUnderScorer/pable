@@ -15,7 +15,7 @@ resource "aws_ecs_task_definition" "api_task" {
 [
     {
         "name": "skryba_api",
-        "image": "${aws_ecr_repository.api_repo.repository_url}:latest",
+        "image": "${aws_ecr_repository.api_repo.repository_url}:${var.image_tag}",
         "memory": 512,
         "essential": true,
         "logConfiguration": {

@@ -20,6 +20,9 @@ jobs:
         with:
           node-version: 15.x
 
+      - name: Build docker image
+        run: npm run build:api-docker
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -43,18 +46,19 @@ jobs:
 
       - name: Terraform Apply
         run: cd deploy && terraform apply -auto-approve
+        env:
+          TF_VAR_image_tag: ${{ env.GITHUB_SHA }}
 
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push image to Amazon ECR
+      - name: Tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: api_repo
-          IMAGE_TAG: latest
+          IMAGE_TAG: ${{ env.GITHUB_SHA }}
         run: |
-          npm run build:api-docker
           docker tag skryba-api:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 

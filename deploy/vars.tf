@@ -17,3 +17,7 @@ variable "dns_name" {
 variable "dns_zone" {
   default = "skryba"
 }
+
+variable "image_tag" {
+  default = "latest"
+}
