@@ -47,7 +47,7 @@ jobs:
       - name: Terraform Apply
         run: cd deploy && terraform apply -auto-approve
         env:
-          TF_VAR_image_tag: $GITHUB_SHA
+          TF_VAR_image_tag: ${{ github.sha }}
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -57,7 +57,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: api_repo
-          IMAGE_TAG: $GITHUB_SHA
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           docker tag skryba-api:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
