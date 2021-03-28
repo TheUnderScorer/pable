@@ -29,12 +29,8 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "ts-node-dev": "TS_NODE_PROJECT=tsconfig.node.json ts-node-dev -r tsconfig-paths/register",
-    "release:skryba": "semantic-release --extends ./tools/release/release.skryba.js",
-    "release:skryba:dry": "semantic-release --extends ./tools/release/release.skryba.js -d",
-    "release:api": "semantic-release --extends ./tools/release/release.api.js",
-    "release:api:dry": "semantic-release --extends ./tools/release/release.api.js -d",
-    "release": "npm run release:api && npm run release:skryba",
-    "release:dry": "npm run release:api:dry && npm run release:skryba:dry"
+    "release": "semantic-release",
+    "release:dry": "semantic-release -d"
   },
   "private": true,
   "devDependencies": {
@@ -71,7 +67,6 @@
     "@typescript-eslint/parser": "4.3.0",
     "@zerollup/ts-transform-paths": "^1.7.18",
     "babel-jest": "26.2.2",
-    "conventional-changelog-angular-scoped": "^0.0.1",
     "cypress": "^6.0.1",
     "dotenv": "6.2.0",
     "eslint": "7.10.0",
@@ -120,5 +115,44 @@
     "ts-key-enum": "^2.0.7",
     "tslib": "^2.0.0",
     "zustand": "^3.3.3"
+  },
+  "release": {
+    "branches": [
+      "+([0-9])?(.{+([0-9]),x}).x",
+      "master",
+      "next",
+      {
+        "name": "alpha",
+        "prerelease": true
+      },
+      {
+        "name": "beta",
+        "prerelease": true
+      }
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogFile": "docs/CHANGELOG.md"
+        }
+      ],
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "docs/CHANGELOG.md",
+            "package.json",
+            "package-lock.json"
+          ]
+        }
+      ],
+      [
+        "@semantic-release/github"
+      ]
+    ]
   }
 }
