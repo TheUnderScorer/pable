@@ -28,14 +28,14 @@ resource "aws_ecs_task_definition" "api_task" {
         },
         "portMappings": [
             {
-                "containerPort": 80,
-                "hostPort": 80
+                "containerPort": 443,
+                "hostPort": 443
             }
         ],
         "environment": [
               {
                 "name": "PORT",
-                "value": "80"
+                "value": "443"
               }
         ]
     }

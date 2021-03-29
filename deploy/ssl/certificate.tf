@@ -13,24 +13,12 @@ resource "aws_acm_certificate_validation" "cert" {
   validation_record_fqdns = [aws_route53_record.cert_validation.fqdn]
 }
 
-resource "aws_route53_record" "app" {
-  name    = "api"
-  type    = "A"
-  zone_id = var.dns_zone_id
-  records = [join(",", data.aws_network_interface.networkinterfacesigserv[*].association[0].public_ip)]
-  ttl = 300
-}
-
 resource "aws_acm_certificate" "app_cert" {
-  domain_name               = aws_route53_record.app.fqdn
-  subject_alternative_names = ["*.${aws_route53_record.app.fqdn}"]
+  domain_name               = var.domain
+  subject_alternative_names = ["*.${var.domain}"]
   validation_method         = "DNS"
 
   lifecycle {
     create_before_destroy = true
   }
-}
-
-output "lb" {
-  value = "App urlL: https://${aws_route53_record.app.fqdn}"
 }

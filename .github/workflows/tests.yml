@@ -82,4 +82,7 @@ jobs:
 
       - name: Run e2e tsts
         run: npx nx run skryba-e2e:e2e
+        env:
+          NX_API_URL: http://localhost:3000
+
 
