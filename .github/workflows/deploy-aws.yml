@@ -38,14 +38,14 @@ jobs:
 
       - name: Terraform Format
         id: fmt
-        run: cd deploy/infra && terraform fmt -check
+        run: cd deploy && terraform fmt -check
 
       - name: Terraform Init
         id: init
-        run: cd deploy/infra && terraform init
+        run: cd deploy && terraform init
 
       - name: Terraform Apply
-        run: cd deploy/infra && terraform apply -auto-approve
+        run: cd deploy && terraform apply -auto-approve
         env:
           TF_VAR_image_tag: ${{ github.sha }}
 
