@@ -21,3 +21,7 @@ variable "dns_zone" {
 variable "image_tag" {
   default = "latest"
 }
+
+variable "api_repository" {
+  default = "086627185220.dkr.ecr.eu-west-1.amazonaws.com/api_repo"
+}

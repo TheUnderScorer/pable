@@ -15,7 +15,7 @@ resource "aws_ecs_task_definition" "api_task" {
 [
     {
         "name": "skryba_api",
-        "image": "${aws_ecr_repository.api_repo.repository_url}:${var.image_tag}",
+        "image": "${var.api_repository}:${var.image_tag}",
         "memory": 512,
         "essential": true,
         "logConfiguration": {
@@ -28,9 +28,15 @@ resource "aws_ecs_task_definition" "api_task" {
         },
         "portMappings": [
             {
-                "containerPort": 3000,
-                "hostPort": 3000
+                "containerPort": 80,
+                "hostPort": 80
             }
+        ],
+        "environment": [
+              {
+                "name": "PORT",
+                "value": "80"
+              }
         ]
     }
 ]
@@ -56,6 +62,8 @@ resource "aws_ecs_service" "api_service" {
 
   force_new_deployment = true
 
+  wait_for_steady_state = true
+
   network_configuration {
     subnets = [
     aws_subnet.public_a.id, aws_subnet.public_b.id]
@@ -63,16 +71,41 @@ resource "aws_ecs_service" "api_service" {
     aws_security_group.api_sg.id]
     assign_public_ip = true
   }
-
-  load_balancer {
-    container_name   = "skryba_api"
-    container_port   = 3000
-    target_group_arn = aws_lb_target_group.api_tg.arn
-  }
-
-  depends_on = [aws_lb_listener.api_https_forward, aws_lb_listener.http_redirect]
 }
 
 resource "aws_cloudwatch_log_group" "api_logs" {
   name = "api-logs"
+}
+
+
+resource "time_sleep" "sigserv_30_seconds" {
+  depends_on = [aws_ecs_service.api_service]
+
+  create_duration = "30s"
+}
+
+data "aws_network_interfaces" "networkinterfacesigserv" {
+  depends_on = [time_sleep.sigserv_30_seconds]
+
+  filter {
+    name   = "group-id"
+    values = [aws_security_group.api_sg.id]
+  }
+}
+
+data "aws_network_interface" "networkinterfacesigserv" {
+  id = join(",", data.aws_network_interfaces.networkinterfacesigserv.ids)
+}
+
+
+output "ecs_privateipv4_sigserv" {
+  value = data.aws_network_interface.networkinterfacesigserv.private_ip
+}
+
+output "ecs_publicipv4_sigserv" {
+  value = join(",", data.aws_network_interface.networkinterfacesigserv[*].association[0].public_ip)
+}
+
+output "ecs_serv_data" {
+  value = data.aws_network_interface.networkinterfacesigserv
 }
