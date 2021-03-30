@@ -11,36 +11,47 @@ resource "aws_ecs_task_definition" "api_task" {
 
   // Fargate requires task definitions to have an execution role ARN to support ECR images
   execution_role_arn    = aws_iam_role.ecs_role.arn
-  container_definitions = <<EOT
-[
+  container_definitions = jsonencode([
     {
-        "name": "skryba_api",
-        "image": "${var.api_repository}:${var.image_tag}",
-        "memory": 512,
-        "essential": true,
-        "logConfiguration": {
-                "logDriver": "awslogs",
-                "options": {
-                  "awslogs-region": "${var.aws_region}",
-                  "awslogs-stream-prefix": "server",
-                  "awslogs-group": "${aws_cloudwatch_log_group.api_logs.name}"
-                }
+      name: "skryba_api",
+      image: "${var.api_repository}:${var.image_tag}",
+      memory: 512,
+      essential: true,
+      logConfiguration: {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-region": var.aws_region,
+          "awslogs-stream-prefix": "server",
+          "awslogs-group": aws_cloudwatch_log_group.api_logs.name
+        }
+      },
+      portMappings: [
+        {
+          containerPort: 443,
+          hostPort: 443
+        }
+      ],
+      environment: [
+        {
+          name: "PORT",
+          value: "443"
         },
-        "portMappings": [
-            {
-                "containerPort": 443,
-                "hostPort": 443
-            }
-        ],
-        "environment": [
-              {
-                "name": "PORT",
-                "value": "443"
-              }
-        ]
+        {
+          name: "CERT",
+          value: var.cert
+        },
+        {
+          name: "CERT_KEY",
+          value: var.cert_key
+        },
+        {
+          name: "VERSION",
+          value: var.image_tag
+        }
+      ]
     }
-]
-EOT
+  ]
+  )
 }
 
 
@@ -108,4 +119,8 @@ output "ecs_publicipv4_sigserv" {
 
 output "ecs_serv_data" {
   value = data.aws_network_interface.networkinterfacesigserv
+}
+
+output "ecs_serv_interfaces" {
+  value = data.aws_network_interfaces.networkinterfacesigserv
 }
