@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/TheUnderScorer/skryba/compare/v1.0.0...v1.1.0) (2021-03-30)
+
+
+### Features
+
+* **api:** Support https ([32d9d98](https://github.com/TheUnderScorer/skryba/commit/32d9d98fcdc031bc8bba8558875f25849d381620))
+
 # 1.0.0 (2021-03-28)
 
 
