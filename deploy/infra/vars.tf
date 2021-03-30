@@ -33,3 +33,11 @@ variable "cert" {
 variable "cert_key" {
   default = ""
 }
+
+variable "client_subdomain" {
+  default = "app.skryba.link"
+}
+
+variable "certificate_arn" {
+  default = ""
+}

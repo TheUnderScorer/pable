@@ -4,7 +4,7 @@ on:
     tags:
       - 'client-[v]\d+.\d+.\d+'
       - 'client-\d+.\d+.\d+'
-name: Publish client on Netlify
+name: Publish client on AWS
 
 jobs:
   publish:
@@ -36,10 +36,8 @@ jobs:
         run: npx nx build skryba --prod
 
       - name: Publish
-        uses: jsmrcaga/action-netlify-deploy@v1.5.0
+        uses: reggionick/s3-deploy@v3
         with:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          build_directory: dist/apps/skryba
-          NETLIFY_DEPLOY_TO_PROD: true
+          folder: dist/apps/skryba
+          bucket: ${{ secrets.S3_BUCKET }}
+          dist-id: ${{ secrets.CLOUDFRONT_ID }}
