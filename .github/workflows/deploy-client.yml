@@ -40,7 +40,7 @@ jobs:
           cd ../..
 
       - name: Build client
-        run: npx nx build skryba --prod
+        run: npm run build
 
       - name: Publish
         uses: reggionick/s3-deploy@v3
