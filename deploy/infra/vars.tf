@@ -25,3 +25,11 @@ variable "image_tag" {
 variable "api_repository" {
   default = "086627185220.dkr.ecr.eu-west-1.amazonaws.com/api_repo"
 }
+
+variable "cert" {
+  default = ""
+}
+
+variable "cert_key" {
+  default = ""
+}

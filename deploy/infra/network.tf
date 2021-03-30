@@ -32,10 +32,17 @@ resource "aws_security_group" "api_sg" {
   vpc_id      = aws_vpc.app_vpc.id
 
   ingress {
-    from_port       = "80"
-    to_port         = "80"
-    protocol        = "tcp"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = "80"
+    to_port     = "80"
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = "443"
+    to_port     = "443"
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -53,7 +60,7 @@ resource "aws_eip" "eip_manager" {
 
 output "eip" {
   value = {
-    public_ip = aws_eip.eip_manager.public_ip
+    public_ip  = aws_eip.eip_manager.public_ip
     private_ip = aws_eip.eip_manager.private_ip
   }
 }

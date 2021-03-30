@@ -9,11 +9,29 @@ import fastifyCors from 'fastify-cors';
 import { apiRoutes } from '@skryba/domain-types';
 
 export const createContainer = async () => {
+  let https = false;
+
   const container = initContainer();
+
+  if (process.env.CERT && process.env.CERT_KEY) {
+    console.log(
+      `Found CERT and CERT_KEY variables, will be using https then 👍`
+    );
+
+    https = true;
+  } else {
+    console.log('No keys found, going with http then.');
+  }
 
   const port = process.env.PORT || 3000;
   const server = fastify({
     logger: true,
+    https: https
+      ? {
+          key: process.env.CERT_KEY,
+          cert: process.env.CERT,
+        }
+      : undefined,
   });
 
   const browser = await puppeteer.launch({
@@ -44,6 +62,7 @@ export const createContainer = async () => {
 
     return {
       result: true,
+      version: process.env.VERSION ?? 'dev',
     };
   });
 

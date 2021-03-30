@@ -29,7 +29,7 @@ jobs:
         run: |
           cd apps/skryba
           touch .env
-          echo NX_API_URL=https://pable-api.herokuapp.com >> .env
+          echo NX_API_URL=https://api.skryba.link/ >> .env
           cd ../..
 
       - name: Build client
