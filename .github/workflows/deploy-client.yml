@@ -41,3 +41,4 @@ jobs:
           folder: dist/apps/skryba
           bucket: ${{ secrets.S3_BUCKET }}
           dist-id: ${{ secrets.CLOUDFRONT_ID }}
+          bucket-region: "eu-west-1"
