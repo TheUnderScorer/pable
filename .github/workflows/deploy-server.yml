@@ -20,8 +20,8 @@ jobs:
         with:
           node-version: 15.x
 
-      - name: Install ts-node
-        run: npm install ts-node tsconfig-paths -g
+      - name: Install deps
+        run: npm ci && npm install ts-node tsconfig-paths -g
 
       - name: Build docker image
         run: npm run build:api-docker
