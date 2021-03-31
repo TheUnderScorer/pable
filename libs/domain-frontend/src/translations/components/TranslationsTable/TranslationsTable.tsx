@@ -49,6 +49,7 @@ export const TranslationsTable = () => {
         <ButtonGroup>
           <TranslationsTableUpload />
           <Button
+            id="export_entries"
             colorScheme="primaryScheme"
             disabled={!fields.length}
             onClick={handleExport}

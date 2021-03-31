@@ -116,6 +116,8 @@ export const TranslationsTableRow = memo(
 
         setValue(targetWordName, alternative);
         setValue(alternativesName, newAlternatives);
+
+        setAlternatives(newAlternatives);
       },
       [alternatives, alternativesName, targetWord, targetWordName, setValue]
     );
@@ -149,7 +151,7 @@ export const TranslationsTableRow = memo(
     });
 
     return (
-      <Tr className={className}>
+      <Tr className={classNames(className, 'translation-table-row')}>
         <Td>
           <FormField name={sourceWordName}>
             <Textarea
@@ -182,10 +184,12 @@ export const TranslationsTableRow = memo(
                 ref={register()}
               />
             </FormField>
-
+            {fetchTranslationQuery.isLoading && <Spinner color="primary" />}
             {alternatives?.length && (
               <Menu>
                 <MenuButton
+                  isDisabled={fetchTranslationQuery.isLoading}
+                  className="show-alternatives"
                   as={IconButton}
                   aria-label="Show alternatives"
                   icon={<ChevronDownIcon />}
@@ -194,6 +198,7 @@ export const TranslationsTableRow = memo(
                   <MenuGroup title="Alternatives">
                     {alternatives?.map((alternative, index) => (
                       <MenuItem
+                        className="alternative"
                         onClick={handleAlternativeClick(alternative)}
                         key={index}
                       >
@@ -204,9 +209,9 @@ export const TranslationsTableRow = memo(
                 </MenuList>
               </Menu>
             )}
-            {fetchTranslationQuery.isLoading && <Spinner color="primary" />}
             {onRemove && (
               <IconButton
+                className="delete-entry"
                 aria-label="Delete entry"
                 colorScheme="dangerScheme"
                 onClick={() => onRemove(index)}

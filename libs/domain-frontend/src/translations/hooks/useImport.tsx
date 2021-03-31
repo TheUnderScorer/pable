@@ -36,6 +36,7 @@ export const useImport = () => {
         title: `Imported ${mappedTexts.length} entries.`,
         description: (
           <Button
+            id="undo_import"
             mt={3}
             color="white"
             variant="link"
