@@ -101,18 +101,18 @@ resource "aws_cloudwatch_log_group" "api_logs" {
 }
 
 
-resource "time_sleep" "sigserv_30_seconds" {
+resource "time_sleep" "sigserv_60_seconds" {
   depends_on = [aws_ecs_service.api_service]
 
-  create_duration = "30s"
+  create_duration = "60s"
 }
 
 data "aws_network_interfaces" "all_network_interfaces" {
-  depends_on = [time_sleep.sigserv_30_seconds]
+  depends_on = [time_sleep.sigserv_60_seconds]
 }
 
 data "aws_network_interfaces" "networkinterfacesigserv" {
-  depends_on = [time_sleep.sigserv_30_seconds]
+  depends_on = [time_sleep.sigserv_60_seconds]
 
   filter {
     name   = "group-id"
