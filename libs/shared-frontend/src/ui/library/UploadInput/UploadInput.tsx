@@ -28,6 +28,7 @@ export const UploadInput = ({
   return (
     <>
       <input
+        id={props.id ? `${props.id}_upload` : undefined}
         multiple={multiple}
         onChange={(event) => {
           onFile?.(event.target.files);

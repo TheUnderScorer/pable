@@ -39,6 +39,7 @@ export const TranslationsTableClearAll = ({
   return (
     <>
       <Button
+        id="clear_all"
         isLoading={loading}
         onClick={() => toggleOpen()}
         colorScheme="dangerScheme"

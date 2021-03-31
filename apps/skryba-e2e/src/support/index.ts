@@ -15,3 +15,11 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands';
+import { apiRoutes } from '@skryba/domain-types';
+import 'cypress-file-upload';
+
+beforeEach(() => {
+  cy.intercept(`http://localhost:3000/${apiRoutes.fetchLanguages}`).as(
+    'translationRequest'
+  );
+});

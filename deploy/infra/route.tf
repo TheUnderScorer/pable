@@ -7,13 +7,13 @@ resource "aws_route53_record" "app" {
 }
 
 resource "aws_route53_record" "frontend" {
-  name = "app"
-  type = "A"
+  name    = "app"
+  type    = "A"
   zone_id = var.dns_zone_id
 
   alias {
-    name = aws_cloudfront_distribution.fronted_cloudfront.domain_name
-    zone_id = aws_cloudfront_distribution.fronted_cloudfront.hosted_zone_id
+    name                   = aws_cloudfront_distribution.fronted_cloudfront.domain_name
+    zone_id                = aws_cloudfront_distribution.fronted_cloudfront.hosted_zone_id
     evaluate_target_health = false
   }
 }

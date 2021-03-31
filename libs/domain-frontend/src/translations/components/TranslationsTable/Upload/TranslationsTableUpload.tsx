@@ -58,6 +58,7 @@ export const TranslationsTableUpload = () => {
   return (
     <>
       <UploadInput
+        id="upload_entries"
         clearAfterOnFile
         isLoading={loading}
         multiple

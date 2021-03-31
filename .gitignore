@@ -42,3 +42,4 @@ deploy/**/.terraform.lock.hcl
 deploy/**/.terraform
 deploy/**/terraform.tfstate
 deploy/**/terraform.tfstate*
+**/cypress/downloads
