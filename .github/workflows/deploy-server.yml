@@ -43,6 +43,13 @@ jobs:
           docker tag skryba-api:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
+      - name: Update terraform workspace variables
+        env:
+          TF_TOKEN: ${{ secrets.TF_API_TOKEN }}
+          WORKSPACE_ID: ${{ secrets.TF_WORKSPACE_ID }}
+          TAG: ${{ github.sha }}
+        run: npm run update-workspace-variables -- --tag $TAG --token $TF_TOKEN --workspace_id $WORKSPACE_ID
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
