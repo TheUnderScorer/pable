@@ -4,3 +4,4 @@ export * from './api/ApiClient';
 export * from './ui/library';
 export * from './files/readFile';
 export * from './form/useLocalStorageForm';
+export * from './clientRoutes';
