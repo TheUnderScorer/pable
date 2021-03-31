@@ -1,4 +1,8 @@
 resource "aws_ecs_task_definition" "api_task" {
+  lifecycle {
+    create_before_destroy = true
+  }
+
   family = "api"
 
   // Fargate is a type of ECS that requires awsvpc network_mode
