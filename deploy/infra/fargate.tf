@@ -68,6 +68,10 @@ resource "aws_ecs_service" "api_service" {
     create_before_destroy = true
   }
 
+  tags = {
+    image = var.image_tag
+  }
+
   name = "api_service"
 
   cluster         = aws_ecs_cluster.api_cluster.id
@@ -105,11 +109,6 @@ resource "time_sleep" "sigserv_30_seconds" {
 
 data "aws_network_interfaces" "all_network_interfaces" {
   depends_on = [time_sleep.sigserv_30_seconds]
-
-  filter {
-    name   = "group-id"
-    values = [aws_security_group.api_sg.id]
-  }
 }
 
 data "aws_network_interfaces" "networkinterfacesigserv" {
