@@ -101,7 +101,7 @@ describe('Language table', () => {
     cy.get('.sourceWord').eq(1).should('have.focus');
   });
 
-  it.only('should remove single entry', () => {
+  it('should remove single entry', () => {
     addEntryToTableWithoutTranslation('Lubię psy');
     addEntryToTableWithoutTranslation('Lubię koty');
 
