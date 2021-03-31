@@ -64,6 +64,10 @@ resource "aws_ecs_cluster" "api_cluster" {
 }
 
 resource "aws_ecs_service" "api_service" {
+  lifecycle {
+    create_before_destroy = true
+  }
+
   name = "api_service"
 
   cluster         = aws_ecs_cluster.api_cluster.id
