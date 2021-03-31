@@ -103,6 +103,15 @@ resource "time_sleep" "sigserv_30_seconds" {
   create_duration = "30s"
 }
 
+data "aws_network_interfaces" "all_network_interfaces" {
+  depends_on = [time_sleep.sigserv_30_seconds]
+
+  filter {
+    name   = "group-id"
+    values = [aws_security_group.api_sg.id]
+  }
+}
+
 data "aws_network_interfaces" "networkinterfacesigserv" {
   depends_on = [time_sleep.sigserv_30_seconds]
 
@@ -131,4 +140,12 @@ output "ecs_serv_data" {
 
 output "ecs_serv_interfaces" {
   value = data.aws_network_interfaces.networkinterfacesigserv
+}
+
+output "ecs_serv_interfaces_str" {
+  value = jsonencode(data.aws_network_interfaces.networkinterfacesigserv)
+}
+
+output "all_network_interfaces" {
+  value = jsonencode(data.aws_network_interfaces.all_network_interfaces)
 }
