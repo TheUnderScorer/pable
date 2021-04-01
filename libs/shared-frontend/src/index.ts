@@ -6,3 +6,6 @@ export * from './files/readFile';
 export * from './form/useLocalStorageForm';
 export * from './clientRoutes';
 export * from './components/TopBar/TopBar';
+export * from './components/DialogController/DialogController';
+export * from './hooks/useConfirmationDialog';
+export * from './utils/downloadAsText';

@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { separator } from '../constants';
-import download from 'downloadjs';
 import { useFormContext } from 'react-hook-form';
 import { TranslationsForm } from '@skryba/domain-types';
+import { downloadAsText } from '@skryba/shared-frontend';
 
 const formatWord = (word?: string) => word?.replace(/\n/g, ' ') ?? '';
 
@@ -19,10 +19,6 @@ export const useExport = () => {
       )
       .join('\n');
 
-    const blob = new Blob([entriesForExport], {
-      type: 'type: "text/plain;charset=utf-8"',
-    });
-
-    download(blob, 'words.txt');
+    downloadAsText(entriesForExport, 'words.txt');
   }, [getValues]);
 };

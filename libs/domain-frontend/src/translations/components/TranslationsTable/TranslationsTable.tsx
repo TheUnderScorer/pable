@@ -11,7 +11,6 @@ import {
 import React, { useCallback } from 'react';
 import { TranslationsTableEntryRow } from './EntryRow/TranslationsTableEntryRow';
 import { TranslationsTableUpload } from './Upload/TranslationsTableUpload';
-import { DownloadIcon } from '@chakra-ui/icons';
 import { useExport } from '../../hooks/useExport';
 import { TranslationsTableClearAll } from './ClearAll/TranslationsTableClearAll';
 import { useFieldArray, useFormContext } from 'react-hook-form';
@@ -21,6 +20,8 @@ import {
   TranslationsForm,
 } from '@skryba/domain-types';
 import { isLast } from '@skryba/shared';
+import { FaIcon } from '@skryba/shared-frontend';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
 export const TranslationsTable = () => {
   const form = useFormContext<TranslationsForm>();
@@ -53,7 +54,7 @@ export const TranslationsTable = () => {
             colorScheme="primaryScheme"
             disabled={!fields.length}
             onClick={handleExport}
-            leftIcon={<DownloadIcon />}
+            leftIcon={<FaIcon icon={faDownload} />}
           >
             Export
           </Button>

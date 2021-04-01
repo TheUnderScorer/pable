@@ -13,3 +13,6 @@ export const readFile = (
     readSource(reader, file);
   });
 };
+
+export const readFileAsText = (file: File) =>
+  readFile(file, (reader, fileToRead) => reader.readAsText(fileToRead));

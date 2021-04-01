@@ -1,13 +1,12 @@
-import React, { MutableRefObject, useCallback, useRef, useState } from 'react';
-import { DeleteIcon } from '@chakra-ui/icons';
-import { Button, ButtonGroup, Text } from '@chakra-ui/react';
-import { Dialog } from '@skryba/shared-frontend';
-import { useToggle } from 'react-use';
+import React, { useCallback } from 'react';
+import { Button } from '@chakra-ui/react';
+import { FaIcon, useConfirmationDialog } from '@skryba/shared-frontend';
 import { UseFormMethods } from 'react-hook-form';
 import {
   initialTranslationEntry,
   TranslationEntry,
 } from '@skryba/domain-types';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export interface TranslationsTableClearAllProps
   extends Pick<UseFormMethods, 'setValue'> {
@@ -18,65 +17,31 @@ export const TranslationsTableClearAll = ({
   entries,
   setValue,
 }: TranslationsTableClearAllProps) => {
-  const [open, toggleOpen] = useToggle(false);
-  const [loading, setLoading] = useState(false);
-  const cancelRef = useRef<HTMLButtonElement>();
-
-  const handleClear = useCallback(async () => {
-    setLoading(true);
-
+  const clear = useCallback(async () => {
     setValue('entries', [
       {
         ...initialTranslationEntry,
       },
     ]);
+  }, [setValue]);
 
-    setLoading(false);
-
-    toggleOpen(false);
-  }, [setValue, toggleOpen]);
+  const handleClear = useConfirmationDialog({
+    onConfirm: clear,
+    confirmText: 'Clear entries',
+    title: 'Clear all entries',
+    content: `Are you sure you want to remove all ${entries?.length} entries?`,
+    confirmColorScheme: 'dangerScheme',
+  });
 
   return (
-    <>
-      <Button
-        id="clear_all"
-        isLoading={loading}
-        onClick={() => toggleOpen()}
-        colorScheme="dangerScheme"
-        disabled={!entries?.length}
-        leftIcon={<DeleteIcon />}
-      >
-        Clear entries
-      </Button>
-      <Dialog
-        title="Clear all entries"
-        footer={
-          <ButtonGroup>
-            <Button
-              isDisabled={loading}
-              onClick={() => toggleOpen()}
-              ref={cancelRef as MutableRefObject<HTMLButtonElement>}
-            >
-              Cancel
-            </Button>
-            <Button
-              isLoading={loading}
-              colorScheme="dangerScheme"
-              onClick={handleClear}
-            >
-              Delete all entries
-            </Button>
-          </ButtonGroup>
-        }
-        leastDestructiveRef={cancelRef}
-        isOpen={open}
-        onClose={toggleOpen}
-      >
-        <Text>
-          Are you sure you want to remove all {entries?.length} entries?
-        </Text>
-        <Text>It cannot be undone!</Text>
-      </Dialog>
-    </>
+    <Button
+      id="clear_all"
+      onClick={handleClear}
+      colorScheme="dangerScheme"
+      disabled={!entries?.length}
+      leftIcon={<FaIcon icon={faTrash} />}
+    >
+      Clear entries
+    </Button>
   );
 };

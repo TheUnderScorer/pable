@@ -3,6 +3,7 @@ import { TranslationEntry, TranslationsForm } from '@skryba/domain-types';
 import { Button, useToast } from '@chakra-ui/react';
 import { separator } from '../constants';
 import { useFormContext } from 'react-hook-form';
+import { first } from 'remeda';
 
 const toastId = 'importResult';
 
@@ -19,9 +20,9 @@ export const useImport = () => {
         entry
           .split('\n')
           .map((entry) => entry.split(separator))
-          .filter((entry) => entry[0])
+          .filter((entry) => first(entry))
           .map((entry) => ({
-            sourceWord: entry[0],
+            sourceWord: first(entry),
             targetWord: entry[1] ?? '',
             alternatives: [],
           }))

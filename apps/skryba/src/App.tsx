@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, Text } from '@chakra-ui/react';
+import { Box, Container, Flex, Text } from '@chakra-ui/react';
 import {
   TranslateDocumentView,
   TranslationsTableView,
@@ -9,24 +9,38 @@ import { clientRoutes, TopBar } from '@skryba/shared-frontend';
 
 export const App = () => {
   return (
-    <>
+    <Flex minHeight="100vh" flexDirection="column">
       <TopBar />
-      <Container p={4} maxW="1100px">
-        <Switch>
-          <Route exact path={clientRoutes.langTable}>
+      <Switch>
+        <Route exact path={clientRoutes.langTable}>
+          <Container
+            display="flex"
+            flexDirection="column"
+            flex={1}
+            p={4}
+            maxW="1100px"
+          >
             <TranslationsTableView />
-          </Route>
-          <Route path={clientRoutes.translateDocument}>
+          </Container>
+        </Route>
+        <Route path={clientRoutes.translateDocument}>
+          <Container
+            display="flex"
+            flexDirection="column"
+            flex={1}
+            p={4}
+            maxW="1440px"
+          >
             <TranslateDocumentView />
-          </Route>
-        </Switch>
-        <Box position="fixed" bottom="0" left="0">
-          <Text fontSize="xs">
-            Version: {process.env.NX_APP_VERSION ?? 'Local'}
-          </Text>
-        </Box>
-      </Container>
-    </>
+          </Container>
+        </Route>
+      </Switch>
+      <Box position="fixed" bottom="0" left="0">
+        <Text fontSize="xs">
+          Version: {process.env.NX_APP_VERSION ?? 'Local'}
+        </Text>
+      </Box>
+    </Flex>
   );
 };
 

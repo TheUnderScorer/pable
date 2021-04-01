@@ -1,14 +1,16 @@
 import React, { MutableRefObject, useCallback, useRef, useState } from 'react';
-import { DownloadIcon, WarningIcon } from '@chakra-ui/icons';
+import { WarningIcon } from '@chakra-ui/icons';
 import {
   Dialog,
-  readFile,
+  FaIcon,
+  readFileAsText,
   UploadInput,
   UploadInputProps,
 } from '@skryba/shared-frontend';
-import { Button, List, ListItem } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import { UploadError } from '@skryba/shared';
 import { useImport } from '../../../hooks/useImport';
+import { faUpload } from '@fortawesome/free-solid-svg-icons';
 
 export const TranslationsTableUpload = () => {
   const { fromRawText } = useImport();
@@ -16,7 +18,7 @@ export const TranslationsTableUpload = () => {
   const closeDialogRef = useRef<HTMLButtonElement>();
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<UploadError | null>();
+  const [error, setError] = useState<Error | null>();
 
   const handleUpload = useCallback<UploadInputProps['onFile']>(
     async (files) => {
@@ -24,33 +26,33 @@ export const TranslationsTableUpload = () => {
         return;
       }
 
-      setLoading(true);
+      try {
+        setLoading(true);
 
-      const filesArray = Array.from(files);
+        const invalidFiles = files.filter((file) => file.type !== 'text/plain');
 
-      const invalidFiles = filesArray.filter(
-        (file) => file.type !== 'text/plain'
-      );
+        if (invalidFiles.length) {
+          setLoading(false);
 
-      if (invalidFiles.length) {
-        setLoading(false);
+          setError(
+            new UploadError('Following files are not text files:', invalidFiles)
+          );
 
-        setError(
-          new UploadError('Following files are not text files:', invalidFiles)
+          return;
+        }
+
+        const contents = await Promise.all(
+          files.map((file) => readFileAsText(file))
         );
 
-        return;
+        fromRawText(contents as string[]);
+      } catch (e) {
+        console.error(e);
+
+        setError(new Error('Failed to parse files.'));
+      } finally {
+        setLoading(false);
       }
-
-      const contents = await Promise.all(
-        filesArray.map((file) =>
-          readFile(file, (reader, fileToRead) => reader.readAsText(fileToRead))
-        )
-      );
-
-      fromRawText(contents as string[]);
-
-      setLoading(false);
     },
     [fromRawText]
   );
@@ -58,12 +60,13 @@ export const TranslationsTableUpload = () => {
   return (
     <>
       <UploadInput
+        accept="text/plain"
         id="upload_entries"
         clearAfterOnFile
         isLoading={loading}
         multiple
         onFile={handleUpload}
-        leftIcon={<DownloadIcon transform="rotate(180deg)" />}
+        leftIcon={<FaIcon icon={faUpload} />}
       >
         Upload
       </UploadInput>
@@ -87,13 +90,6 @@ export const TranslationsTableUpload = () => {
         isOpen={Boolean(error)}
       >
         {error?.message}
-        {error?.invalidFiles?.length && (
-          <List mt={2}>
-            {error.invalidFiles.map((file) => (
-              <ListItem>{file.name}</ListItem>
-            ))}
-          </List>
-        )}
       </Dialog>
     </>
   );

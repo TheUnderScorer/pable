@@ -16,6 +16,8 @@ export const ThemeProvider = ({ children }: PropsWithChildren<unknown>) => {
           primary: primaryScheme['400'],
           dangerScheme: chakraTheme.colors.red,
           danger: chakraTheme.colors.red['500'],
+          lightGrey: chakraTheme.colors.gray['200'],
+          paper: chakraTheme.colors.white,
         },
         components: {
           Textarea: {

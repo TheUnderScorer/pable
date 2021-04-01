@@ -25,6 +25,22 @@ export interface TranslationConfiguration {
   sourceLang: Language;
 }
 
+export interface TranslatedDocumentEntry {
+  word: string;
+  translation: TranslationEntry;
+  arrayIndex: number;
+  key: string;
+  isRestored?: boolean;
+}
+
+export type TranslatedDocumentEntries = Array<string | TranslatedDocumentEntry>;
+
+export const isTranslatedDocumentEntry = (
+  item: unknown
+): item is TranslatedDocumentEntry => {
+  return typeof item === 'object' && 'word' in item && 'translation' in item;
+};
+
 export const initialTranslationEntry: TranslationEntry = {
   targetWord: '',
   alternatives: [],
