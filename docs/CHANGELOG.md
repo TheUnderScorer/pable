@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/TheUnderScorer/skryba/compare/v1.1.0...v1.1.1) (2021-04-01)
+
+
+### Bug Fixes
+
+* **skryba:** Don't show delete button when there is only one entry ([d87cd05](https://github.com/TheUnderScorer/skryba/commit/d87cd0580305b8ce175aa259e6ae0d654beeb72d))
+
 # [1.1.0](https://github.com/TheUnderScorer/skryba/compare/v1.0.0...v1.1.0) (2021-03-30)
 
 
