@@ -112,6 +112,10 @@ describe('Language table', () => {
     cy.get('.sourceWord').eq(1).should('not.have.value');
   });
 
+  it('should not show delete button if there is only one record', () => {
+    cy.get('.delete-entry').should('have.length', 0);
+  });
+
   it('should export entries', () => {
     cy.intercept(`http://localhost:3000/${apiRoutes.fetchLanguages}`, {
       translation: 'I like dogs',
