@@ -5,3 +5,4 @@ export * from './ui/library';
 export * from './files/readFile';
 export * from './form/useLocalStorageForm';
 export * from './clientRoutes';
+export * from './components/TopBar/TopBar';
