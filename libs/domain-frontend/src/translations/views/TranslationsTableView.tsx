@@ -34,7 +34,9 @@ export const TranslationsTableView = () => {
             },
           ]);
 
-          window.location.reload();
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         }}
       >
         <Box as="form" onSubmit={form.handleSubmit(console.log)}>
