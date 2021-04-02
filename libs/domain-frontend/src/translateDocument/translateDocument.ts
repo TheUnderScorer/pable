@@ -35,8 +35,6 @@ export const translateDocument = ({
       return currentResult.replace(regex, (match, index) => {
         const formattedMatch = match.replace(/\n/g, '');
 
-        console.log({ formattedMatch, translation });
-
         const jsonString = JSON.stringify({
           translation,
           arrayIndex: 0,
