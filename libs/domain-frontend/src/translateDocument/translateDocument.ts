@@ -11,6 +11,8 @@ interface TranslateDocumentParams {
   translations: TranslationEntry[];
 }
 
+const forbiddenChars = ['"', '[', ']', '{', '}'];
+
 const separator = '<sep>';
 
 export const translateDocument = ({
@@ -33,16 +35,23 @@ export const translateDocument = ({
       );
 
       return currentResult.replace(regex, (match, index) => {
+        if (
+          forbiddenChars.includes(currentResult[index - 1]) ||
+          forbiddenChars.includes(currentResult[index + 1])
+        ) {
+          return match;
+        }
+
         const formattedMatch = match.replace(/\n/g, '');
 
-        const jsonString = JSON.stringify({
+        const json = {
           translation,
           arrayIndex: 0,
           word: formattedMatch,
           key: `${formattedMatch}-${index}`,
-        } as TranslatedDocumentEntry);
+        } as TranslatedDocumentEntry;
 
-        return `${separator}${jsonString}${separator}`;
+        return `${separator}${JSON.stringify(json)}${separator}`;
       });
     }, formattedContent),
     (val) => val.split(separator),
@@ -53,6 +62,7 @@ export const translateDocument = ({
         if (isTranslatedDocumentEntry(parsed)) {
           return {
             ...parsed,
+            translation: parsed.translation,
             arrayIndex: index,
           };
         }
