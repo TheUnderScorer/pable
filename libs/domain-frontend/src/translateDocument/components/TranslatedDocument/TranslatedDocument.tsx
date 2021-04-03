@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import { TranslatedDocumentRestoredEntry } from './RestoredEntry/TranslatedDocumentRestoredEntry';
 import { TranslatedDocumentEntries } from '@skryba/domain-types';
 import { TranslatedDocumentEntry } from './Entry/TranslatedDocumentEntry';
+import { Box } from '@chakra-ui/react';
 
 export interface TranslatedDocumentProps {
   translatedDocument: TranslatedDocumentEntries;
@@ -13,7 +14,7 @@ const BaseTranslatedDocument = ({
   highlightedWord,
 }: TranslatedDocumentProps) => {
   return (
-    <>
+    <Box className="translated-document">
       {translatedDocument.map((entry, index) => {
         if (typeof entry === 'string') {
           return entry;
@@ -38,7 +39,7 @@ const BaseTranslatedDocument = ({
           />
         );
       })}
-    </>
+    </Box>
   );
 };
 

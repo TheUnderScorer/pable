@@ -46,12 +46,14 @@ const BaseTranslatedEntry = ({
 
   return (
     <Popover
+      isLazy
       isOpen={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
     >
       <PopoverTrigger>
         <Button
+          className="translated-entry-trigger"
           variant="link"
           bg={highlight ? 'primary' : undefined}
           color={highlight ? 'white' : 'primary'}

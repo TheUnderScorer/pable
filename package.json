@@ -105,6 +105,7 @@
     "core-js": "^3.6.5",
     "document-register-element": "1.13.1",
     "downloadjs": "^1.4.7",
+    "escape-string-regexp": "^4.0.0",
     "fastify": "^3.14.0",
     "fastify-cors": "^5.2.0",
     "framer-motion": "3.10.6",

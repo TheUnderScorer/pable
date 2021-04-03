@@ -41,6 +41,7 @@ export const TranslateDocumentView = () => {
         <FileDropzone
           buttonProps={{
             isLoading: loading,
+            id: 'translate_document_file',
           }}
           onFile={handleFile}
           multiple={false}
@@ -58,7 +59,7 @@ export const TranslateDocumentView = () => {
         >
           <Box flex={1} bg="paper" p={6} rounded="md" boxShadow="lg">
             <HStack alignItems="center" mb={4}>
-              <Text fontSize="2xl">
+              <Text className="file-name" fontSize="2xl">
                 {file?.name}{' '}
                 {display === DocumentToDisplay.Source && '(original)'}
               </Text>
@@ -77,6 +78,7 @@ export const TranslateDocumentView = () => {
               />
             </Text>
             <Text
+              className="original-document"
               display={display === DocumentToDisplay.Source ? 'block' : 'none'}
               as="div"
               whiteSpace="pre-line"

@@ -4,6 +4,7 @@ import { FaIcon } from '@skryba/shared-frontend';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { TranslatedDocumentEntry } from '@skryba/domain-types';
 import { useTranslateDocumentStore } from '../../../../stores/useTranslateDocumentStore';
+import classNames from 'classnames';
 
 export interface TranslatedDocumentEntriesListItemProps {
   entry: TranslatedDocumentEntry;
@@ -25,6 +26,7 @@ const BaseTranslatedDocumentEntriesListItem = ({
 
   return (
     <ListItem
+      className={classNames('translation-list-item', { highlight })}
       bg={highlight ? 'primary' : undefined}
       color={highlight ? 'white' : undefined}
       onMouseEnter={() => {

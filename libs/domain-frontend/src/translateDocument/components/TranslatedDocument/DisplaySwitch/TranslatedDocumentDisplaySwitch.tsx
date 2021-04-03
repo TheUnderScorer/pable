@@ -26,7 +26,7 @@ export const TranslatedDocumentDisplaySwitch = () => {
         isChecked={display === DocumentToDisplay.Source}
         onChange={() => toggleDisplay()}
         colorScheme="primaryScheme"
-        id="display"
+        id="display_switch"
       />
       <Button
         color="inherit"

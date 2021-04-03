@@ -36,7 +36,7 @@ export const useTranslatedEntries = () => {
       const contentRaw = await readFileAsText(file);
       const content = contentRaw.toString();
 
-      setFileContent(content.toString());
+      setFileContent(content);
       setFile({
         name: file.name,
         size: file.size,

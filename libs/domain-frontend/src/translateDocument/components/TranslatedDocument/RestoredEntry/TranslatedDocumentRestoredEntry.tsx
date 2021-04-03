@@ -29,9 +29,14 @@ const BaseTranslatedDocumentRestoredEntry = ({
   );
 
   return (
-    <Popover>
+    <Popover isLazy>
       <PopoverTrigger>
-        <Button color="inherit" variant="link" minWidth="0">
+        <Button
+          className="translated-restored-entry-trigger"
+          color="inherit"
+          variant="link"
+          minWidth="0"
+        >
           {text}
         </Button>
       </PopoverTrigger>

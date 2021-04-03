@@ -3,9 +3,9 @@ import { FaIcon } from '../FaIcon/FaIcon';
 import { UploadInput, UploadInputProps } from '../UploadInput/UploadInput';
 import { Text } from '@chakra-ui/react';
 import {
-  faUpload,
-  faFileImport,
   faFile,
+  faFileImport,
+  faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
@@ -63,6 +63,7 @@ export const FileDropzone = ({
       height={height}
       flexDirection="column"
       clearAfterOnFile
+      className="file-dropzone"
       {...buttonProps}
     >
       {
