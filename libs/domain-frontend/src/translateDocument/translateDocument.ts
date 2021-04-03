@@ -129,7 +129,7 @@ export const translateDocument = ({
       });
     }, withSeparators),
     (val) => val.split(separator),
-    map.indexed<string, TranslatedDocumentEntry | string>((item, index) => {
+    map.indexed<string, TranslatedDocumentEntry | string>((item) => {
       try {
         const parsed = JSON.parse(item);
 

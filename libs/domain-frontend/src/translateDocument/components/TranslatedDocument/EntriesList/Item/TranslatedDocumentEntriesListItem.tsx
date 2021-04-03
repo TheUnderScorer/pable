@@ -36,7 +36,7 @@ const BaseTranslatedDocumentEntriesListItem = ({
       mb={2}
     >
       <HStack>
-        <Tooltip label={word}>
+        <Tooltip transition="none" label={word}>
           <Text as={isRestored ? 's' : undefined} isTruncated>
             {word}
           </Text>

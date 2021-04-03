@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { TranslatedDocumentEntries } from '@skryba/domain-types';
 import { TranslatedDocumentEntry } from './Entry/TranslatedDocumentEntry';
 import { Box } from '@chakra-ui/react';
@@ -8,7 +8,7 @@ export interface TranslatedDocumentProps {
   highlightedWord?: string;
 }
 
-const BaseTranslatedDocument = ({
+export const TranslatedDocument = ({
   translatedDocument,
   highlightedWord,
 }: TranslatedDocumentProps) => {
@@ -35,5 +35,3 @@ const BaseTranslatedDocument = ({
     </Box>
   );
 };
-
-export const TranslatedDocument = memo(BaseTranslatedDocument);

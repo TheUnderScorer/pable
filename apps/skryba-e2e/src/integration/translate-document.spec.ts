@@ -112,10 +112,12 @@ describe('Translate document', () => {
     cy.visit(clientRoutes.langTable);
     importEntries('translate-document/advanced.txt');
 
-    cy.wait(500);
+    cy.wait(4000);
 
     cy.visit(clientRoutes.translateDocument);
 
     uploadDocument('translate-document/advanced.txt');
+
+    cy.wait(1000);
   });
 });

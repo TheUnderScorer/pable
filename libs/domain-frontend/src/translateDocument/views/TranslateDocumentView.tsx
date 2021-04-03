@@ -36,11 +36,6 @@ export const TranslateDocumentView = () => {
     [handleTranslate]
   );
 
-  console.log({
-    translatedOnMount,
-    translatedContent,
-  });
-
   return (
     <Center flex={1}>
       {!content && (

@@ -1,5 +1,8 @@
 import React, { memo, useEffect, useState } from 'react';
-import { TranslatedDocumentEntry as TranslatedDocumentEntryType } from '@skryba/domain-types';
+import {
+  TranslatedDocumentEntry as TranslatedDocumentEntryType,
+  TranslationEntry,
+} from '@skryba/domain-types';
 import {
   Button,
   Popover,
@@ -13,8 +16,8 @@ import {
 } from '@chakra-ui/react';
 import { useTranslateDocumentStore } from '../../../stores/useTranslateDocumentStore';
 import { useUnmount } from 'react-use';
-import { equals } from 'remeda';
 import { resolveDocumentWord } from '../../../resolveDocumentWord';
+import { equals, omit } from 'remeda';
 
 export interface TranslatedDocumentEntryProps
   extends Pick<
@@ -68,8 +71,8 @@ const BaseTranslatedEntry = ({
         <Button
           className={
             isRestored
-              ? 'translated-entry-trigger'
-              : 'translated-restored-entry-trigger'
+              ? 'translated-restored-entry-trigger'
+              : 'translated-entry-trigger'
           }
           variant="link"
           bg={highlight && !isRestored ? 'primary' : undefined}
@@ -87,14 +90,14 @@ const BaseTranslatedEntry = ({
         <PopoverCloseButton />
         <PopoverHeader>Manage translation</PopoverHeader>
         <PopoverBody>
-          {!isRestored ? (
-            <>
-              Translated from: <strong>{word}</strong>
-            </>
-          ) : (
+          {isRestored ? (
             <>
               Restored word from translation:{' '}
               <strong>{translation.targetWord}</strong>
+            </>
+          ) : (
+            <>
+              Translated from: <strong>{word}</strong>
             </>
           )}
         </PopoverBody>
@@ -114,4 +117,27 @@ const BaseTranslatedEntry = ({
   );
 };
 
-export const TranslatedDocumentEntry = memo(BaseTranslatedEntry, equals);
+export const TranslatedDocumentEntry = memo(
+  BaseTranslatedEntry,
+  (prevProps, nextProps) => {
+    const omitKeys = ['translation'] as Array<
+      keyof TranslatedDocumentEntryProps
+    >;
+
+    const omitTranslationKeys = ['alternatives'] as Array<
+      keyof TranslationEntry
+    >;
+
+    const prevPropsToCompare = omit(prevProps, omitKeys);
+    const nextPropsToCompare = omit(nextProps, omitKeys);
+
+    if (!equals(prevPropsToCompare, nextPropsToCompare)) {
+      return false;
+    }
+
+    return equals(
+      omit(prevProps.translation, omitTranslationKeys),
+      omit(nextProps.translation, omitTranslationKeys)
+    );
+  }
+);
