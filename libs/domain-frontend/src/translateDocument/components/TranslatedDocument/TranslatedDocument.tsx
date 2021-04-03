@@ -1,5 +1,4 @@
 import React, { memo } from 'react';
-import { TranslatedDocumentRestoredEntry } from './RestoredEntry/TranslatedDocumentRestoredEntry';
 import { TranslatedDocumentEntries } from '@skryba/domain-types';
 import { TranslatedDocumentEntry } from './Entry/TranslatedDocumentEntry';
 import { Box } from '@chakra-ui/react';
@@ -15,26 +14,20 @@ const BaseTranslatedDocument = ({
 }: TranslatedDocumentProps) => {
   return (
     <Box className="translated-document">
-      {translatedDocument.map((entry, index) => {
+      {translatedDocument.map((entry) => {
         if (typeof entry === 'string') {
           return entry;
         }
 
         const highlight = highlightedWord === entry.word;
 
-        return entry.isRestored ? (
-          <TranslatedDocumentRestoredEntry
-            key={`${entry.word}-${entry.arrayIndex}`}
-            text={entry.word}
-            index={index}
-            translationEntry={entry.translation}
-          />
-        ) : (
+        return (
           <TranslatedDocumentEntry
-            key={`${entry.word}-${entry.arrayIndex}`}
-            text={entry.word}
+            isRestored={entry.isRestored}
+            key={entry.id}
+            id={entry.id}
+            word={entry.word}
             translation={entry.translation}
-            arrayIndex={entry.arrayIndex}
             highlight={highlight}
           />
         );

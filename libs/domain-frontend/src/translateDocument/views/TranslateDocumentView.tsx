@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { FileDropzone } from '@skryba/shared-frontend';
-import { Box, Center, HStack, Text } from '@chakra-ui/react';
+import { Box, Center, HStack, Spinner, Text } from '@chakra-ui/react';
 import {
   DocumentToDisplay,
   useTranslateDocumentStore,
@@ -25,6 +25,7 @@ export const TranslateDocumentView = () => {
     translatedContent,
     loading,
     handleTranslate,
+    translatedOnMount,
   } = useTranslatedEntries();
 
   const handleFile = useCallback(
@@ -34,6 +35,11 @@ export const TranslateDocumentView = () => {
     },
     [handleTranslate]
   );
+
+  console.log({
+    translatedOnMount,
+    translatedContent,
+  });
 
   return (
     <Center flex={1}>
@@ -51,46 +57,53 @@ export const TranslateDocumentView = () => {
         </FileDropzone>
       )}
       {translatedContent && content && (
-        <HStack
-          width="100%"
-          spacing={8}
-          position="relative"
-          alignItems="flex-start"
-        >
-          <Box flex={1} bg="paper" p={6} rounded="md" boxShadow="lg">
-            <HStack alignItems="center" mb={4}>
-              <Text className="file-name" fontSize="2xl">
-                {file?.name}{' '}
-                {display === DocumentToDisplay.Source && '(original)'}
-              </Text>
-              <TranslatedDocumentMenu />
-            </HStack>
-            <Text
-              display={
-                display === DocumentToDisplay.Translated ? 'block' : 'none'
-              }
-              as="div"
-              whiteSpace="pre-line"
+        <>
+          {!translatedOnMount && <Spinner />}
+          {translatedOnMount && (
+            <HStack
+              width="100%"
+              spacing={8}
+              position="relative"
+              alignItems="flex-start"
             >
-              <TranslatedDocument
-                highlightedWord={highlightInDocument}
-                translatedDocument={translatedContent}
+              <Box flex={1} bg="paper" p={6} rounded="md" boxShadow="lg">
+                <HStack alignItems="center" mb={4}>
+                  <Text className="file-name" fontSize="2xl">
+                    {file?.name}{' '}
+                    {display === DocumentToDisplay.Source && '(original)'}
+                  </Text>
+                  <TranslatedDocumentMenu />
+                </HStack>
+                <Text
+                  display={
+                    display === DocumentToDisplay.Translated ? 'block' : 'none'
+                  }
+                  as="div"
+                  whiteSpace="pre-line"
+                >
+                  <TranslatedDocument
+                    highlightedWord={highlightInDocument}
+                    translatedDocument={translatedContent}
+                  />
+                </Text>
+                <Text
+                  className="original-document"
+                  display={
+                    display === DocumentToDisplay.Source ? 'block' : 'none'
+                  }
+                  as="div"
+                  whiteSpace="pre-line"
+                >
+                  {content}
+                </Text>
+              </Box>
+              <TranslatedDocumentSidebar
+                highlight={highlightInList}
+                entries={translatedContent}
               />
-            </Text>
-            <Text
-              className="original-document"
-              display={display === DocumentToDisplay.Source ? 'block' : 'none'}
-              as="div"
-              whiteSpace="pre-line"
-            >
-              {content}
-            </Text>
-          </Box>
-          <TranslatedDocumentSidebar
-            highlight={highlightInList}
-            entries={translatedContent}
-          />
-        </HStack>
+            </HStack>
+          )}
+        </>
       )}
     </Center>
   );

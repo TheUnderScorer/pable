@@ -25,7 +25,7 @@ const waitForTranslationResult = async (page: Page) => {
       return Boolean(textArea.value);
     },
     {
-      timeout: 60_000,
+      timeout: 60000,
       polling: 500,
     },
     selectors

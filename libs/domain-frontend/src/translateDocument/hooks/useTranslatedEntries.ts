@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { translateDocument } from '../translateDocument';
 import { useTranslateDocumentStore } from '../stores/useTranslateDocumentStore';
 import { getTranslationsFromLocalStorage } from '../../translations/getTranslationsFromLocalStorage';
 import { readFileAsText } from '@skryba/shared-frontend';
+import { translateDocument } from '../translateDocument';
 
 export const useTranslatedEntries = () => {
   const [translatedOnMount, setTranslatedOnMount] = useState(false);
@@ -56,18 +56,23 @@ export const useTranslatedEntries = () => {
 
   useEffect(() => {
     if (fileContent && !translatedOnMount) {
+      setLoading(true);
+
       setTranslatedContent(
         translateDocument({
           content: fileContent,
           translations: translationEntries,
+          previousTranslatedDocument: translatedContent,
         })
       );
 
+      setLoading(false);
       setTranslatedOnMount(true);
     }
   }, [
     fileContent,
     setTranslatedContent,
+    translatedContent,
     translatedOnMount,
     translationEntries,
   ]);
@@ -76,5 +81,6 @@ export const useTranslatedEntries = () => {
     loading,
     translatedContent,
     handleTranslate,
+    translatedOnMount,
   };
 };

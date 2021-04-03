@@ -2,6 +2,7 @@ import {
   isTranslatedDocumentEntry,
   TranslatedDocumentEntries,
 } from '@skryba/domain-types';
+import { resolveDocumentWord } from './resolveDocumentWord';
 
 export const translatedEntriesToString = (
   entries: TranslatedDocumentEntries
@@ -12,9 +13,7 @@ export const translatedEntriesToString = (
         return entry;
       }
 
-      return entry.isRestored
-        ? entry.word.trim()
-        : entry.translation.targetWord.trim();
+      return resolveDocumentWord(entry);
     })
     .join('');
 };

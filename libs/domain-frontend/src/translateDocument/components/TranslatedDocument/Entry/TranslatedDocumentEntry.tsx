@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { TranslationEntry } from '@skryba/domain-types';
+import { TranslatedDocumentEntry as TranslatedDocumentEntryType } from '@skryba/domain-types';
 import {
   Button,
   Popover,
@@ -13,21 +13,28 @@ import {
 } from '@chakra-ui/react';
 import { useTranslateDocumentStore } from '../../../stores/useTranslateDocumentStore';
 import { useUnmount } from 'react-use';
+import { equals } from 'remeda';
+import { resolveDocumentWord } from '../../../resolveDocumentWord';
 
-export interface TranslatedDocumentEntryProps {
-  text: string;
-  translation: TranslationEntry;
-  arrayIndex: number;
+export interface TranslatedDocumentEntryProps
+  extends Pick<
+    TranslatedDocumentEntryType,
+    'translation' | 'id' | 'word' | 'isRestored'
+  > {
   highlight?: boolean;
 }
 
 const BaseTranslatedEntry = ({
-  translation,
-  text,
-  arrayIndex,
   highlight,
+  translation,
+  id,
+  word,
+  isRestored,
 }: TranslatedDocumentEntryProps) => {
   const restoreWord = useTranslateDocumentStore((store) => store.restoreWord);
+  const restoreTranslation = useTranslateDocumentStore(
+    (store) => store.restoreTranslation
+  );
   const setHighlightInList = useTranslateDocumentStore(
     (store) => store.setHighlightedWordInList
   );
@@ -35,13 +42,19 @@ const BaseTranslatedEntry = ({
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    setHighlightInList(open ? text : undefined);
-  }, [text, open, setHighlightInList]);
+    setHighlightInList(open ? word : undefined);
+  }, [word, open, setHighlightInList]);
 
   useUnmount(() => {
     if (open) {
       setHighlightInList(undefined);
     }
+  });
+
+  const wordToShow = resolveDocumentWord({
+    word,
+    translation,
+    isRestored,
   });
 
   return (
@@ -53,28 +66,47 @@ const BaseTranslatedEntry = ({
     >
       <PopoverTrigger>
         <Button
-          className="translated-entry-trigger"
+          className={
+            isRestored
+              ? 'translated-entry-trigger'
+              : 'translated-restored-entry-trigger'
+          }
           variant="link"
-          bg={highlight ? 'primary' : undefined}
-          color={highlight ? 'white' : 'primary'}
+          bg={highlight && !isRestored ? 'primary' : undefined}
+          color={highlight ? 'white' : isRestored ? 'inherit' : 'primary'}
           m={0}
           py={highlight ? 1 : 0}
           px={1}
           minWidth="0"
         >
-          {translation.targetWord}
+          {wordToShow}
         </Button>
       </PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />
         <PopoverCloseButton />
-        <PopoverHeader>Translation</PopoverHeader>
+        <PopoverHeader>Manage translation</PopoverHeader>
         <PopoverBody>
-          Translated from: <strong>{text}</strong>
+          {!isRestored ? (
+            <>
+              Translated from: <strong>{word}</strong>
+            </>
+          ) : (
+            <>
+              Restored word from translation:{' '}
+              <strong>{translation.targetWord}</strong>
+            </>
+          )}
         </PopoverBody>
         <PopoverFooter>
-          <Button onClick={() => restoreWord(arrayIndex)}>
-            Restore original word
+          <Button
+            onClick={() => {
+              isRestored ? restoreTranslation(id) : restoreWord(id);
+
+              setOpen(false);
+            }}
+          >
+            {isRestored ? 'Restore translation' : 'Restore original word'}
           </Button>
         </PopoverFooter>
       </PopoverContent>
@@ -82,4 +114,4 @@ const BaseTranslatedEntry = ({
   );
 };
 
-export const TranslatedDocumentEntry = memo(BaseTranslatedEntry);
+export const TranslatedDocumentEntry = memo(BaseTranslatedEntry, equals);

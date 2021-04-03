@@ -6,19 +6,27 @@ import {
 } from '@skryba/domain-types';
 import { map, pipe, reduce, sortBy } from 'remeda';
 import escapeStringRegexp from 'escape-string-regexp';
+import { getTranslatedEntryById } from './getTranslatedEntryById';
 
 interface TranslateDocumentParams {
   content: string;
   translations: TranslationEntry[];
+  previousTranslatedDocument?: TranslatedDocumentEntries;
 }
 
 const forbiddenChars = ['"', '[', ']', '{', '}', ':', '<', '>'];
 
 const separator = '<sep>';
 
+const buildId = (
+  translation: Pick<TranslationEntry, 'targetWord'>,
+  index: number
+) => `${translation.targetWord}-${index}`.replace(/\s/g, '');
+
 export const translateDocument = ({
   content,
   translations,
+  previousTranslatedDocument,
 }: TranslateDocumentParams): TranslatedDocumentEntries => {
   const nbspRegex = new RegExp(String.fromCharCode(160), 'g');
   const formattedContent = content.replace(nbspRegex, ' ');
@@ -47,10 +55,6 @@ export const translateDocument = ({
         `(?<!\\w)${translation.sourceWord}(?!\\w)`,
         'gi'
       );
-
-      if (translation.sourceWord.includes('uprzedzenie')) {
-        console.log(regex);
-      }
 
       return currentResult.replace(regex, (match, index) => {
         if (
@@ -90,8 +94,6 @@ export const translateDocument = ({
     formattedContent
   );
 
-  console.log(withSeparators);
-
   return pipe(
     formattedTranslations,
     reduce((currentResult, translation) => {
@@ -109,11 +111,18 @@ export const translateDocument = ({
           .replace(/\n/g, '')
           .replace(new RegExp(separator, 'g'), '');
 
+        const id = buildId(translation, index);
+
+        const prevEntry = getTranslatedEntryById(
+          previousTranslatedDocument ?? [],
+          id
+        );
+
         const json = {
           translation,
-          arrayIndex: 0,
           word: formattedMatch,
-          key: `${formattedMatch}-${index}`,
+          id,
+          isRestored: Boolean(prevEntry?.isRestored),
         } as TranslatedDocumentEntry;
 
         return `${separator}${JSON.stringify(json)}${separator}`;
@@ -125,11 +134,7 @@ export const translateDocument = ({
         const parsed = JSON.parse(item);
 
         if (isTranslatedDocumentEntry(parsed)) {
-          return {
-            ...parsed,
-            translation: parsed.translation,
-            arrayIndex: index,
-          };
+          return parsed;
         }
 
         return item;

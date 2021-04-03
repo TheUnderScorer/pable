@@ -28,9 +28,8 @@ export interface TranslationConfiguration {
 export interface TranslatedDocumentEntry {
   word: string;
   translation: TranslationEntry;
-  arrayIndex: number;
-  key: string;
   isRestored?: boolean;
+  id: string;
 }
 
 export type TranslatedDocumentEntries = Array<string | TranslatedDocumentEntry>;

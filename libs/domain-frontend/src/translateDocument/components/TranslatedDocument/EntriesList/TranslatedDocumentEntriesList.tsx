@@ -58,7 +58,7 @@ export const TranslatedDocumentEntriesList = ({
                   highlight={entry.word === highlight}
                   count={entry.isRestored ? restoredLength : translationsLength}
                   isRestored={entry.isRestored}
-                  key={entry.key}
+                  key={entry.id}
                   entry={entry}
                 />
               );

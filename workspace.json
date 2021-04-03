@@ -74,27 +74,6 @@
         }
       }
     },
-    "domain": {
-      "root": "libs/domain",
-      "sourceRoot": "libs/domain/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/domain/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/domain"],
-          "options": {
-            "jestConfig": "libs/domain/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "domain-types": {
       "root": "libs/domain-types",
       "sourceRoot": "libs/domain-types/src",
@@ -293,6 +272,27 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/skryba-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    },
+    "domain-backend": {
+      "root": "libs/domain-backend",
+      "sourceRoot": "libs/domain-backend/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/domain-backend/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/domain-backend"],
+          "options": {
+            "jestConfig": "libs/domain-backend/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }

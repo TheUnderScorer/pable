@@ -3,9 +3,9 @@ import { persist } from 'zustand/middleware';
 import {
   isTranslatedDocumentEntry,
   TranslatedDocumentEntries,
-  TranslatedDocumentEntry,
 } from '@skryba/domain-types';
 import { clone } from 'remeda';
+import { getTranslatedEntryById } from '../getTranslatedEntryById';
 
 export enum DocumentToDisplay {
   Translated = 'Translated',
@@ -30,8 +30,8 @@ export interface TranslateDocumentStore {
   setFileContent: (content?: string) => void;
   setDisplay: (doc: DocumentToDisplay) => void;
   toggleDisplay: () => void;
-  restoreWord: (index: number) => void;
-  restoreTranslation: (index: number) => void;
+  restoreWord: (id: string) => void;
+  restoreTranslation: (id: string) => void;
   restoreAllTranslations: () => void;
 
   [key: string]: unknown;
@@ -40,14 +40,17 @@ export interface TranslateDocumentStore {
 export const useTranslateDocumentStore = create<TranslateDocumentStore>(
   persist(
     (set, get) => {
-      const toggleIsRestored = (isRestored: boolean) => (index: number) => {
+      const toggleIsRestored = (isRestored: boolean) => (id: string) => {
         const { translatedContent } = get();
-        const newTranslatedContent = clone(translatedContent);
 
-        if (isTranslatedDocumentEntry(newTranslatedContent[index])) {
-          (newTranslatedContent[
-            index
-          ] as TranslatedDocumentEntry).isRestored = isRestored;
+        const newTranslatedContent = clone(translatedContent);
+        const contentToChange = getTranslatedEntryById(
+          newTranslatedContent,
+          id
+        );
+
+        if (isTranslatedDocumentEntry(contentToChange)) {
+          contentToChange.isRestored = isRestored;
         }
 
         set({
