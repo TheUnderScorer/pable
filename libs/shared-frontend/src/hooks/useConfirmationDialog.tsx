@@ -31,6 +31,7 @@ export const useConfirmationDialog = ({
         },
         {
           children: confirmText,
+          id: 'confirm',
           onClick: async () => {
             setLoading(true);
 

@@ -65,7 +65,7 @@ export const selectAlternative = (
 
 export const clearTable = () => {
   cy.get('#clear_all').click();
-  cy.contains('Delete all entries').click();
+  cy.get('#confirm').click();
 };
 
 export const importEntries = (fileName = 'words.txt') => {
