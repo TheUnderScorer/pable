@@ -6,6 +6,17 @@ import {
 } from '../support/app.po';
 import { apiRoutes, FetchTranslationsResult } from '@skryba/domain-types';
 
+function advancedSetup() {
+  cy.visit(clientRoutes.langTable);
+  importEntries('translate-document/advanced.txt');
+
+  cy.wait(4000);
+
+  cy.visit(clientRoutes.translateDocument);
+
+  uploadDocument('translate-document/advanced.txt');
+}
+
 describe('Translate document', () => {
   beforeEach(() => {
     cy.visit(clientRoutes.translateDocument);
@@ -108,16 +119,40 @@ describe('Translate document', () => {
     );
   });
 
-  it.only('should handle flow with multiple words', () => {
-    cy.visit(clientRoutes.langTable);
-    importEntries('translate-document/advanced.txt');
+  it.only('should handle export with multiple restored words', () => {
+    const entriesToRestore = 10;
+    let restoredEntries = 0;
 
-    cy.wait(4000);
+    cy.intercept(`http://localhost:3000/${apiRoutes.fetchLanguages}`, {
+      translation: 'Foo',
+    } as FetchTranslationsResult).as('translationRequest');
 
-    cy.visit(clientRoutes.translateDocument);
-
-    uploadDocument('translate-document/advanced.txt');
+    advancedSetup();
 
     cy.wait(1000);
+
+    cy.get('.translated-entry-trigger').each((el, index) => {
+      if (restoredEntries > entriesToRestore) {
+        return false;
+      }
+
+      if (index % 2 > 0) {
+        cy.wrap(el).click();
+        cy.contains('Restore original word').click();
+
+        restoredEntries++;
+      }
+    });
+
+    cy.get('#export_document').click();
+
+    cy.fixture('translate-document/advanced-translated-expected.txt').then(
+      (content) => {
+        cy.readFile('cypress/downloads/advanced-translated.txt').should(
+          'contain',
+          content
+        );
+      }
+    );
   });
 });

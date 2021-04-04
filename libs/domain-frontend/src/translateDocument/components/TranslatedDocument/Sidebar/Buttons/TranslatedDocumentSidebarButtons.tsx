@@ -10,6 +10,7 @@ export const TranslatedDocumentSidebarButtons = () => {
   return (
     <ButtonGroup>
       <Button
+        id="export_document"
         onClick={handleExport}
         leftIcon={<FaIcon icon={faFileExport} />}
         colorScheme="primaryScheme"
