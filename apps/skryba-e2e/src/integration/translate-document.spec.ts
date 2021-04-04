@@ -119,7 +119,7 @@ describe('Translate document', () => {
     );
   });
 
-  it.only('should handle export with multiple restored words', () => {
+  it('should handle export with multiple restored words', () => {
     const entriesToRestore = 10;
     let restoredEntries = 0;
 
