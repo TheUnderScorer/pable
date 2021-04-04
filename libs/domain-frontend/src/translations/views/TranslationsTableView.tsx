@@ -1,4 +1,4 @@
-import { Box, Stack, Text } from '@chakra-ui/react';
+import { Box, Stack } from '@chakra-ui/react';
 import React from 'react';
 import { TranslationsConfiguration } from '../components/TranslationsConfiguration/TranslationsConfiguration';
 import { TranslationsTable } from '../components/TranslationsTable/TranslationsTable';
@@ -26,12 +26,6 @@ export const TranslationsTableView = () => {
 
   return (
     <FormProvider {...form}>
-      <Text id="title" textAlign="center" fontSize="6xl" mb={6}>
-        Skryba 2.0{' '}
-        <span role="img" aria-label="Hand write">
-          ✍️
-        </span>
-      </Text>
       <TranslationsErrorBoundary
         clearEntries={() => {
           form.setValue('entries', [
@@ -40,7 +34,9 @@ export const TranslationsTableView = () => {
             },
           ]);
 
-          window.location.reload();
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         }}
       >
         <Box as="form" onSubmit={form.handleSubmit(console.log)}>

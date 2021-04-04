@@ -1,10 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { ThemeProvider } from '@skryba/shared-frontend';
-import { ApiClientProvider } from '@skryba/shared-frontend';
+import {
+  ApiClientProvider,
+  DialogController,
+  ThemeProvider,
+} from '@skryba/shared-frontend';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { ColorModeScript } from '@chakra-ui/react';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,15 +22,19 @@ const queryClient = new QueryClient({
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
-          <ApiClientProvider url={process.env.NX_API_URL}>
-            <App />
-          </ApiClientProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </BrowserRouter>
+    <DndProvider backend={HTML5Backend}>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <ColorModeScript initialColorMode="system" />
+          <ThemeProvider>
+            <ApiClientProvider url={process.env.NX_API_URL}>
+              <DialogController />
+              <App />
+            </ApiClientProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </BrowserRouter>
+    </DndProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

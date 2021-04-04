@@ -23,11 +23,12 @@ import {
   FetchTranslationsResult,
   TranslationEntry,
 } from '@skryba/domain-types';
-import { ChevronDownIcon, DeleteIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import classNames from 'classnames';
 import { Key } from 'ts-key-enum';
-import { FormField } from '@skryba/shared-frontend';
+import { FaIcon, FormField } from '@skryba/shared-frontend';
 import { UseFormMethods } from 'react-hook-form';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export interface TranslationsTableRowProps {
   onKeyDown?: (
@@ -107,12 +108,12 @@ export const TranslationsTableRow = memo(
 
     const handleAlternativeClick = useCallback(
       (alternative: string) => () => {
-        const newAlternatives = [
-          ...(alternatives?.filter(
+        const filteredAlternatives =
+          alternatives?.filter(
             (prevAlternative) => prevAlternative !== alternative
-          ) ?? []),
-          targetWord,
-        ];
+          ) ?? [];
+
+        const newAlternatives = [...filteredAlternatives, targetWord];
 
         setValue(targetWordName, alternative);
         setValue(alternativesName, newAlternatives);
@@ -215,7 +216,7 @@ export const TranslationsTableRow = memo(
                 aria-label="Delete entry"
                 colorScheme="dangerScheme"
                 onClick={() => onRemove(index)}
-                icon={<DeleteIcon />}
+                icon={<FaIcon icon={faTrash} />}
               />
             )}
           </HStack>

@@ -29,9 +29,6 @@
     "api": {
       "tags": []
     },
-    "domain": {
-      "tags": []
-    },
     "domain-types": {
       "tags": []
     },
@@ -53,6 +50,9 @@
     "skryba-e2e": {
       "tags": [],
       "implicitDependencies": ["skryba"]
+    },
+    "domain-backend": {
+      "tags": []
     }
   }
 }

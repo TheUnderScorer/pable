@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { RegisterRouteFn } from '@skryba/shared-server';
 import { apiRoutes } from '@skryba/domain-types';
-import { FetchTranslations } from '@skryba/domain';
+import { FetchTranslations } from '@skryba/domain-backend';
 import { FetchTranslationsDto } from '@skryba/shared';
 import { bodySchemaValidator } from '@skryba/shared-server';
 

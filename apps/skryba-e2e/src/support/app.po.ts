@@ -65,7 +65,7 @@ export const selectAlternative = (
 
 export const clearTable = () => {
   cy.get('#clear_all').click();
-  cy.contains('Delete all entries').click();
+  cy.get('#confirm').click();
 };
 
 export const importEntries = (fileName = 'words.txt') => {
@@ -78,4 +78,8 @@ export const exportEntries = () => {
   cy.wait(1000);
 
   return cy.readFile('cypress/downloads/words.txt');
+};
+
+export const uploadDocument = (file: string) => {
+  cy.get('#translate_document_file_upload').attachFile(file);
 };
