@@ -1,3 +1,17 @@
+# [1.2.0](https://github.com/TheUnderScorer/skryba/compare/v1.1.1...v1.2.0) (2021-04-04)
+
+
+### Bug Fixes
+
+* **skryba:** Error boundary not clearing entries ([cd1f5dd](https://github.com/TheUnderScorer/skryba/commit/cd1f5dd595cb8c8e34973b4d7b53d961dbf614f8))
+
+
+### Features
+
+* **skryba:** Add dark mode ([829a0bb](https://github.com/TheUnderScorer/skryba/commit/829a0bbc4245f801f1aaafb3e7334c9069ea645f))
+* **skryba:** Add option to translate document ([c31eae6](https://github.com/TheUnderScorer/skryba/commit/c31eae648a946dfb14f6dd77fea1b0326f167983))
+* **skryba:** Add topbar ([43f4078](https://github.com/TheUnderScorer/skryba/commit/43f4078d5b31cd69b39a73049ba4e986de3cac05))
+
 ## [1.1.1](https://github.com/TheUnderScorer/skryba/compare/v1.1.0...v1.1.1) (2021-04-01)
 
 
