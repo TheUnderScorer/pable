@@ -1,7 +1,13 @@
 import { clientRoutes } from '@skryba/shared-frontend';
 
 describe('Topbar', () => {
-  beforeEach(() => cy.visit('/'));
+  beforeEach(() => {
+    cy.window().then((window) => {
+      window.localStorage.setItem('didTranslateDocumentOnboard', 'true');
+    });
+
+    cy.visit('/');
+  });
 
   it('should navigate to different pages', () => {
     cy.contains('Translate document').click();
