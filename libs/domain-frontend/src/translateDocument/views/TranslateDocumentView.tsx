@@ -1,32 +1,30 @@
-import React, { useCallback } from 'react';
-import { FileDropzone } from '@skryba/shared-frontend';
-import { Box, Center, HStack, Spinner, Text } from '@chakra-ui/react';
-import {
-  DocumentToDisplay,
-  useTranslateDocumentStore,
-} from '../stores/useTranslateDocumentStore';
+import React, { useCallback, useEffect } from 'react';
+import { clientRoutes, FileDropzone } from '@skryba/shared-frontend';
+import { Button, Center, Spinner, VStack } from '@chakra-ui/react';
+import { useTranslateDocumentStore } from '../stores/useTranslateDocumentStore';
 import { useTranslatedEntries } from '../hooks/useTranslatedEntries';
-import { TranslatedDocument } from '../components/TranslatedDocument/TranslatedDocument';
-import { TranslatedDocumentSidebar } from '../components/TranslatedDocument/Sidebar/TranslatedDocumentSidebar';
-import { TranslatedDocumentMenu } from '../components/TranslatedDocument/Menu/TranslatedDocumentMenu';
+import { TranslateDocumentOnboard } from '../components/TranslateDocumentOnboard/TranslateDocumentOnboard';
+import { TranslatedDocumentContent } from '../components/TranslatedDocument/Content/TranslatedDocumentContent';
+import { useLocalStorage } from 'react-use';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 
 export const TranslateDocumentView = () => {
-  const display = useTranslateDocumentStore((store) => store.display);
+  const location = useLocation();
+  const tutorial = location.search?.includes('tutorial=1');
+  const history = useHistory();
+
+  const [onboardFinished, setOnboardFinished] = useLocalStorage(
+    'didTranslateDocumentOnboard',
+    false
+  );
   const content = useTranslateDocumentStore((store) => store.fileContent);
-  const file = useTranslateDocumentStore((store) => store.file);
-  const highlightInDocument = useTranslateDocumentStore(
-    (store) => store.highlightedWordInDocument
-  );
-  const highlightInList = useTranslateDocumentStore(
-    (store) => store.highlightedWordInList
-  );
 
   const {
     translatedContent,
     loading,
     handleTranslate,
     translatedOnMount,
-  } = useTranslatedEntries();
+  } = useTranslatedEntries(onboardFinished);
 
   const handleFile = useCallback(
     async (files: File[]) => {
@@ -36,68 +34,53 @@ export const TranslateDocumentView = () => {
     [handleTranslate]
   );
 
+  useEffect(() => {
+    if (tutorial) {
+      setOnboardFinished(false);
+    }
+  }, [setOnboardFinished, tutorial]);
+
   return (
     <Center flex={1}>
-      {!content && (
-        <FileDropzone
-          buttonProps={{
-            isLoading: loading,
-            id: 'translate_document_file',
-          }}
-          onFile={handleFile}
-          multiple={false}
-          accept="text/plain"
-        >
-          Upload file
-        </FileDropzone>
+      <TranslateDocumentOnboard
+        finished={onboardFinished}
+        onFinish={() => {
+          setOnboardFinished(true);
+
+          if (tutorial) {
+            history.push(clientRoutes.translateDocument);
+          }
+        }}
+      />
+      {(!content || !onboardFinished) && (
+        <VStack width="100%" spacing={6}>
+          <FileDropzone
+            buttonProps={{
+              isLoading: loading,
+              id: 'translate_document_file',
+            }}
+            onFile={handleFile}
+            multiple={false}
+            accept="text/plain"
+          >
+            Upload file
+          </FileDropzone>
+
+          {onboardFinished && (
+            <Link
+              to={{
+                search: 'tutorial=1',
+              }}
+            >
+              <Button size="xs">Show tutorial again</Button>
+            </Link>
+          )}
+        </VStack>
       )}
-      {translatedContent && content && (
+      {translatedContent && content && onboardFinished && (
         <>
           {!translatedOnMount && <Spinner />}
-          {translatedOnMount && (
-            <HStack
-              width="100%"
-              spacing={8}
-              position="relative"
-              alignItems="flex-start"
-            >
-              <Box flex={1} bg="paper" p={6} rounded="md" boxShadow="lg">
-                <HStack alignItems="center" mb={4}>
-                  <Text className="file-name" fontSize="2xl">
-                    {file?.name}{' '}
-                    {display === DocumentToDisplay.Source && '(original)'}
-                  </Text>
-                  <TranslatedDocumentMenu />
-                </HStack>
-                <Text
-                  display={
-                    display === DocumentToDisplay.Translated ? 'block' : 'none'
-                  }
-                  as="div"
-                  whiteSpace="pre-line"
-                >
-                  <TranslatedDocument
-                    highlightedWord={highlightInDocument}
-                    translatedDocument={translatedContent}
-                  />
-                </Text>
-                <Text
-                  className="original-document"
-                  display={
-                    display === DocumentToDisplay.Source ? 'block' : 'none'
-                  }
-                  as="div"
-                  whiteSpace="pre-line"
-                >
-                  {content}
-                </Text>
-              </Box>
-              <TranslatedDocumentSidebar
-                highlight={highlightInList}
-                entries={translatedContent}
-              />
-            </HStack>
-          )}
+          {translatedOnMount && <TranslatedDocumentContent />}
         </>
       )}
     </Center>

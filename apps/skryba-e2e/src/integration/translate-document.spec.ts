@@ -19,6 +19,9 @@ function advancedSetup() {
 
 describe('Translate document', () => {
   beforeEach(() => {
+    cy.window().then((window) => {
+      window.localStorage.setItem('didTranslateDocumentOnboard', 'true');
+    });
     cy.visit(clientRoutes.translateDocument);
   });
 

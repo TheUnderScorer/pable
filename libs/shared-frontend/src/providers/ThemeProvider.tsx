@@ -22,6 +22,8 @@ export const ThemeProvider = ({ children }: PropsWithChildren<unknown>) => {
           primary: primaryScheme['400'],
           dangerScheme: chakraTheme.colors.red,
           danger: chakraTheme.colors.red['500'],
+          success: chakraTheme.colors.green['500'],
+          successScheme: chakraTheme.colors.green,
           lightGrey:
             colorModePreference === 'light'
               ? chakraTheme.colors.gray['200']

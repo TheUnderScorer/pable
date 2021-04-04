@@ -46,7 +46,7 @@ export const TranslationsTable = () => {
 
   return (
     <Table>
-      <TableCaption placement="top">
+      <TableCaption className="caption" placement="top">
         <ButtonGroup>
           <TranslationsTableUpload />
           <Button

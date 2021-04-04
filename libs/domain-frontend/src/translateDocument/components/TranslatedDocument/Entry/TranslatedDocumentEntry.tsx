@@ -103,6 +103,7 @@ const BaseTranslatedEntry = ({
         </PopoverBody>
         <PopoverFooter>
           <Button
+            className="document-entry-action"
             onClick={() => {
               isRestored ? restoreTranslation(id) : restoreWord(id);
 

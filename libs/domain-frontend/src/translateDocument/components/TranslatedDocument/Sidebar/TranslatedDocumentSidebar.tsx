@@ -18,6 +18,7 @@ export const TranslatedDocumentSidebar = ({
 }: TranslatedDocumentSidebarProps) => {
   return (
     <VStack
+      className="translated-document-sidebar"
       minWidth={350}
       height="80vh"
       spacing={6}

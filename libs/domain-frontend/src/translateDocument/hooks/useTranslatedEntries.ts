@@ -4,8 +4,8 @@ import { getTranslationsFromLocalStorage } from '../../translations/getTranslati
 import { readFileAsText } from '@skryba/shared-frontend';
 import { translateDocument } from '../translateDocument';
 
-export const useTranslatedEntries = () => {
-  const [translatedOnMount, setTranslatedOnMount] = useState(false);
+export const useTranslatedEntries = (translateOnMount = true) => {
+  const [translatedOnMount, setTranslatedOnMount] = useState(!translateOnMount);
 
   const translationEntries = useMemo(
     () => getTranslationsFromLocalStorage(),
@@ -53,6 +53,10 @@ export const useTranslatedEntries = () => {
     },
     [setFile, setFileContent, setTranslatedContent, translationEntries]
   );
+
+  useEffect(() => {
+    setTranslatedOnMount(!translateOnMount);
+  }, [translateOnMount]);
 
   useEffect(() => {
     if (fileContent && !translatedOnMount) {
