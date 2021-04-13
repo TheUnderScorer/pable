@@ -1,9 +1,9 @@
 import { FastifyInstance } from 'fastify';
-import { RegisterRouteFn } from '@skryba/shared-server';
+import { bodySchemaValidator, RegisterRouteFn } from '@skryba/shared-server';
 import { apiRoutes } from '@skryba/domain-types';
 import { FetchTranslations } from '@skryba/domain-backend';
 import { FetchTranslationsDto } from '@skryba/shared';
-import { bodySchemaValidator } from '@skryba/shared-server';
+import Queue from 'queue';
 
 export const languageRoutes: RegisterRouteFn = async (
   fastify: FastifyInstance
@@ -14,11 +14,23 @@ export const languageRoutes: RegisterRouteFn = async (
     method: 'POST',
     preHandler: [bodySchemaValidator(FetchTranslationsDto)],
     handler: async (request) => {
-      const fetchTranslations = request.container.resolve<FetchTranslations>(
-        'fetchTranslations'
-      );
+      return new Promise((resolve) => {
+        const translationQueue = request.container.resolve<Queue>(
+          'translationQueue'
+        );
 
-      return fetchTranslations(request.body as FetchTranslationsDto);
+        const fetchTranslations = request.container.resolve<FetchTranslations>(
+          'fetchTranslations'
+        );
+
+        translationQueue.push(async () => {
+          const result = await fetchTranslations(
+            request.body as FetchTranslationsDto
+          );
+
+          resolve(result);
+        });
+      });
     },
   });
 };

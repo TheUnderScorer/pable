@@ -7,6 +7,7 @@ import { errorHandler, scopedContainer } from '@skryba/shared-server';
 import { URL } from 'url';
 import fastifyCors from 'fastify-cors';
 import { apiRoutes } from '@skryba/domain-types';
+import queue from 'queue';
 
 export const createContainer = async () => {
   let https = false;
@@ -40,12 +41,27 @@ export const createContainer = async () => {
     headless: true,
   });
 
+  const translationQueue = queue({
+    autostart: true,
+    concurrency: 10,
+    timeout: 900000,
+  });
+
+  translationQueue.on('start', (job) => {
+    server.log.info(`Starting job:`, job);
+  });
+
+  translationQueue.on('success', (result, job) => {
+    server.log.info(`Job completed:`, job);
+  });
+
   container.register({
     port: asValue(port),
     server: asValue(server),
     browser: asValue(browser),
     deeplUrl: asValue(new URL('https://www.deepl.com')),
     fetchTranslations: asFunction(makeFetchTranslations).singleton(),
+    translationQueue: asValue(translationQueue),
   });
 
   server.setErrorHandler(errorHandler);

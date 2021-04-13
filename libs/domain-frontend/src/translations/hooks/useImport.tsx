@@ -19,7 +19,7 @@ export const useImport = () => {
       const mappedTexts: TranslationEntry[] = textEntries.flatMap((entry) =>
         entry
           .split('\n')
-          .map((entry) => entry.split(separator))
+          .map((entry) => entry.split(separator).map((item) => item.trim()))
           .filter((entry) => first(entry))
           .map((entry) => ({
             sourceWord: first(entry),
