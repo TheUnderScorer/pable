@@ -1,4 +1,5 @@
 export const apiRoutes = {
-  fetchLanguages: '/languages',
+  translate: '/translate',
+  bulkTranslate: '/bulk-translate',
   health: '/health',
 };

@@ -1,8 +1,10 @@
-import { Browser, Page } from 'puppeteer';
-import { FetchTranslationsResult } from '@skryba/domain-types';
+import { Browser } from 'puppeteer';
+import { TranslationsResult } from '@skryba/domain-types';
 import { URL } from 'url';
 import { FetchTranslationsDto } from '@skryba/shared';
 import { buildTranslationUrl } from './buildTranslationUrl';
+import { waitForTranslationResult } from './waitForTranslationResult';
+import { selectors } from './selectors';
 import { getElementPropertyAsText } from '@skryba/shared-server';
 
 interface FetchTranslationsDependencies {
@@ -10,38 +12,17 @@ interface FetchTranslationsDependencies {
   deeplUrl: URL;
 }
 
-const selectors = {
-  targetTextArea: '.lmt__target_textarea',
-  sourceTextArea: '.lmt__source_textarea',
-};
-
-const waitForTranslationResult = async (page: Page) => {
-  await page.waitForFunction(
-    (deeplSelectors: typeof selectors) => {
-      const textArea = document.querySelector<HTMLTextAreaElement>(
-        deeplSelectors.targetTextArea
-      );
-
-      return Boolean(textArea.value);
-    },
-    {
-      timeout: 60000,
-      polling: 500,
-    },
-    selectors
-  );
-};
-
 export const makeFetchTranslations = ({
   browser,
   deeplUrl,
 }: FetchTranslationsDependencies) => async (
   dto: FetchTranslationsDto
-): Promise<FetchTranslationsResult> => {
+): Promise<TranslationsResult> => {
   const context = await browser.createIncognitoBrowserContext();
 
   try {
     const url = buildTranslationUrl(deeplUrl, dto);
+
     const page = await context.newPage();
 
     await page.goto(url.toString());

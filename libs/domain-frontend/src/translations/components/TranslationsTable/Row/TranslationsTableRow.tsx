@@ -19,10 +19,7 @@ import {
   Textarea,
   Tr,
 } from '@chakra-ui/react';
-import {
-  FetchTranslationsResult,
-  TranslationEntry,
-} from '@skryba/domain-types';
+import { TranslationsResult, TranslationEntry } from '@skryba/domain-types';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import classNames from 'classnames';
 import { Key } from 'ts-key-enum';
@@ -68,7 +65,7 @@ export const TranslationsTableRow = memo(
     const [alternatives, setAlternatives] = useState(entry.alternatives);
 
     const handleQueryResult = useCallback(
-      (data?: FetchTranslationsResult) => {
+      (data?: TranslationsResult) => {
         const { alternatives = [], translation } = data;
         if (translation) {
           setValue(targetWordName, translation);

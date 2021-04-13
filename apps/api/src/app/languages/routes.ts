@@ -1,16 +1,31 @@
 import { FastifyInstance } from 'fastify';
 import { bodySchemaValidator, RegisterRouteFn } from '@skryba/shared-server';
 import { apiRoutes } from '@skryba/domain-types';
-import { FetchTranslations } from '@skryba/domain-backend';
-import { FetchTranslationsDto } from '@skryba/shared';
+import {
+  BulkFetchTranslations,
+  FetchTranslations,
+} from '@skryba/domain-backend';
+import { BulkFetchTranslationsDto, FetchTranslationsDto } from '@skryba/shared';
 import Queue from 'queue';
 
 export const languageRoutes: RegisterRouteFn = async (
   fastify: FastifyInstance
 ) => {
-  // TODO validate schema
   fastify.route({
-    url: apiRoutes.fetchLanguages,
+    url: apiRoutes.bulkTranslate,
+    method: 'POST',
+    preHandler: [bodySchemaValidator(BulkFetchTranslationsDto)],
+    handler: async (request) => {
+      const bulkFetchTranslations = request.container.resolve<BulkFetchTranslations>(
+        'bulkFetchTranslations'
+      );
+
+      return bulkFetchTranslations(request.body as BulkFetchTranslationsDto);
+    },
+  });
+
+  fastify.route({
+    url: apiRoutes.translate,
     method: 'POST',
     preHandler: [bodySchemaValidator(FetchTranslationsDto)],
     handler: async (request) => {

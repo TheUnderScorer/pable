@@ -1,7 +1,7 @@
 import { useTranslationsConfiguration } from '../stores/useTranslationsConfiguration';
 import { useMutation } from 'react-query';
 import { useApiClient } from '@skryba/shared-frontend';
-import { FetchTranslationsResult } from '@skryba/domain-types';
+import { TranslationsResult } from '@skryba/domain-types';
 import { FetchTranslationsDto } from '@skryba/shared';
 import { useCallback } from 'react';
 
@@ -9,7 +9,7 @@ export const fetchTranslationsKey = 'fetchTranslations';
 
 export const useFetchTranslation = (
   word: string,
-  onSuccess?: (data: FetchTranslationsResult | undefined) => void
+  onSuccess?: (data: TranslationsResult | undefined) => void
 ) => {
   const sourceLang = useTranslationsConfiguration(
     useCallback((store) => store.sourceLang, [])
@@ -21,7 +21,7 @@ export const useFetchTranslation = (
   const { apiClient } = useApiClient();
 
   return useMutation<
-    FetchTranslationsResult | undefined,
+    TranslationsResult | undefined,
     Error,
     Pick<FetchTranslationsDto, 'word'>
   >(

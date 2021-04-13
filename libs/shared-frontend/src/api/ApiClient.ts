@@ -1,14 +1,14 @@
 import { FetchTranslationsDto } from '@skryba/shared';
-import { apiRoutes, FetchTranslationsResult } from '@skryba/domain-types';
+import { apiRoutes, TranslationsResult } from '@skryba/domain-types';
 
 export class ApiClient {
   constructor(private readonly url: string) {}
 
   async fetchTranslations(
     dto: FetchTranslationsDto
-  ): Promise<FetchTranslationsResult> {
+  ): Promise<TranslationsResult> {
     const url = new URL(this.url);
-    url.pathname = apiRoutes.fetchLanguages;
+    url.pathname = apiRoutes.translate;
 
     const response = await fetch(url.toString(), {
       body: JSON.stringify(dto),

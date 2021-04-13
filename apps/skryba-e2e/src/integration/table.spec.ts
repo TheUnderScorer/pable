@@ -8,11 +8,7 @@ import {
   selectAlternative,
   setSettings,
 } from '../support/app.po';
-import {
-  apiRoutes,
-  FetchTranslationsResult,
-  Language,
-} from '@skryba/domain-types';
+import { apiRoutes, TranslationsResult, Language } from '@skryba/domain-types';
 
 const assertEmptyTable = () => {
   cy.get('.translation-table-row').should('have.length', 1);
@@ -47,10 +43,10 @@ describe('Language table', () => {
   });
 
   it('should show alternative translations', () => {
-    cy.intercept(`http://localhost:3000/${apiRoutes.fetchLanguages}`, {
+    cy.intercept(`http://localhost:3000/${apiRoutes.translate}`, {
       translation: 'I like all animals',
       alternatives: ['I like all the animals'],
-    } as FetchTranslationsResult).as('translationRequest');
+    } as TranslationsResult).as('translationRequest');
 
     addEntryToTableWithoutTranslation('Lubię wszystkie zwierzęta');
 
@@ -117,9 +113,9 @@ describe('Language table', () => {
   });
 
   it('should export entries', () => {
-    cy.intercept(`http://localhost:3000/${apiRoutes.fetchLanguages}`, {
+    cy.intercept(`http://localhost:3000/${apiRoutes.translate}`, {
       translation: 'I like dogs',
-    } as FetchTranslationsResult).as('translationRequest');
+    } as TranslationsResult).as('translationRequest');
 
     addEntryToTableWithoutTranslation('Lubię psy');
 

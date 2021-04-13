@@ -4,7 +4,11 @@ export enum Language {
   Polish = 'Polish',
 }
 
-export interface FetchTranslationsResult {
+export interface BulkFetchTranslationsResult {
+  translations: TranslationsResult[];
+}
+
+export interface TranslationsResult {
   translation: string;
   alternatives: string[];
 }
