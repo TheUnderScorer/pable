@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/TheUnderScorer/skryba/compare/v1.2.1...v1.2.2) (2021-04-13)
+
+
+### Performance Improvements
+
+* **api:** POC of translations queue ([9fb1e98](https://github.com/TheUnderScorer/skryba/commit/9fb1e981a2e32bd8932dbcc4df1bd60abf92dff7))
+
 ## [1.2.1](https://github.com/TheUnderScorer/skryba/compare/v1.2.0...v1.2.1) (2021-04-13)
 
 
