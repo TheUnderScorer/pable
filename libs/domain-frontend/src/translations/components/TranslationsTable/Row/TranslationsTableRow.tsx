@@ -63,9 +63,8 @@ export const TranslationsTableRow = memo(
   }: TranslationsTableRowProps) => {
     const [didMountQuery, setDidMountQuery] = useState(false);
 
-    const { targetWord } = entry;
-
     const [sourceWord, setSourceWord] = useState(entry.sourceWord);
+    const [targetWord, setTargetWord] = useState(entry.targetWord);
     const [alternatives, setAlternatives] = useState(entry.alternatives);
 
     const handleQueryResult = useCallback(
@@ -73,6 +72,7 @@ export const TranslationsTableRow = memo(
         const { alternatives = [], translation } = data;
         if (translation) {
           setValue(targetWordName, translation);
+          setTargetWord(translation);
         }
 
         setValue(alternativesName, alternatives);
@@ -116,6 +116,7 @@ export const TranslationsTableRow = memo(
         const newAlternatives = [...filteredAlternatives, targetWord];
 
         setValue(targetWordName, alternative);
+        setTargetWord(alternative);
         setValue(alternativesName, newAlternatives);
 
         setAlternatives(newAlternatives);
@@ -183,6 +184,9 @@ export const TranslationsTableRow = memo(
                 placeholder="Translation will appear here..."
                 defaultValue={entry.targetWord}
                 ref={register()}
+                onChange={(event) => {
+                  setTargetWord(event.target.value);
+                }}
               />
             </FormField>
             {fetchTranslationQuery.isLoading && <Spinner color="primary" />}
