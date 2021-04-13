@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/TheUnderScorer/skryba/compare/v1.2.0...v1.2.1) (2021-04-13)
+
+
+### Bug Fixes
+
+* **skryba:** Alternatives disappearing after click ([45fcb88](https://github.com/TheUnderScorer/skryba/commit/45fcb88522396f84ddaf388b2ff6a6f402bf7669))
+
 # [1.2.0](https://github.com/TheUnderScorer/skryba/compare/v1.1.1...v1.2.0) (2021-04-04)
 
 
