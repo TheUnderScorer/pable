@@ -44,8 +44,8 @@ export const useImport = () => {
           .map((entry) => entry.split(separator).map((item) => item.trim()))
           .filter((entry) => first(entry))
           .map((entry) => ({
-            sourceWord: first(entry),
-            targetWord: entry[1] ?? '',
+            sourceWord: first(entry).trim(),
+            targetWord: entry[1]?.trim() ?? '',
             alternatives: [],
           }))
       );

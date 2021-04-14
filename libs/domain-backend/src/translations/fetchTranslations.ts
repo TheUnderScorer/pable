@@ -66,10 +66,10 @@ export const makeFetchTranslations = ({
     logger.info(`Got translation on ${url} for ${dto.word}`);
 
     return {
-      translation,
-      alternatives: alternatives.filter(
-        (value) => value && value !== translation
-      ) as string[],
+      translation: translation.trim(),
+      alternatives: alternatives
+        .filter((value) => value && value !== translation)
+        .map((word) => word.trim()) as string[],
       from: dto.word,
     };
   } catch (e) {

@@ -16,7 +16,6 @@ import { TranslationsTableClearAll } from './ClearAll/TranslationsTableClearAll'
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import {
   initialTranslationEntry,
-  TranslationEntry,
   TranslationsForm,
 } from '@skryba/domain-types';
 import { isLast } from '@skryba/shared';
@@ -25,7 +24,7 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
 export const TranslationsTable = () => {
   const form = useFormContext<TranslationsForm>();
-  const { append, fields, remove } = useFieldArray<TranslationEntry>({
+  const { append, fields, remove } = useFieldArray({
     name: 'entries',
     control: form.control,
     keyName: 'id',
@@ -39,7 +38,9 @@ export const TranslationsTable = () => {
         {
           ...initialTranslationEntry,
         },
-        false
+        {
+          shouldFocus: false,
+        }
       ),
     [append]
   );
@@ -80,7 +81,6 @@ export const TranslationsTable = () => {
             index={index}
             onAdd={handleAdd}
             isLast={isLast(index, fields)}
-            register={form.register}
             setValue={form.setValue}
           />
         ))}

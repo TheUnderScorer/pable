@@ -19,13 +19,17 @@ import {
   Textarea,
   Tr,
 } from '@chakra-ui/react';
-import { TranslationsResult, TranslationEntry } from '@skryba/domain-types';
+import {
+  TranslationEntry,
+  TranslationsForm,
+  TranslationsResult,
+} from '@skryba/domain-types';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import classNames from 'classnames';
 import { Key } from 'ts-key-enum';
-import { FaIcon, FormField } from '@skryba/shared-frontend';
-import { UseFormMethods } from 'react-hook-form';
+import { FaIcon, FormFieldController } from '@skryba/shared-frontend';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FieldPath, UseFormReturn } from 'react-hook-form';
 
 export interface TranslationsTableRowProps {
   onKeyDown?: (
@@ -35,15 +39,14 @@ export interface TranslationsTableRowProps {
   inputVariant?: string;
   className?: string;
   index?: number;
-  sourceWordName: string;
-  targetWordName: string;
-  alternativesName: string;
+  sourceWordName: FieldPath<TranslationsForm>;
+  targetWordName: FieldPath<TranslationsForm>;
+  alternativesName: FieldPath<TranslationsForm>;
+  targetWordEditedManuallyName: FieldPath<TranslationsForm>;
   entry: TranslationEntry;
-  register: UseFormMethods['register'];
-  setValue: UseFormMethods['setValue'];
+  setValue: UseFormReturn<TranslationsForm>['setValue'];
 }
 
-// TODO Fix alternatives
 export const TranslationsTableRow = memo(
   ({
     onKeyDown,
@@ -55,13 +58,12 @@ export const TranslationsTableRow = memo(
     sourceWordName,
     targetWordName,
     entry,
-    register,
     setValue,
   }: TranslationsTableRowProps) => {
     const [didMountQuery, setDidMountQuery] = useState(false);
 
-    const [sourceWord, setSourceWord] = useState(entry.sourceWord);
     const [targetWord, setTargetWord] = useState(entry.targetWord);
+    const [sourceWord, setSourceWord] = useState(entry.sourceWord);
     const [alternatives, setAlternatives] = useState(entry.alternatives);
 
     const handleQueryResult = useCallback(
@@ -114,8 +116,8 @@ export const TranslationsTableRow = memo(
 
         setValue(targetWordName, alternative);
         setTargetWord(alternative);
-        setValue(alternativesName, newAlternatives);
 
+        setValue(alternativesName, newAlternatives);
         setAlternatives(newAlternatives);
       },
       [alternatives, alternativesName, targetWord, targetWordName, setValue]
@@ -152,40 +154,52 @@ export const TranslationsTableRow = memo(
     return (
       <Tr className={classNames(className, 'translation-table-row')}>
         <Td>
-          <FormField name={sourceWordName}>
-            <Textarea
-              defaultValue={entry.sourceWord}
-              name={sourceWordName}
-              ref={register()}
-              className={classNames('sourceWord', `sourceWord-${index}`)}
-              minHeight={12}
-              variant={inputVariant}
-              onKeyDown={handleKeyDown('sourceWord')}
-              placeholder="Enter word here..."
-              onChange={(event) => {
-                setSourceWord(event.target.value);
-              }}
-            />
-          </FormField>
+          <FormFieldController
+            name={sourceWordName}
+            defaultValue={entry.sourceWord}
+          >
+            {({ field: { onChange, ...rest } }) => (
+              <Textarea
+                name={sourceWordName}
+                className={classNames('sourceWord', `sourceWord-${index}`)}
+                minHeight={12}
+                variant={inputVariant}
+                onKeyDown={handleKeyDown('sourceWord')}
+                placeholder="Enter word here..."
+                {...rest}
+                onChange={(event) => {
+                  setSourceWord(event.target.value);
+
+                  onChange(event);
+                }}
+              />
+            )}
+          </FormFieldController>
         </Td>
         <Td>
           <HStack width="100%">
-            <FormField name={targetWordName}>
-              <Textarea
-                name={targetWordName}
-                className={classNames('targetWord', `targetWord-${index}`)}
-                minHeight={12}
-                variant={inputVariant}
-                disabled={fetchTranslationQuery.isLoading}
-                onKeyDown={handleKeyDown('targetWord')}
-                placeholder="Translation will appear here..."
-                defaultValue={entry.targetWord}
-                ref={register()}
-                onChange={(event) => {
-                  setTargetWord(event.target.value);
-                }}
-              />
-            </FormField>
+            <FormFieldController
+              defaultValue={entry.targetWord}
+              name={targetWordName}
+            >
+              {({ field: { onChange, ...rest } }) => (
+                <Textarea
+                  className={classNames('targetWord', `targetWord-${index}`)}
+                  minHeight={12}
+                  variant={inputVariant}
+                  disabled={fetchTranslationQuery.isLoading}
+                  onKeyDown={handleKeyDown('targetWord')}
+                  placeholder="Translation will appear here..."
+                  {...rest}
+                  onChange={(event) => {
+                    setTargetWord(event.target.value);
+
+                    onChange(event);
+                  }}
+                />
+              )}
+            </FormFieldController>
+
             {fetchTranslationQuery.isLoading && <Spinner color="primary" />}
             {alternatives?.length && (
               <Menu>

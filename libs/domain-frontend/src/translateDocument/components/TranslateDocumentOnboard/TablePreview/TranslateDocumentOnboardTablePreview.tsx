@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { TranslationEntry, TranslationsForm } from '@skryba/domain-types';
 import { TranslationsTable } from '../../../../translations/components/TranslationsTable/TranslationsTable';
 import { Box } from '@chakra-ui/react';
@@ -39,7 +39,10 @@ export const TranslateDocumentOnboardTablePreview = () => {
         word,
         delayMs: 100,
         onType: (word) => {
-          setValue(`entries[${index}].${type}`, word);
+          setValue(
+            `entries.${index}.${type}` as FieldPath<TranslationsForm>,
+            word
+          );
         },
       });
     },

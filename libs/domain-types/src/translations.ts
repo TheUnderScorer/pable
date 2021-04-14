@@ -20,6 +20,7 @@ export interface TranslationEntry {
   sourceWord?: string;
   targetWord?: string;
   alternatives?: string[];
+  targetWordEditedManually?: boolean;
 }
 
 export interface TranslationsForm {

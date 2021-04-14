@@ -10,7 +10,9 @@ function advancedSetup() {
   cy.visit(clientRoutes.langTable);
   importEntries('translate-document/advanced.txt');
 
-  cy.wait(4000);
+  cy.wait('@bulkTranslationRequest');
+
+  cy.wait(1000);
 
   cy.visit(clientRoutes.translateDocument);
 
@@ -122,13 +124,9 @@ describe('Translate document', () => {
     );
   });
 
-  it('should handle export with multiple restored words', () => {
+  it.only('should handle export with multiple restored words', () => {
     const entriesToRestore = 10;
     let restoredEntries = 0;
-
-    cy.intercept(`http://localhost:3000/${apiRoutes.translate}`, {
-      translation: 'Foo',
-    } as TranslationsResult).as('translationRequest');
 
     advancedSetup();
 
@@ -150,11 +148,14 @@ describe('Translate document', () => {
     cy.get('#export_document').click();
 
     cy.fixture('translate-document/advanced-translated-expected.txt').then(
-      (content) => {
-        cy.readFile('cypress/downloads/advanced-translated.txt').should(
-          'contain',
-          content
+      (content: string) => {
+        const downloaded = cy.readFile(
+          'cypress/downloads/advanced-translated.txt'
         );
+
+        content.split('\n').forEach((line) => {
+          downloaded.should('contain', line.trim());
+        });
       }
     );
   });

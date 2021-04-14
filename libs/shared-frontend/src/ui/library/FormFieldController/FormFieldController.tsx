@@ -1,20 +1,20 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { FormField, FormFieldProps } from '../FormField/FormField';
 import { Controller, ControllerProps, useFormContext } from 'react-hook-form';
 
-export interface FormFieldControllerProps<T extends ReactElement>
+export interface FormFieldControllerProps
   extends FormFieldProps,
-    Pick<ControllerProps<ReactElement>, 'name' | 'rules' | 'defaultValue'> {
-  children: ControllerProps<T>['render'];
+    Pick<ControllerProps, 'rules' | 'defaultValue'> {
+  children: ControllerProps['render'];
 }
 
-export const FormFieldController = <T extends ReactElement>({
+export const FormFieldController = ({
   name,
   rules,
   defaultValue,
   children,
   ...props
-}: FormFieldControllerProps<T>) => {
+}: FormFieldControllerProps) => {
   const form = useFormContext();
 
   return (
@@ -24,7 +24,7 @@ export const FormFieldController = <T extends ReactElement>({
         control={form.control}
         defaultValue={defaultValue}
         rules={rules}
-        render={(formProps, state) => children(formProps, state)}
+        render={(formProps) => children(formProps)}
       />
     </FormField>
   );
