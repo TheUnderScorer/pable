@@ -12,14 +12,21 @@ export const makeBulkFetchTranslations = ({
 }: BulkFetchTranslationsDependencies) => async (
   dto: BulkFetchTranslationsDto
 ): Promise<BulkFetchTranslationsResult> => {
-  const limit = pLimit(10);
+  const limit = pLimit(5);
 
   const translations = await Promise.all(
     dto.entries.map((entry) => limit(() => fetchTranslations(entry)))
   );
 
+  const entriesWithTranslations = translations.filter(
+    ({ translation }) => translation
+  );
+
   return {
     translations,
+    translatedEntries: entriesWithTranslations.length,
+    entriesWithoutTranslations:
+      translations.length - entriesWithTranslations.length,
   };
 };
 

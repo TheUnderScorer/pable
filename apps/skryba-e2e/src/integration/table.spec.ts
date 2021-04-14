@@ -82,6 +82,18 @@ describe('Language table', () => {
     assertEmptyTable();
   });
 
+  it('should import entries and translate them', () => {
+    importEntries('words1.txt');
+
+    cy.contains('Hold on, we are translating').should('exist');
+
+    cy.wait('@bulkTranslationRequest');
+
+    cy.wait(1000);
+
+    cy.get('.targetWord').eq(2).should('have.text', 'School');
+  });
+
   it('should support navigation via arrows', () => {
     addEntryToTableWithoutTranslation('Lubię psy');
     addEntryToTableWithoutTranslation('Lubię koty');

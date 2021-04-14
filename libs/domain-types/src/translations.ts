@@ -6,10 +6,13 @@ export enum Language {
 
 export interface BulkFetchTranslationsResult {
   translations: TranslationsResult[];
+  translatedEntries: number;
+  entriesWithoutTranslations: number;
 }
 
 export interface TranslationsResult {
   translation: string;
+  from: string;
   alternatives: string[];
 }
 
