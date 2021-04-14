@@ -10,7 +10,7 @@
     "build:api-docker": "docker buildx build -f docker/api/Dockerfile -t skryba-api:latest --progress=plain --platform linux/amd64 .",
     "build:api-docker:native": "docker buildx build . -f docker/api/Dockerfile -t skryba-api:native --progress=plain",
     "heroku-postbuild": "nx build api --prod",
-    "test": "jest",
+    "test": "jest --forceExit",
     "lint": "nx workspace-lint && nx lint && nx lint api",
     "e2e": "nx e2e",
     "affected:apps": "nx affected:apps",
