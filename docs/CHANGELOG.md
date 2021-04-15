@@ -1,3 +1,11 @@
+# [1.3.0](https://github.com/TheUnderScorer/skryba/compare/v1.2.2...v1.3.0) (2021-04-15)
+
+
+### Features
+
+* **api:** Add endpoint for fetching bulk translations ([b32cef8](https://github.com/TheUnderScorer/skryba/commit/b32cef85c863dc2e3630ee3bd1f687cf49d3fc15))
+* **skryba:** Bulk translate entries on import ([50cdae7](https://github.com/TheUnderScorer/skryba/commit/50cdae79f0c448523296b0d08dc0676e7a15de17))
+
 ## [1.2.2](https://github.com/TheUnderScorer/skryba/compare/v1.2.1...v1.2.2) (2021-04-13)
 
 
