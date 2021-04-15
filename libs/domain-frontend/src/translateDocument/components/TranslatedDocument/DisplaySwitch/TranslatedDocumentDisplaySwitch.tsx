@@ -2,8 +2,8 @@ import {
   DocumentToDisplay,
   useTranslateDocumentStore,
 } from '../../../stores/useTranslateDocumentStore';
-import { Button, HStack, Switch } from '@chakra-ui/react';
 import React from 'react';
+import { LabeledSwitch } from '@skryba/shared-frontend';
 
 export const TranslatedDocumentDisplaySwitch = () => {
   const setDisplay = useTranslateDocumentStore((store) => store.setDisplay);
@@ -13,29 +13,15 @@ export const TranslatedDocumentDisplaySwitch = () => {
   );
 
   return (
-    <HStack spacing={4}>
-      <Button
-        color="inherit"
-        p={0}
-        variant="link"
-        onClick={() => setDisplay(DocumentToDisplay.Translated)}
-      >
-        Translated
-      </Button>
-      <Switch
-        isChecked={display === DocumentToDisplay.Source}
-        onChange={() => toggleDisplay()}
-        colorScheme="primaryScheme"
-        id="display_switch"
-      />
-      <Button
-        color="inherit"
-        p={0}
-        variant="link"
-        onClick={() => setDisplay(DocumentToDisplay.Source)}
-      >
-        Original
-      </Button>
-    </HStack>
+    <LabeledSwitch
+      leftLabel="Translated"
+      rightLabel="Original"
+      onLeftClick={() => setDisplay(DocumentToDisplay.Translated)}
+      onRightClick={() => setDisplay(DocumentToDisplay.Source)}
+      isChecked={display === DocumentToDisplay.Source}
+      onChange={() => toggleDisplay()}
+      colorScheme="primaryScheme"
+      id="display_switch"
+    />
   );
 };
