@@ -68,8 +68,11 @@ describe('Language table', () => {
     assertEmptyTable();
   });
 
-  it('should import entries via file', () => {
+  it.only('should import entries via file', () => {
     importEntries();
+
+    cy.wait('@bulkTranslationRequest');
+    cy.wait(1000);
 
     cy.get('.translation-table-row').should('have.length', 145);
   });
