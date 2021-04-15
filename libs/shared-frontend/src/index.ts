@@ -11,3 +11,4 @@ export * from './hooks/useConfirmationDialog';
 export * from './utils/downloadAsText';
 export * from './hooks/usePrefersColorScheme';
 export * from './utils/simulateTyping';
+export * from './hooks/useToastOnError';

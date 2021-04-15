@@ -46,6 +46,8 @@ describe('Translate document', () => {
 
     uploadDocument('translate-document/simple.txt');
 
+    cy.wait('@translateDocumentRequest');
+
     cy.get('.translated-document').should('contain', 'Foo Foo hehe');
     cy.get('.file-name').should('contain', 'simple.txt');
     cy.get('.translation-list-item')
@@ -68,6 +70,8 @@ describe('Translate document', () => {
     cy.visit(clientRoutes.translateDocument);
 
     uploadDocument('translate-document/simple.txt');
+
+    cy.wait('@translateDocumentRequest');
 
     cy.get('#display_switch').parent().click();
     cy.get('.original-document')
@@ -103,6 +107,8 @@ describe('Translate document', () => {
 
     uploadDocument('translate-document/simple1.txt');
 
+    cy.wait('@translateDocumentRequest');
+
     cy.get('.translated-entry-trigger').first().click();
     cy.get('.translation-list-item').first().should('have.class', 'highlight');
     cy.contains('Restore original word').click();
@@ -124,7 +130,7 @@ describe('Translate document', () => {
     );
   });
 
-  it.only('should handle export with multiple restored words', () => {
+  it('should handle export with multiple restored words', () => {
     const entriesToRestore = 10;
     let restoredEntries = 0;
 

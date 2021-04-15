@@ -4,8 +4,13 @@ import { apiRoutes } from '@skryba/domain-types';
 import {
   BulkFetchTranslations,
   FetchTranslations,
+  translateDocument,
 } from '@skryba/domain-backend';
-import { BulkFetchTranslationsDto, FetchTranslationsDto } from '@skryba/shared';
+import {
+  BulkFetchTranslationsDto,
+  FetchTranslationsDto,
+  TranslateDocumentDto,
+} from '@skryba/shared';
 import Queue from 'queue';
 
 export const languageRoutes: RegisterRouteFn = async (
@@ -21,6 +26,15 @@ export const languageRoutes: RegisterRouteFn = async (
       );
 
       return bulkFetchTranslations(request.body as BulkFetchTranslationsDto);
+    },
+  });
+
+  fastify.route({
+    url: apiRoutes.translateDocument,
+    method: 'POST',
+    preHandler: [bodySchemaValidator(TranslateDocumentDto)],
+    handler: async (request) => {
+      return translateDocument(request.body as TranslateDocumentDto);
     },
   });
 

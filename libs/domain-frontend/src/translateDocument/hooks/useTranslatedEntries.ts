@@ -2,13 +2,30 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslateDocumentStore } from '../stores/useTranslateDocumentStore';
 import { getTranslationsFromLocalStorage } from '../../translations/getTranslationsFromLocalStorage';
 import { readFileAsText } from '@skryba/shared-frontend';
-import { translateDocument } from '../translateDocument';
+import { useTranslateDocument } from './useTranslateDocument';
+import { TranslateDocumentResult } from '@skryba/domain-types';
 
-export const useTranslatedEntries = (translateOnMount = true) => {
+export const useTranslatedEntries = (
+  translateOnMount = true,
+  onSuccess?: (data: TranslateDocumentResult) => void
+) => {
+  const translateDocumentMutation = useTranslateDocument({
+    onSuccess: (data) => {
+      if (data.document) {
+        setTranslatedContent(data.document);
+
+        onSuccess?.(data);
+      }
+    },
+  });
+
   const [translatedOnMount, setTranslatedOnMount] = useState(!translateOnMount);
 
   const translationEntries = useMemo(
-    () => getTranslationsFromLocalStorage(),
+    () =>
+      getTranslationsFromLocalStorage()?.filter(
+        (translation) => translation.targetWord && translation.sourceWord
+      ) ?? [],
     []
   );
 
@@ -25,33 +42,25 @@ export const useTranslatedEntries = (translateOnMount = true) => {
     (store) => store.setFileContent
   );
 
-  const [loading, setLoading] = useState(false);
-
   const handleTranslate = useCallback(
     async (file: File) => {
       setTranslatedOnMount(true);
 
-      setLoading(true);
-
       const contentRaw = await readFileAsText(file);
       const content = contentRaw.toString();
+
+      await translateDocumentMutation.mutateAsync({
+        content,
+        translations: translationEntries,
+      });
 
       setFileContent(content);
       setFile({
         name: file.name,
         size: file.size,
       });
-
-      setTranslatedContent(
-        translateDocument({
-          content,
-          translations: translationEntries,
-        })
-      );
-
-      setLoading(false);
     },
-    [setFile, setFileContent, setTranslatedContent, translationEntries]
+    [setFile, setFileContent, translateDocumentMutation, translationEntries]
   );
 
   useEffect(() => {
@@ -60,31 +69,35 @@ export const useTranslatedEntries = (translateOnMount = true) => {
 
   useEffect(() => {
     if (fileContent && !translatedOnMount) {
-      setLoading(true);
+      translateDocumentMutation.mutate({
+        content: fileContent,
+        translations: translationEntries,
+        previousTranslatedDocument: translatedContent,
+      });
 
-      setTranslatedContent(
-        translateDocument({
-          content: fileContent,
-          translations: translationEntries,
-          previousTranslatedDocument: translatedContent,
-        })
-      );
-
-      setLoading(false);
       setTranslatedOnMount(true);
     }
   }, [
     fileContent,
     setTranslatedContent,
+    translateDocumentMutation,
     translatedContent,
     translatedOnMount,
     translationEntries,
   ]);
 
+  useEffect(() => {
+    if (translateDocumentMutation.error) {
+      setFileContent(undefined);
+      setFile(undefined);
+    }
+  }, [setFile, setFileContent, translateDocumentMutation.error]);
+
   return {
-    loading,
+    loading: translateDocumentMutation.isLoading,
     translatedContent,
     handleTranslate,
     translatedOnMount,
+    error: translateDocumentMutation.error,
   };
 };

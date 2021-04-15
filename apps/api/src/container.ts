@@ -5,7 +5,7 @@ import {
   makeBulkFetchTranslations,
   makeFetchTranslations,
 } from '@skryba/domain-backend';
-import { languageRoutes } from './app/languages/routes';
+import { languageRoutes } from './app/translate/routes';
 import { errorHandler, scopedContainer } from '@skryba/shared-server';
 import { URL } from 'url';
 import fastifyCors from 'fastify-cors';

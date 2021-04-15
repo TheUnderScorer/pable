@@ -5,7 +5,7 @@ import {
   TranslatedDocumentEntries,
 } from '@skryba/domain-types';
 import { clone } from 'remeda';
-import { getTranslatedEntryById } from '../getTranslatedEntryById';
+import { getTranslatedEntryById } from '@skryba/domain-shared';
 
 export enum DocumentToDisplay {
   Translated = 'Translated',

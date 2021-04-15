@@ -26,4 +26,8 @@ beforeEach(() => {
   cy.intercept(`http://localhost:3000/${apiRoutes.bulkTranslate}`).as(
     'bulkTranslationRequest'
   );
+
+  cy.intercept(`http://localhost:3000/${apiRoutes.translateDocument}`).as(
+    'translateDocumentRequest'
+  );
 });

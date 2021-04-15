@@ -1,22 +1,15 @@
 import {
   isTranslatedDocumentEntry,
-  TranslatedDocumentEntries,
   TranslatedDocumentEntry,
+  TranslateDocumentResult,
   TranslationEntry,
 } from '@skryba/domain-types';
 import { map, pipe, reduce, sortBy } from 'remeda';
 import escapeStringRegexp from 'escape-string-regexp';
-import { getTranslatedEntryById } from './getTranslatedEntryById';
-
-interface TranslateDocumentParams {
-  content: string;
-  translations: TranslationEntry[];
-  previousTranslatedDocument?: TranslatedDocumentEntries;
-}
-
-const forbiddenChars = ['"', '[', ']', '{', '}', ':', '<', '>'];
-
-const separator = '<sep>';
+import { TranslateDocumentDto } from '@skryba/shared';
+import { getTranslatedEntryById } from '@skryba/domain-shared';
+import { separator } from './constants';
+import { translateWord } from './translateWord';
 
 const buildId = (
   translation: Pick<TranslationEntry, 'targetWord'>,
@@ -27,7 +20,9 @@ export const translateDocument = ({
   content,
   translations,
   previousTranslatedDocument,
-}: TranslateDocumentParams): TranslatedDocumentEntries => {
+}: TranslateDocumentDto): TranslateDocumentResult => {
+  let translatedEntries = 0;
+
   const nbspRegex = new RegExp(String.fromCharCode(160), 'g');
   const formattedContent = content.replace(nbspRegex, ' ');
 
@@ -45,51 +40,13 @@ export const translateDocument = ({
 
   const allMatches: string[] = [];
 
-  const withSeparators = formattedTranslations.reduce(
+  const translatedWordsWithSeparators = formattedTranslations.reduce(
     (currentResult, translation) => {
       if (!translation.sourceWord || !translation.targetWord) {
         return currentResult;
       }
 
-      const regex = new RegExp(
-        `(?<!\\w)${translation.sourceWord}(?!\\w)`,
-        'gi'
-      );
-
-      return currentResult.replace(regex, (match, index) => {
-        if (
-          allMatches.some(
-            (prevMatch) => prevMatch.includes(match) && match !== prevMatch
-          )
-        ) {
-          // This ensures that the word is not an part of translated word
-          const prevMatch = allMatches.find(
-            (prevMatch) => prevMatch.includes(match) && match !== prevMatch
-          );
-
-          const offset = prevMatch.length - match.length;
-          const diffWord = currentResult.slice(index - offset, index);
-          const wholeWord = `${diffWord.trim()} ${match.trim()}`;
-
-          if (prevMatch === wholeWord) {
-            return match;
-          }
-        }
-
-        const prevChar = currentResult[index - 1];
-        const nextChar = currentResult[index + 1];
-
-        if (
-          forbiddenChars.includes(prevChar) ||
-          forbiddenChars.includes(nextChar)
-        ) {
-          return match;
-        }
-
-        allMatches.push(match);
-
-        return `${separator}${match.trim()}${separator}`;
-      });
+      return translateWord(translation, currentResult, allMatches);
     },
     formattedContent
   );
@@ -127,13 +84,14 @@ export const translateDocument = ({
 
         return `${separator}${JSON.stringify(json)}${separator}`;
       });
-    }, withSeparators),
+    }, translatedWordsWithSeparators),
     (val) => val.split(separator),
     map.indexed<string, TranslatedDocumentEntry | string>((item) => {
       try {
         const parsed = JSON.parse(item);
 
         if (isTranslatedDocumentEntry(parsed)) {
+          translatedEntries++;
           return parsed;
         }
 
@@ -141,6 +99,10 @@ export const translateDocument = ({
       } catch {
         return item;
       }
+    }),
+    (result) => ({
+      document: result,
+      translatedEntries,
     })
   );
 };

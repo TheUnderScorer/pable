@@ -28,7 +28,8 @@
       "@skryba/shared": ["libs/shared/src/index.ts"],
       "@skryba/shared-frontend": ["libs/shared-frontend/src/index.ts"],
       "@skryba/domain-frontend": ["libs/domain-frontend/src/index.ts"],
-      "@skryba/domain-backend": ["libs/domain-backend/src/index.ts"]
+      "@skryba/domain-backend": ["libs/domain-backend/src/index.ts"],
+      "@skryba/domain-shared": ["libs/domain-shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

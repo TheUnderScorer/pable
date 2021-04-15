@@ -8,5 +8,6 @@ module.exports = {
     '<rootDir>/libs/shared',
     '<rootDir>/libs/shared-frontend',
     '<rootDir>/libs/domain-frontend',
+    '<rootDir>/libs/domain-shared',
   ],
 };

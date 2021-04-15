@@ -1,23 +1,12 @@
 {
   "version": 2,
-  "cli": {
-    "defaultCollection": "@nrwl/react"
-  },
+  "cli": { "defaultCollection": "@nrwl/react" },
   "defaultProject": "skryba",
   "generators": {
     "@nrwl/react": {
-      "application": {
-        "style": "css",
-        "linter": "eslint",
-        "babel": true
-      },
-      "component": {
-        "style": "css"
-      },
-      "library": {
-        "style": "css",
-        "linter": "eslint"
-      }
+      "application": { "style": "css", "linter": "eslint", "babel": true },
+      "component": { "style": "css" },
+      "library": { "style": "css", "linter": "eslint" }
     }
   },
   "projects": {
@@ -60,9 +49,7 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/api/**/*.ts"]
-          }
+          "options": { "lintFilePatterns": ["apps/api/**/*.ts"] }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -81,9 +68,7 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/domain-types/**/*.ts"]
-          }
+          "options": { "lintFilePatterns": ["libs/domain-types/**/*.ts"] }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -102,9 +87,7 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared-server/**/*.ts"]
-          }
+          "options": { "lintFilePatterns": ["libs/shared-server/**/*.ts"] }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -123,9 +106,7 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared/**/*.ts"]
-          }
+          "options": { "lintFilePatterns": ["libs/shared/**/*.ts"] }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -225,13 +206,9 @@
         },
         "serve": {
           "executor": "@nrwl/web:dev-server",
-          "options": {
-            "buildTarget": "skryba:build"
-          },
+          "options": { "buildTarget": "skryba:build" },
           "configurations": {
-            "production": {
-              "buildTarget": "skryba:build:production"
-            }
+            "production": { "buildTarget": "skryba:build:production" }
           }
         },
         "lint": {
@@ -263,16 +240,12 @@
             "devServerTarget": "skryba:serve"
           },
           "configurations": {
-            "production": {
-              "devServerTarget": "skryba:serve:production"
-            }
+            "production": { "devServerTarget": "skryba:serve:production" }
           }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/skryba-e2e/**/*.{js,ts}"]
-          }
+          "options": { "lintFilePatterns": ["apps/skryba-e2e/**/*.{js,ts}"] }
         }
       }
     },
@@ -283,15 +256,32 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/domain-backend/**/*.ts"]
-          }
+          "options": { "lintFilePatterns": ["libs/domain-backend/**/*.ts"] }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/libs/domain-backend"],
           "options": {
             "jestConfig": "libs/domain-backend/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "domain-shared": {
+      "root": "libs/domain-shared",
+      "sourceRoot": "libs/domain-shared/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": { "lintFilePatterns": ["libs/domain-shared/**/*.ts"] }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/domain-shared"],
+          "options": {
+            "jestConfig": "libs/domain-shared/jest.config.js",
             "passWithNoTests": true
           }
         }
