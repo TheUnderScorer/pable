@@ -8,11 +8,7 @@ import {
   selectAlternative,
   setSettings,
 } from '../support/app.po';
-import {
-  apiRoutes,
-  FetchTranslationsResult,
-  Language,
-} from '@skryba/domain-types';
+import { apiRoutes, TranslationsResult, Language } from '@skryba/domain-types';
 
 const assertEmptyTable = () => {
   cy.get('.translation-table-row').should('have.length', 1);
@@ -47,10 +43,10 @@ describe('Language table', () => {
   });
 
   it('should show alternative translations', () => {
-    cy.intercept(`http://localhost:3000/${apiRoutes.fetchLanguages}`, {
+    cy.intercept(`http://localhost:3000/${apiRoutes.translate}`, {
       translation: 'I like all animals',
       alternatives: ['I like all the animals'],
-    } as FetchTranslationsResult).as('translationRequest');
+    } as TranslationsResult).as('translationRequest');
 
     addEntryToTableWithoutTranslation('Lubię wszystkie zwierzęta');
 
@@ -72,8 +68,11 @@ describe('Language table', () => {
     assertEmptyTable();
   });
 
-  it('should import entries via file', () => {
+  it.only('should import entries via file', () => {
     importEntries();
+
+    cy.wait('@bulkTranslationRequest');
+    cy.wait(1000);
 
     cy.get('.translation-table-row').should('have.length', 145);
   });
@@ -84,6 +83,18 @@ describe('Language table', () => {
     cy.get('#undo_import').click();
 
     assertEmptyTable();
+  });
+
+  it('should import entries and translate them', () => {
+    importEntries('words1.txt');
+
+    cy.contains('Hold on, we are translating').should('exist');
+
+    cy.wait('@bulkTranslationRequest');
+
+    cy.wait(1000);
+
+    cy.get('.targetWord').eq(2).should('have.text', 'School');
   });
 
   it('should support navigation via arrows', () => {
@@ -117,9 +128,9 @@ describe('Language table', () => {
   });
 
   it('should export entries', () => {
-    cy.intercept(`http://localhost:3000/${apiRoutes.fetchLanguages}`, {
+    cy.intercept(`http://localhost:3000/${apiRoutes.translate}`, {
       translation: 'I like dogs',
-    } as FetchTranslationsResult).as('translationRequest');
+    } as TranslationsResult).as('translationRequest');
 
     addEntryToTableWithoutTranslation('Lubię psy');
 

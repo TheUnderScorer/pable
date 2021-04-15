@@ -4,13 +4,15 @@ import {
   importEntries,
   uploadDocument,
 } from '../support/app.po';
-import { apiRoutes, FetchTranslationsResult } from '@skryba/domain-types';
+import { apiRoutes, TranslationsResult } from '@skryba/domain-types';
 
 function advancedSetup() {
   cy.visit(clientRoutes.langTable);
   importEntries('translate-document/advanced.txt');
 
-  cy.wait(4000);
+  cy.wait('@bulkTranslationRequest');
+
+  cy.wait(1000);
 
   cy.visit(clientRoutes.translateDocument);
 
@@ -32,9 +34,9 @@ describe('Translate document', () => {
   it('should upload file and translate it basing on entries from table - simple document', () => {
     cy.visit(clientRoutes.langTable);
 
-    cy.intercept(`http://localhost:3000/${apiRoutes.fetchLanguages}`, {
+    cy.intercept(`http://localhost:3000/${apiRoutes.translate}`, {
       translation: 'Foo',
-    } as FetchTranslationsResult).as('translationRequest');
+    } as TranslationsResult).as('translationRequest');
 
     addEntryToTableWithoutTranslation('Bar');
 
@@ -55,9 +57,9 @@ describe('Translate document', () => {
   it('should let user switch between translation and original', () => {
     cy.visit(clientRoutes.langTable);
 
-    cy.intercept(`http://localhost:3000/${apiRoutes.fetchLanguages}`, {
+    cy.intercept(`http://localhost:3000/${apiRoutes.translate}`, {
       translation: 'Foo',
-    } as FetchTranslationsResult).as('translationRequest');
+    } as TranslationsResult).as('translationRequest');
 
     addEntryToTableWithoutTranslation('Bar');
 
@@ -78,18 +80,18 @@ describe('Translate document', () => {
   it('should support restoring original words', () => {
     cy.visit(clientRoutes.langTable);
 
-    cy.intercept(`http://localhost:3000/${apiRoutes.fetchLanguages}`, (req) => {
+    cy.intercept(`http://localhost:3000/${apiRoutes.translate}`, (req) => {
       if (req.body.word === 'Bar') {
         req.reply({
           translation: 'Foo',
-        } as FetchTranslationsResult);
+        } as TranslationsResult);
 
         return;
       }
 
       req.reply({
         translation: 'Ipsum',
-      } as FetchTranslationsResult);
+      } as TranslationsResult);
     }).as('translationRequest');
 
     addEntryToTableWithoutTranslation('Bar');
@@ -122,13 +124,9 @@ describe('Translate document', () => {
     );
   });
 
-  it('should handle export with multiple restored words', () => {
+  it.only('should handle export with multiple restored words', () => {
     const entriesToRestore = 10;
     let restoredEntries = 0;
-
-    cy.intercept(`http://localhost:3000/${apiRoutes.fetchLanguages}`, {
-      translation: 'Foo',
-    } as FetchTranslationsResult).as('translationRequest');
 
     advancedSetup();
 
@@ -150,11 +148,14 @@ describe('Translate document', () => {
     cy.get('#export_document').click();
 
     cy.fixture('translate-document/advanced-translated-expected.txt').then(
-      (content) => {
-        cy.readFile('cypress/downloads/advanced-translated.txt').should(
-          'contain',
-          content
+      (content: string) => {
+        const downloaded = cy.readFile(
+          'cypress/downloads/advanced-translated.txt'
         );
+
+        content.split('\n').forEach((line) => {
+          downloaded.should('contain', line.trim());
+        });
       }
     );
   });

@@ -3,10 +3,10 @@ module.exports = {
     '<rootDir>/apps/skryba',
     '<rootDir>/apps/api',
     '<rootDir>/libs/domain-backend',
-    '<rootDir>/libs/domain-backend-types',
+    '<rootDir>/libs/domain-types',
     '<rootDir>/libs/shared-server',
     '<rootDir>/libs/shared',
     '<rootDir>/libs/shared-frontend',
-    '<rootDir>/libs/domain-backend-frontend',
+    '<rootDir>/libs/domain-frontend',
   ],
 };

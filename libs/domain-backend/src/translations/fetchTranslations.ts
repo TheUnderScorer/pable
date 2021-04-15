@@ -1,52 +1,47 @@
-import { Browser, Page } from 'puppeteer';
-import { FetchTranslationsResult } from '@skryba/domain-types';
+import { Browser } from 'puppeteer';
+import { TranslationsResult } from '@skryba/domain-types';
 import { URL } from 'url';
-import { FetchTranslationsDto } from '@skryba/shared';
+import { FetchTranslationsDto, Logger } from '@skryba/shared';
 import { buildTranslationUrl } from './buildTranslationUrl';
+import { waitForTranslationResult } from './waitForTranslationResult';
+import { selectors } from './selectors';
 import { getElementPropertyAsText } from '@skryba/shared-server';
 
 interface FetchTranslationsDependencies {
   browser: Browser;
   deeplUrl: URL;
+  logger: Logger;
 }
-
-const selectors = {
-  targetTextArea: '.lmt__target_textarea',
-  sourceTextArea: '.lmt__source_textarea',
-};
-
-const waitForTranslationResult = async (page: Page) => {
-  await page.waitForFunction(
-    (deeplSelectors: typeof selectors) => {
-      const textArea = document.querySelector<HTMLTextAreaElement>(
-        deeplSelectors.targetTextArea
-      );
-
-      return Boolean(textArea.value);
-    },
-    {
-      timeout: 60000,
-      polling: 500,
-    },
-    selectors
-  );
-};
 
 export const makeFetchTranslations = ({
   browser,
   deeplUrl,
+  logger,
 }: FetchTranslationsDependencies) => async (
   dto: FetchTranslationsDto
-): Promise<FetchTranslationsResult> => {
+): Promise<TranslationsResult> => {
   const context = await browser.createIncognitoBrowserContext();
 
   try {
     const url = buildTranslationUrl(deeplUrl, dto);
+
     const page = await context.newPage();
 
     await page.goto(url.toString());
 
-    await waitForTranslationResult(page);
+    logger.info(`Waiting for translation on ${url}...`);
+
+    const waitResult = await waitForTranslationResult(page);
+
+    if (!waitResult) {
+      logger.error(`No results found for ${url}`);
+
+      return {
+        translation: '',
+        from: dto.word,
+        alternatives: [],
+      };
+    }
 
     const targetTextArea = await page.$(selectors.targetTextArea);
     const alternativeElements = await page.$$(
@@ -68,12 +63,19 @@ export const makeFetchTranslations = ({
       throw new Error(`No translation found for word ${dto.word}`);
     }
 
+    logger.info(`Got translation on ${url} for ${dto.word}`);
+
     return {
-      translation,
-      alternatives: alternatives.filter(
-        (value) => value && value !== translation
-      ) as string[],
+      translation: translation.trim(),
+      alternatives: alternatives
+        .filter((value) => value && value !== translation)
+        .map((word) => word.trim()) as string[],
+      from: dto.word,
     };
+  } catch (e) {
+    logger.error(`Failed to fetch translation for ${dto.word}:`, e);
+
+    throw e;
   } finally {
     await context.close();
   }

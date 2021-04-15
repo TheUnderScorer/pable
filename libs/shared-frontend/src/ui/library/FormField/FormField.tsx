@@ -23,7 +23,10 @@ export const FormField = ({
   children,
 }: PropsWithChildren<FormFieldProps>) => {
   const form = useForm();
-  const error = useMemo(() => get(form.errors, name), [form.errors, name]);
+  const error = useMemo(() => get(form.formState.errors, name), [
+    form.formState.errors,
+    name,
+  ]);
 
   return (
     <FormControl id={name} {...FormControlProps}>

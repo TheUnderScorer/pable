@@ -12,10 +12,7 @@ import { Key } from 'ts-key-enum';
 import { useDebounce } from 'react-use';
 
 export interface TranslationsTableEntryRowProps
-  extends Pick<
-    TranslationsTableRowProps,
-    'onRemove' | 'entry' | 'register' | 'setValue'
-  > {
+  extends Pick<TranslationsTableRowProps, 'onRemove' | 'entry' | 'setValue'> {
   index: number;
   isLast: boolean;
   onAdd: () => void;
@@ -70,9 +67,12 @@ export const TranslationsTableEntryRow = memo(
         onRemove={itemsCount <= 1 ? undefined : onRemove}
         inputVariant="filled"
         index={index}
-        alternativesName={`entries[${index}].alternatives`}
-        sourceWordName={`entries[${index}].sourceWord`}
-        targetWordName={`entries[${index}].targetWord`}
+        alternativesName={`entries.${index}.alternatives` as const}
+        sourceWordName={`entries.${index}.sourceWord` as const}
+        targetWordName={`entries.${index}.targetWord` as const}
+        targetWordEditedManuallyName={
+          `entries.${index}.targetWordEditedManually` as const
+        }
         onKeyDown={handleAdd}
         {...props}
       />

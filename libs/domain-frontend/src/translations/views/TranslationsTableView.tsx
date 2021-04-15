@@ -21,7 +21,6 @@ export const TranslationsTableView = () => {
       newEntry: {},
     },
     localStorageKey: 'translationsForm',
-    shouldUnregister: false,
   });
 
   return (
@@ -39,7 +38,7 @@ export const TranslationsTableView = () => {
           }, 500);
         }}
       >
-        <Box as="form" onSubmit={form.handleSubmit(console.log)}>
+        <Box as="form">
           <Stack>
             <TranslationsConfiguration />
             <TranslationsTable />

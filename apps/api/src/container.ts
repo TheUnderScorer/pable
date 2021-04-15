@@ -1,7 +1,10 @@
 import { asFunction, asValue, createContainer as initContainer } from 'awilix';
 import fastify from 'fastify';
 import puppeteer from 'puppeteer';
-import { makeFetchTranslations } from '@skryba/domain-backend';
+import {
+  makeBulkFetchTranslations,
+  makeFetchTranslations,
+} from '@skryba/domain-backend';
 import { languageRoutes } from './app/languages/routes';
 import { errorHandler, scopedContainer } from '@skryba/shared-server';
 import { URL } from 'url';
@@ -47,14 +50,6 @@ export const createContainer = async () => {
     timeout: 900000,
   });
 
-  translationQueue.on('start', (job) => {
-    server.log.info(`Starting job:`, job);
-  });
-
-  translationQueue.on('success', (result, job) => {
-    server.log.info(`Job completed:`, job);
-  });
-
   container.register({
     port: asValue(port),
     server: asValue(server),
@@ -62,6 +57,8 @@ export const createContainer = async () => {
     deeplUrl: asValue(new URL('https://www.deepl.com')),
     fetchTranslations: asFunction(makeFetchTranslations).singleton(),
     translationQueue: asValue(translationQueue),
+    logger: asValue(server.log),
+    bulkFetchTranslations: asFunction(makeBulkFetchTranslations).singleton(),
   });
 
   server.setErrorHandler(errorHandler);

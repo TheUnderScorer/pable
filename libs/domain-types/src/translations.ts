@@ -4,8 +4,15 @@ export enum Language {
   Polish = 'Polish',
 }
 
-export interface FetchTranslationsResult {
+export interface BulkFetchTranslationsResult {
+  translations: TranslationsResult[];
+  translatedEntries: number;
+  entriesWithoutTranslations: number;
+}
+
+export interface TranslationsResult {
   translation: string;
+  from: string;
   alternatives: string[];
 }
 
@@ -13,6 +20,7 @@ export interface TranslationEntry {
   sourceWord?: string;
   targetWord?: string;
   alternatives?: string[];
+  targetWordEditedManually?: boolean;
 }
 
 export interface TranslationsForm {

@@ -19,7 +19,11 @@ import { apiRoutes } from '@skryba/domain-types';
 import 'cypress-file-upload';
 
 beforeEach(() => {
-  cy.intercept(`http://localhost:3000/${apiRoutes.fetchLanguages}`).as(
+  cy.intercept(`http://localhost:3000/${apiRoutes.translate}`).as(
     'translationRequest'
+  );
+
+  cy.intercept(`http://localhost:3000/${apiRoutes.bulkTranslate}`).as(
+    'bulkTranslationRequest'
   );
 });

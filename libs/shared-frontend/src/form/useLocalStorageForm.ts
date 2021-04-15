@@ -1,8 +1,8 @@
-import { useForm, UseFormOptions } from 'react-hook-form';
+import { useForm, UseFormProps } from 'react-hook-form';
 import { useMemo } from 'react';
-import { useDebounce } from 'react-use';
+import { useTimeoutFn } from 'react-use';
 
-export interface UseLocalStorageFormOptions<T> extends UseFormOptions<T> {
+export interface UseLocalStorageFormOptions<T> extends UseFormProps<T> {
   localStorageKey: string;
 }
 
@@ -31,15 +31,13 @@ export const useLocalStorageForm = <T>({
     mode: 'onBlur',
   });
 
-  const values = form.watch();
+  const [, , resetTimeout] = useTimeoutFn(() => {
+    localStorage.setItem(localStorageKey, JSON.stringify(form.getValues()));
+  }, 400);
 
-  useDebounce(
-    () => {
-      localStorage.setItem(localStorageKey, JSON.stringify(values));
-    },
-    350,
-    [values]
-  );
+  form.watch(() => {
+    resetTimeout();
+  });
 
   return form;
 };

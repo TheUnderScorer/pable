@@ -45,11 +45,11 @@ export const TranslationsTableUpload = () => {
           files.map((file) => readFileAsText(file))
         );
 
-        fromRawText(contents as string[]);
-      } catch (e) {
-        console.error(e);
+        await fromRawText(contents as string[]);
+      } catch (error) {
+        console.error(error);
 
-        setError(new Error('Failed to parse files.'));
+        setError(error);
       } finally {
         setLoading(false);
       }
